@@ -1,0 +1,117 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright (c) 2022, Unikraft GmbH and The KraftKit Authors.
+// Licensed under the BSD-3-Clause License (the "License").
+// You may not use this file except in compliance with the License.
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	"time"
+
+	"github.com/fatih/color"
+	"sdk.kraft.cloud/v0/client"
+	"sdk.kraft.cloud/v0/instance"
+)
+
+// This toy program creates a kraftcloud instance, displays its status and then prints the console output.
+func main() {
+	user := os.Getenv("KRAFT_USER")
+	password := os.Getenv("KRAFT_PASS")
+
+	if user == "" || password == "" {
+		fmt.Println("Please set KRAFT_USER and KRAFT_PASS environment variables")
+		return
+	}
+
+	apiClient := instance.NewDefaultInstanceClient(user, password)
+	ctx := context.Background()
+	instance, err := apiClient.CreateInstance(ctx, instance.CreateInstancePayload{
+		// You have to build the kraft.cloud.yaml target from https://github.com/unikraft/app-nginx
+		// and upload it with kraft pkg push to make this image available to your account.
+		Image:        "unikraft.io/jayc.unikraft.io/nginx/latest",
+		Args:         []string{"-c", "/nginx/conf/nginx.conf"},
+		Memory:       16,
+		Handlers:     []string{client.DefaultHandler},
+		Port:         443,
+		InternalPort: 80,
+		Autostart:    client.DefaultAutoStart,
+	})
+	if err != nil {
+		fmt.Printf("erred: %v\n", err)
+		return
+	}
+
+	result, err := apiClient.InstanceStatus(ctx, instance.UUID)
+	if err != nil {
+		fmt.Printf("erred: %v\n", err)
+		return
+	}
+
+	DisplayInstanceDetails(*result)
+
+	time.Sleep(time.Second * 1)
+
+	// get and print the console output
+	output, err := apiClient.ConsoleOutput(ctx, instance.UUID, -1, true)
+	if err != nil {
+		fmt.Printf("erred: %v\n", err)
+	}
+
+	fmt.Println(output)
+
+	// stop
+	instance, err = apiClient.StopInstance(ctx, instance.UUID, 0)
+	if err != nil {
+		fmt.Printf("%v", err)
+	}
+	// start
+	instance, err = apiClient.StartInstance(ctx, instance.UUID, 0)
+	if err != nil {
+		fmt.Printf("%v", err)
+	}
+	// list
+	instances, err := apiClient.ListInstances(ctx)
+	if err != nil {
+		fmt.Printf("%v", err)
+	}
+	// print the retrieved instances
+	for _, i := range instances {
+		fmt.Println(i.UUID)
+	}
+	// delete
+	err = apiClient.DeleteInstance(ctx, instance.UUID)
+	if err != nil {
+		fmt.Printf("%v", err)
+	}
+}
+
+// DisplayInstanceDetails pretty prints the result of an instance status call.
+func DisplayInstanceDetails(instance instance.Instance) {
+	headerColor := color.New(color.FgCyan, color.Bold)
+	dataColor := color.New(color.FgWhite)
+
+	headerColor.Println("=====================================")
+	headerColor.Println("          Instance Details           ")
+	headerColor.Println("=====================================")
+
+	dataColor.Printf("UUID:         %s\n", instance.UUID)
+	dataColor.Printf("Status:       %s\n", instance.Status)
+	dataColor.Printf("Created At:   %s\n", instance.CreatedAt)
+	dataColor.Printf("Image:        %s\n", instance.Image)
+	dataColor.Printf("Memory (MB):  %d\n", instance.MemoryMB)
+	dataColor.Printf("DNS:          %s\n", instance.DNS)
+	dataColor.Printf("Private IP:   %s\n", instance.PrivateIP)
+	dataColor.Printf("Boot Time:    %s\n", bootTimeToString(instance.BootTimeUS))
+
+	headerColor.Println("=====================================")
+}
+
+func bootTimeToString(bootTimeUS int64) string {
+	bootTimeSec := float64(bootTimeUS) / 1_000_000.0
+	if bootTimeSec < 1.0 {
+		return fmt.Sprintf("%.2f ms", bootTimeSec*1_000)
+	}
+	return fmt.Sprintf("%.2f s", bootTimeSec)
+}
