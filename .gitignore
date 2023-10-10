@@ -1,0 +1,9 @@
+*.swp
+*.swo
+go.work
+go.work.sum
+.idea/
+.vscode/
+*.test
+*.out
+.DS_Store
