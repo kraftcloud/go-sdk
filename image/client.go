@@ -27,6 +27,14 @@ func NewImagesClient(opts ...kraftcloud.Option) ImagesService {
 	}
 }
 
+// NewImagesClientFromOptions instantiates a new image services client based on
+// the provided pre-existing options.
+func NewImagesFromOptions(opts *kraftcloud.Options) ImagesService {
+	return &imagesClient{
+		opts: opts,
+	}
+}
+
 // WithMetro sets the just-in-time metro to use when connecting to the
 // KraftCloud API.
 func (i *imagesClient) WithMetro(metro string) ImagesService {
