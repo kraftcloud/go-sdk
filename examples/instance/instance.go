@@ -34,13 +34,17 @@ func main() {
 	instance, err := apiClient.Create(ctx, instance.CreateInstanceRequest{
 		// You have to build the kraft.cloud.yaml target from https://github.com/unikraft/app-nginx
 		// and upload it with kraft pkg push to make this image available to your account.
-		Image:        "unikraft.io/jayc.unikraft.io/nginx/latest",
-		Args:         []string{"-c", "/nginx/conf/nginx.conf"},
-		MemoryMB:     16,
-		Handlers:     []string{instance.DefaultHandler},
-		Port:         443,
-		InternalPort: 80,
-		Autostart:    instance.DefaultAutoStart,
+		Image:    "unikraft.io/jayc.unikraft.io/nginx:latest",
+		Args:     []string{"-c", "/nginx/conf/nginx.conf"},
+		MemoryMB: 16,
+		Services: []instance.CreateInstanceServicesRequest{
+			{
+				Port:         443,
+				Handlers:     []string{instance.DefaultHandler},
+				InternalPort: 80,
+			},
+		},
+		Autostart: instance.DefaultAutoStart,
 	})
 	if err != nil {
 		fmt.Printf("erred: %v\n", err)

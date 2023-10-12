@@ -16,6 +16,21 @@ import (
 	"sdk.kraft.cloud/v0/util"
 )
 
+// CreateInstanceServicesRequest contains the description of an exposed network
+// service.
+//
+// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#create
+type CreateInstanceServicesRequest struct {
+	// Public-facing Port
+	Port int `json:"port,omitempty"`
+
+	// Port that the image listens on.
+	InternalPort int `json:"internal_port,omitempty"`
+
+	// Connection handlers. Must be [ "tls" ].
+	Handlers []string `json:"handlers,omitempty"`
+}
+
 // CreateInstanceRequest holds all the data necessary to create an instance via
 // the API.
 //
@@ -31,14 +46,8 @@ type CreateInstanceRequest struct {
 	// Amount of memory to assign to the instance in megabytes.
 	MemoryMB int64 `json:"memory_mb,omitempty"`
 
-	// Connection handlers. Must be [ "tls" ].
-	Handlers []string `json:"handlers,omitempty"`
-
-	// Public-facing Port.
-	Port int64 `json:"port,omitempty"`
-
-	// Port that the image listens on.
-	InternalPort int64 `json:"internal_port,omitempty"`
+	// Description of exposed network services.
+	Services []CreateInstanceServicesRequest `json:"services,omitempty"`
 
 	// Autostart behavior. If true the instance will start immediately after
 	// creation.
