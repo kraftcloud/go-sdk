@@ -25,7 +25,7 @@ func main() {
 	}
 	client := image.NewDefaultImageClient(user, password)
 	filter := make(map[string]interface{})
-	images, err := client.ListImages(context.Background(), filter)
+	images, err := client.List(context.Background(), filter)
 	if err != nil {
 		fmt.Println("erred, are your credentials ok?")
 	}
