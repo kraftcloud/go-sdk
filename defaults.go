@@ -13,12 +13,6 @@ const (
 	BaseV1FormatURL = "https://api.%s.kraft.cloud/v1"
 	// DefaultPort is the port the instance will listen on externally by default.
 	DefaultPort = 443
-	// DefaultHandler sets the connection handler. The API only accepts "tls" for
-	// now.
-	DefaultHandler = "tls"
-	// DefaultAutoStart is the default autostart value - whether the instance will
-	// start immediately after creation
-	DefaultAutoStart = true
 	// DefaultMetro is set to a default node based in Frankfurt.
 	DefaultMetro = "fra0"
 )

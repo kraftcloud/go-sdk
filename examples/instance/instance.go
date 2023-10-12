@@ -37,10 +37,10 @@ func main() {
 		Image:        "unikraft.io/jayc.unikraft.io/nginx/latest",
 		Args:         []string{"-c", "/nginx/conf/nginx.conf"},
 		MemoryMB:     16,
-		Handlers:     []string{kraftcloud.DefaultHandler},
+		Handlers:     []string{instance.DefaultHandler},
 		Port:         443,
 		InternalPort: 80,
-		Autostart:    kraftcloud.DefaultAutoStart,
+		Autostart:    instance.DefaultAutoStart,
 	})
 	if err != nil {
 		fmt.Printf("erred: %v\n", err)
