@@ -18,6 +18,9 @@ import (
 const (
 	// BaseURL defines the default location of the Kraftcloud API.
 	BaseURL = "https://api.fra0.kraft.cloud/v1"
+	// BaseV1FormatURL defines the default location of the KraftCloud API which is
+	// formatted to allow setting the metro.
+	BaseV1FormatURL = "https://api.%s.kraft.cloud/v1"
 	// DefaultPort is the port the instance will listen on externally by default.
 	DefaultPort = 443
 	// DefaultHandler sets the connection handler. The API only accepts "tls" for now.
