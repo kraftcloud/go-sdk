@@ -11,6 +11,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
+	kraftcloud "sdk.kraft.cloud/v0"
 	"sdk.kraft.cloud/v0/image"
 )
 
@@ -23,7 +24,10 @@ func main() {
 		fmt.Println("Please set KRAFT_USER and KRAFT_PASS environment variables")
 		return
 	}
-	client := image.NewDefaultImageClient(user, password)
+	client := image.NewImagesClient(
+		kraftcloud.WithUser(user),
+		kraftcloud.WithToken(password),
+	)
 	filter := make(map[string]interface{})
 	images, err := client.List(context.Background(), filter)
 	if err != nil {

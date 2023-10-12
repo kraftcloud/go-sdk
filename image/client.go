@@ -19,18 +19,11 @@ type imagesClient struct {
 	request *kraftcloud.ServiceRequest
 }
 
-// NewDefaultClient creates a sensible, default Kraftcloud image API client.
-func NewDefaultImageClient(user, token string) ImagesService {
-	return NewImageClient(kraftcloud.NewHTTPClient(), kraftcloud.BaseURL, user, token)
-}
-
-func NewImageClient(httpClient kraftcloud.HTTPClient, baseURL, user, token string) ImagesService {
+// NewImagesClient instantiates a new image services client based on the
+// provided options.
+func NewImagesClient(opts ...kraftcloud.Option) ImagesService {
 	return &imagesClient{
-		opts: kraftcloud.NewDefaultOptions(
-			kraftcloud.WithUser(user),
-			kraftcloud.WithToken(token),
-			kraftcloud.WithHTTPClient(httpClient),
-		),
+		opts: kraftcloud.NewDefaultOptions(opts...),
 	}
 }
 
