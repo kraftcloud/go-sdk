@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"sdk.kraft.cloud/v0/client"
+	kraftcloud "sdk.kraft.cloud/v0"
 )
 
 const (
@@ -20,17 +20,17 @@ const (
 
 // ImageClient wraps the v1 Image client of Kraftcloud.
 type ImageClient struct {
-	client.Client
+	kraftcloud.Client
 }
 
 // NewDefaultClient creates a sensible, default Kraftcloud image API client.
 func NewDefaultImageClient(user, token string) *ImageClient {
-	return NewImageClient(client.NewHTTPClient(), client.BaseURL, user, token)
+	return NewImageClient(kraftcloud.NewHTTPClient(), kraftcloud.BaseURL, user, token)
 }
 
-func NewImageClient(httpClient client.HTTPClient, baseURL, user, token string) *ImageClient {
+func NewImageClient(httpClient kraftcloud.HTTPClient, baseURL, user, token string) *ImageClient {
 	return &ImageClient{
-		Client: client.Client{
+		Client: kraftcloud.Client{
 			HTTPClient: httpClient,
 			BaseURL:    baseURL,
 			User:       user,

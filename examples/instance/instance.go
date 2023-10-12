@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"sdk.kraft.cloud/v0/client"
+	kraftcloud "sdk.kraft.cloud/v0"
 	"sdk.kraft.cloud/v0/instance"
 )
 
@@ -34,10 +34,10 @@ func main() {
 		Image:        "unikraft.io/jayc.unikraft.io/nginx/latest",
 		Args:         []string{"-c", "/nginx/conf/nginx.conf"},
 		Memory:       16,
-		Handlers:     []string{client.DefaultHandler},
+		Handlers:     []string{kraftcloud.DefaultHandler},
 		Port:         443,
 		InternalPort: 80,
-		Autostart:    client.DefaultAutoStart,
+		Autostart:    kraftcloud.DefaultAutoStart,
 	})
 	if err != nil {
 		fmt.Printf("erred: %v\n", err)

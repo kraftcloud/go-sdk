@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"sdk.kraft.cloud/v0/client"
+	kraftcloud "sdk.kraft.cloud/v0"
 	"sdk.kraft.cloud/v0/util"
 )
 
@@ -24,17 +24,17 @@ const (
 // InstanceClient is a basic wrapper around the v1 Instance client of Kraftcloud.
 // see: https://docs.kraft.cloud/002-rest-api-v1-instances.html
 type InstanceClient struct {
-	client.Client
+	kraftcloud.Client
 }
 
 // NewDefaultClient creates a sensible, default Kraftcloud instance API client.
 func NewDefaultInstanceClient(user, token string) *InstanceClient {
-	return NewInstanceClient(client.NewHTTPClient(), client.BaseURL, user, token)
+	return NewInstanceClient(kraftcloud.NewHTTPClient(), kraftcloud.BaseURL, user, token)
 }
 
-func NewInstanceClient(httpClient client.HTTPClient, baseURL, user, token string) *InstanceClient {
+func NewInstanceClient(httpClient kraftcloud.HTTPClient, baseURL, user, token string) *InstanceClient {
 	return &InstanceClient{
-		Client: client.Client{
+		Client: kraftcloud.Client{
 			HTTPClient: httpClient,
 			BaseURL:    baseURL,
 			User:       user,
