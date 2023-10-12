@@ -15,7 +15,8 @@ import (
 )
 
 const (
-	imagesEndpoint = "/images/list"
+	// Endpoint is the public path for the images service.
+	Endpoint = "/images"
 )
 
 // ImageClient wraps the v1 Image client of Kraftcloud.
@@ -93,7 +94,7 @@ func (i *ImageClient) ListImages(ctx context.Context, filter map[string]interfac
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
-	endpoint := i.BaseURL + imagesEndpoint
+	endpoint := i.BaseURL + Endpoint + "/list"
 
 	var response ImageListResponse
 
