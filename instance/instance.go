@@ -138,22 +138,6 @@ func (i *Instance) GetFieldByPrettyTag(tag string) string {
 	}
 }
 
-// Lists all existing instances.
-//
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#list
-func (i *InstanceClient) List(ctx context.Context) ([]Instance, error) {
-	base := i.BaseURL + Endpoint
-	endpoint := fmt.Sprintf("%s/list", base)
-
-	var response InstanceResponse
-
-	if err := i.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {
-		return nil, fmt.Errorf("performing the request: %w", err)
-	}
-
-	return response.Data.Instances, nil
-}
-
 // Stops the specified instance, but does not destroy it. All volatile state
 // (e.g., RAM contents) is lost. Does nothing for an instance that is already
 // stopped. The instance can be started again with the start endpoint.
