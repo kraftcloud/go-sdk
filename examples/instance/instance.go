@@ -47,13 +47,13 @@ func main() {
 		Autostart: instance.DefaultAutoStart,
 	})
 	if err != nil {
-		fmt.Printf("erred: %v\n", err)
+		fmt.Printf("could not create instance: %s\n", err)
 		return
 	}
 
 	result, err := apiClient.Status(ctx, instance.UUID)
 	if err != nil {
-		fmt.Printf("erred: %v\n", err)
+		fmt.Printf("could not get instance status: %s\n", err)
 		return
 	}
 
@@ -64,7 +64,7 @@ func main() {
 	// get and print the console output
 	output, err := apiClient.Logs(ctx, instance.UUID, -1, true)
 	if err != nil {
-		fmt.Printf("erred: %v\n", err)
+		fmt.Printf("could not get instance logs: %s\n", err)
 	}
 
 	fmt.Println(output)
@@ -72,26 +72,31 @@ func main() {
 	// stop
 	instance, err = apiClient.Stop(ctx, instance.UUID, 0)
 	if err != nil {
-		fmt.Printf("%v", err)
+		fmt.Printf("could not stop instance: %s\n", err)
+		return
 	}
+
 	// start
 	instance, err = apiClient.Start(ctx, instance.UUID, 0)
 	if err != nil {
-		fmt.Printf("%v", err)
+		fmt.Printf("could not start instance: %s\n", err)
 	}
+
 	// list
 	instances, err := apiClient.List(ctx)
 	if err != nil {
-		fmt.Printf("%v", err)
+		fmt.Printf("could not list all instances: %s\n", err)
 	}
+
 	// print the retrieved instances
 	for _, i := range instances {
 		fmt.Println(i.UUID)
 	}
+
 	// delete
 	err = apiClient.Delete(ctx, instance.UUID)
 	if err != nil {
-		fmt.Printf("%v", err)
+		fmt.Printf("could not delete instance: %s\n", err)
 	}
 }
 
