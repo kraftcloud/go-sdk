@@ -108,6 +108,8 @@ type Instance struct {
 	ServiceGroup      string             `json:"service_group" pretty:"Service Group"`
 	NetworkInterfaces []NetworkInterface `json:"network_interfaces" pretty:"Network Interfaces"`
 	BootTimeUS        int64              `json:"boot_time_us" pretty:"Boot Time (ms)"`
+	Message           string             `json:"message"`
+	Error             int64              `json:"error"`
 }
 
 func (i *Instance) GetFieldByPrettyTag(tag string) string {
@@ -319,6 +321,9 @@ func firstInstanceOrErr(response *InstanceResponse) (*Instance, error) {
 	}
 	if len(response.Data.Instances) == 0 {
 		return nil, errors.New("no instances data returned from the server")
+	}
+	if response.Data.Instances[0].Status == "error" {
+		return nil, errors.New(response.Data.Instances[0].Message)
 	}
 	return &response.Data.Instances[0], nil
 }
