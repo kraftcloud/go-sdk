@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"net/http"
 
+	kraftcloud "sdk.kraft.cloud/v0"
 	"sdk.kraft.cloud/v0/util"
 )
 
@@ -78,10 +79,10 @@ func (i *InstanceClient) Create(ctx context.Context, req CreateInstanceRequest) 
 
 	endpoint := i.BaseURL + Endpoint
 
-	var response InstanceResponse
+	var response kraftcloud.ServiceResponse[Instance]
 	if err := i.DoRequest(ctx, http.MethodPost, endpoint, bytes.NewBuffer(body), &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	return firstInstanceOrErr(&response)
+	return response.FirstOrErr()
 }

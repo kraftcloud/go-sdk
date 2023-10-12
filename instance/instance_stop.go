@@ -12,6 +12,8 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+
+	kraftcloud "sdk.kraft.cloud/v0"
 )
 
 // StopInstancePayload carries the data used by stop instance requests.
@@ -40,10 +42,10 @@ func (i *InstanceClient) Stop(ctx context.Context, uuid string, drainTimeoutMS i
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
-	var response InstanceResponse
+	var response kraftcloud.ServiceResponse[Instance]
 	if err := i.DoRequest(ctx, http.MethodPut, endpoint, bytes.NewBuffer(body), &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	return firstInstanceOrErr(&response)
+	return response.FirstOrErr()
 }

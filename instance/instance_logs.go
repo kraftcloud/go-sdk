@@ -8,22 +8,11 @@ package instance
 import (
 	"context"
 	"encoding/base64"
-	"errors"
 	"fmt"
 	"net/http"
-)
 
-// LogsResponse holds console output data, as returned by the API.
-type LogsResponse struct {
-	Status string `json:"status"`
-	Data   struct {
-		Instances []struct {
-			Status string `json:"status"`
-			UUID   string `json:"uuid"`
-			Output string `json:"output"`
-		} `json:"instances"`
-	} `json:"data"`
-}
+	kraftcloud "sdk.kraft.cloud/v0"
+)
 
 // Logs returns the console output of the specified instance.
 //
@@ -32,22 +21,17 @@ func (i *InstanceClient) Logs(ctx context.Context, uuid string, maxLines int, la
 	base := i.BaseURL + Endpoint
 	endpoint := fmt.Sprintf("%s/%s/console", base, uuid)
 
-	response := &LogsResponse{}
-
-	if err := i.DoRequest(ctx, http.MethodGet, endpoint, nil, response); err != nil {
+	var resp kraftcloud.ServiceResponse[Instance]
+	if err := i.DoRequest(ctx, http.MethodGet, endpoint, nil, resp); err != nil {
 		return "", fmt.Errorf("performing the request: %w", err)
 	}
 
-	if response.Data.Instances == nil {
-		return "", errors.New("instances data is nil")
+	instance, err := resp.FirstOrErr()
+	if err != nil {
+		return "", err
 	}
 
-	if len(response.Data.Instances) == 0 {
-		return "", errors.New("no instances data returned from the server")
-	}
-
-	outputB64 := response.Data.Instances[0].Output
-	output, err := base64.StdEncoding.DecodeString(outputB64)
+	output, err := base64.StdEncoding.DecodeString(instance.Output)
 	if err != nil {
 		return "", fmt.Errorf("decoding base64 console output: %w", err)
 	}

@@ -10,6 +10,8 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+
+	kraftcloud "sdk.kraft.cloud/v0"
 )
 
 // Deletes the specified instance. After this call the UUID of the instance is
@@ -23,8 +25,7 @@ func (i *InstanceClient) Delete(ctx context.Context, uuid string) error {
 	base := i.BaseURL + Endpoint
 	endpoint := fmt.Sprintf("%s/%s", base, uuid)
 
-	var response InstanceResponse
-
+	var response kraftcloud.ServiceResponse[Instance]
 	if err := i.DoRequest(ctx, http.MethodDelete, endpoint, nil, &response); err != nil {
 		return fmt.Errorf("performing the request: %w", err)
 	}

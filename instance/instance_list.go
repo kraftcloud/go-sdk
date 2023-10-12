@@ -9,6 +9,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+
+	kraftcloud "sdk.kraft.cloud/v0"
 )
 
 // Lists all existing instances.
@@ -18,11 +20,10 @@ func (i *InstanceClient) List(ctx context.Context) ([]Instance, error) {
 	base := i.BaseURL + Endpoint
 	endpoint := fmt.Sprintf("%s/list", base)
 
-	var response InstanceResponse
-
+	var response kraftcloud.ServiceResponse[Instance]
 	if err := i.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	return response.Data.Instances, nil
+	return response.AllOrErr()
 }

@@ -5,7 +5,6 @@
 package instance
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -13,14 +12,6 @@ const (
 	// Endpoint is the public path for the instances service.
 	Endpoint = "/instances"
 )
-
-// InstanceResponse holds instance description, as returned by the API.
-type InstanceResponse struct {
-	Status string `json:"status"`
-	Data   struct {
-		Instances []Instance `json:"instances"`
-	} `json:"data"`
-}
 
 // NetworkInterface holds interface data returned by the Instance API.
 type NetworkInterface struct {
@@ -82,6 +73,9 @@ type Instance struct {
 
 	// An error response code dictating the specific error type.
 	Error int64 `json:"error"`
+
+	// Base 64 encoded console output.
+	Output string `json:"output,omitempty"`
 }
 
 func (i *Instance) GetFieldByPrettyTag(tag string) string {
@@ -114,20 +108,4 @@ func (i *Instance) GetFieldByPrettyTag(tag string) string {
 	default:
 		return ""
 	}
-}
-
-func firstInstanceOrErr(response *InstanceResponse) (*Instance, error) {
-	if response == nil {
-		return nil, errors.New("response is nil")
-	}
-	if response.Data.Instances == nil {
-		return nil, errors.New("instances data is nil")
-	}
-	if len(response.Data.Instances) == 0 {
-		return nil, errors.New("no instances data returned from the server")
-	}
-	if response.Data.Instances[0].Status == "error" {
-		return nil, errors.New(response.Data.Instances[0].Message)
-	}
-	return &response.Data.Instances[0], nil
 }
