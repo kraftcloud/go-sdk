@@ -303,6 +303,10 @@ func (i *InstanceClient) ConsoleOutput(ctx context.Context, uuid string, maxLine
 		return "", errors.New("instances data is nil")
 	}
 
+	if len(response.Data.Instances) == 0 {
+		return "", errors.New("no instances data returned from the server")
+	}
+
 	outputB64 := response.Data.Instances[0].Output
 	output, err := base64.StdEncoding.DecodeString(outputB64)
 	if err != nil {
