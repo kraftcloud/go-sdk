@@ -6,35 +6,12 @@ package image
 
 import (
 	"fmt"
-
-	kraftcloud "sdk.kraft.cloud/v0"
 )
 
 const (
 	// Endpoint is the public path for the images service.
 	Endpoint = "/images"
 )
-
-// ImageClient wraps the v1 Image client of Kraftcloud.
-type ImageClient struct {
-	kraftcloud.RESTClient
-}
-
-// NewDefaultClient creates a sensible, default Kraftcloud image API client.
-func NewDefaultImageClient(user, token string) *ImageClient {
-	return NewImageClient(kraftcloud.NewHTTPClient(), kraftcloud.BaseURL, user, token)
-}
-
-func NewImageClient(httpClient kraftcloud.HTTPClient, baseURL, user, token string) *ImageClient {
-	return &ImageClient{
-		RESTClient: kraftcloud.RESTClient{
-			HTTPClient: httpClient,
-			BaseURL:    baseURL,
-			User:       user,
-			Token:      token,
-		},
-	}
-}
 
 // Image describes a Kraftcloud image as returned by the API server.
 type Image struct {
