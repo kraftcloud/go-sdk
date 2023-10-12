@@ -16,8 +16,13 @@ import (
 	kraftcloud "sdk.kraft.cloud/v0"
 )
 
-// StopInstancePayload carries the data used by stop instance requests.
-type StopInstancePayload struct {
+// InstanceStopRequest carries the data used by stop instance requests.
+//
+// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#request_3
+type InstanceStopRequest struct {
+	// Timeout for draining connections in milliseconds. The instance does not
+	// receive new connections in the draining phase. The instance is stopped when
+	// the last connection has been closed or the timeout expired.
 	DrainTimeoutMS int64 `json:"drain_timeout_ms,omitempty"`
 }
 
@@ -33,7 +38,7 @@ func (i *InstanceClient) Stop(ctx context.Context, uuid string, drainTimeoutMS i
 	base := i.BaseURL + Endpoint
 	endpoint := fmt.Sprintf("%s/%s/stop", base, uuid)
 
-	requestBody := StopInstancePayload{
+	requestBody := InstanceStopRequest{
 		DrainTimeoutMS: drainTimeoutMS,
 	}
 
