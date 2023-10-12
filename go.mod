@@ -1,4 +1,4 @@
-module sdk.kraft.cloud
+module sdk.kraft.cloud/v0
 
 go 1.20
 
