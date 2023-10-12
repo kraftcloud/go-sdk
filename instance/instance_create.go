@@ -23,26 +23,26 @@ import (
 type CreateInstanceRequest struct {
 	// Name of the Unikraft image to instantiate. Private images will be available
 	// under your user's namespace.
-	Image string
+	Image string `json:"image,omitempty"`
 
 	// Application arguments.
-	Args []string
+	Args []string `json:"args,omitempty"`
 
 	// Amount of memory to assign to the instance in megabytes.
-	Memory int64
+	MemoryMB int64 `json:"memory_mb,omitempty"`
 
 	// Connection handlers. Must be [ "tls" ].
-	Handlers []string
+	Handlers []string `json:"handlers,omitempty"`
 
 	// Public-facing Port.
-	Port int64
+	Port int64 `json:"port,omitempty"`
 
 	// Port that the image listens on.
-	InternalPort int64
+	InternalPort int64 `json:"internal_port,omitempty"`
 
 	// Autostart behavior. If true the instance will start immediately after
 	// creation.
-	Autostart bool
+	Autostart bool `json:"autostart,omitempty"`
 }
 
 // Creates one or more new instances of the specified Unikraft images. You can
@@ -58,23 +58,11 @@ func (i *InstanceClient) Create(ctx context.Context, req CreateInstanceRequest) 
 		return nil, fmt.Errorf("normalizing image name: %w", err)
 	}
 
-	requestBody := map[string]interface{}{
-		"image":     image,
-		"args":      req.Args,
-		"memory_mb": req.Memory,
-		"services": []map[string]interface{}{
-			{
-				"port":          req.Port,
-				"internal_port": req.InternalPort,
-				"handlers":      req.Handlers,
-			},
-		},
-		"autostart": req.Autostart,
-	}
+	req.Image = image
 
-	body, err := json.Marshal(requestBody)
+	body, err := json.Marshal(req)
 	if err != nil {
-		return nil, fmt.Errorf("marshalling request body: %w", err)
+		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
 
 	endpoint := i.BaseURL + Endpoint
