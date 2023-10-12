@@ -44,22 +44,32 @@ func NewInstanceClient(httpClient kraftcloud.HTTPClient, baseURL, user, token st
 	}
 }
 
-// CreateInstanceRequest holds all the data necessary to create an instance via the API.
-// see: https://docs.kraft.cloud/002-rest-api-v1-instances.html#create
+// CreateInstanceRequest holds all the data necessary to create an instance via
+// the API.
+//
+// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#create
 type CreateInstanceRequest struct {
-	// Name of the Unikraft image to instantiate. Private images will be available under your user's namespace
+	// Name of the Unikraft image to instantiate. Private images will be available
+	// under your user's namespace.
 	Image string
-	// Application arguments
+
+	// Application arguments.
 	Args []string
-	// Amount of memory to assign to the instance in megabytes
+
+	// Amount of memory to assign to the instance in megabytes.
 	Memory int64
-	// Connection handlers. Must be [ "tls" ]
+
+	// Connection handlers. Must be [ "tls" ].
 	Handlers []string
-	// Public-facing Port
+
+	// Public-facing Port.
 	Port int64
-	// Port that the image listens on
+
+	// Port that the image listens on.
 	InternalPort int64
-	// Autostart behavior. If true the instance will start immediately after creation
+
+	// Autostart behavior. If true the instance will start immediately after
+	// creation.
 	Autostart bool
 }
 
