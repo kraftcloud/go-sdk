@@ -18,7 +18,8 @@ import (
 )
 
 const (
-	instancesEndpoint = "/instances"
+	// Endpoint is the public path for the instances service.
+	Endpoint = "/instances"
 )
 
 // InstanceClient is a basic wrapper around the v1 Instance client of Kraftcloud.
@@ -172,7 +173,7 @@ func (i *InstanceClient) CreateInstance(ctx context.Context, req CreateInstanceR
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
-	endpoint := i.BaseURL + instancesEndpoint
+	endpoint := i.BaseURL + Endpoint
 
 	var response InstanceResponse
 	if err := i.DoRequest(ctx, http.MethodPost, endpoint, bytes.NewBuffer(body), &response); err != nil {
@@ -188,7 +189,7 @@ func (i *InstanceClient) InstanceStatus(ctx context.Context, uuid string) (*Inst
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
-	base := i.BaseURL + instancesEndpoint
+	base := i.BaseURL + Endpoint
 	endpoint := fmt.Sprintf("%s/%s", base, uuid)
 
 	var response InstanceResponse
@@ -203,7 +204,7 @@ func (i *InstanceClient) InstanceStatus(ctx context.Context, uuid string) (*Inst
 // ListInstances fetches all instances from the Kraftcloud compute API.
 // see: https://docs.kraft.cloud/002-rest-api-v1-instances.html#list
 func (i *InstanceClient) ListInstances(ctx context.Context) ([]Instance, error) {
-	base := i.BaseURL + instancesEndpoint
+	base := i.BaseURL + Endpoint
 	endpoint := fmt.Sprintf("%s/list", base)
 
 	var response InstanceResponse
@@ -222,7 +223,7 @@ func (i *InstanceClient) StopInstance(ctx context.Context, uuid string, drainTim
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
-	base := i.BaseURL + instancesEndpoint
+	base := i.BaseURL + Endpoint
 	endpoint := fmt.Sprintf("%s/%s/stop", base, uuid)
 
 	requestBody := StopInstancePayload{
@@ -248,7 +249,7 @@ func (i *InstanceClient) StartInstance(ctx context.Context, uuid string, waitTim
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
-	base := i.BaseURL + instancesEndpoint
+	base := i.BaseURL + Endpoint
 	endpoint := fmt.Sprintf("%s/%s/start", base, uuid)
 
 	requestBody := map[string]interface{}{
@@ -275,7 +276,7 @@ func (i *InstanceClient) DeleteInstance(ctx context.Context, uuid string) error 
 	if uuid == "" {
 		return errors.New("UUID cannot be empty")
 	}
-	base := i.BaseURL + instancesEndpoint
+	base := i.BaseURL + Endpoint
 	endpoint := fmt.Sprintf("%s/%s", base, uuid)
 
 	var response InstanceResponse
@@ -290,7 +291,7 @@ func (i *InstanceClient) DeleteInstance(ctx context.Context, uuid string) error 
 // ConsoleOutput fetches console output of the specified instance.
 // see: https://docs.kraft.cloud/002-rest-api-v1-instances.html#console
 func (i *InstanceClient) ConsoleOutput(ctx context.Context, uuid string, maxLines int, latest bool) (string, error) {
-	base := i.BaseURL + instancesEndpoint
+	base := i.BaseURL + Endpoint
 	endpoint := fmt.Sprintf("%s/%s/console", base, uuid)
 
 	response := &ConsoleOutputResponse{}
