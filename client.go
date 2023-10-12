@@ -82,16 +82,6 @@ func (c *Client) getBearerToken() (string, error) {
 	return fmt.Sprintf("Bearer %s", bearer), nil
 }
 
-// Error is a generic wrapper around errors returned by the API server.
-type Error struct {
-	StatusCode int
-	Message    string
-}
-
-func (e *Error) Error() string {
-	return fmt.Sprintf("API error: status code %d, message: %s", e.StatusCode, e.Message)
-}
-
 // NewHTTPClient creates a default Go HTTP client.
 func NewHTTPClient() *http.Client {
 	// We disable KeepAlive due to issues with the proxy in front of the API.
