@@ -11,6 +11,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	kraftcloud "sdk.kraft.cloud/v0"
 )
 
 // ImageListResponse holds the list of images description, as returned by the API.
@@ -31,11 +33,10 @@ func (i *ImageClient) List(ctx context.Context, filter map[string]interface{}) (
 
 	endpoint := i.BaseURL + Endpoint + "/list"
 
-	var response ImageListResponse
-
+	var response kraftcloud.ServiceResponse[Image]
 	if err := i.DoRequest(ctx, http.MethodGet, endpoint, bytes.NewBuffer(body), &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	return response.Data.Images, nil
+	return response.AllOrErr()
 }
