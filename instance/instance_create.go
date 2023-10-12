@@ -51,7 +51,7 @@ type CreateInstanceRequest struct {
 // be defined during creation. They cannot be changed later.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#create
-func (i *InstanceClient) Create(ctx context.Context, req CreateInstanceRequest) (*Instance, error) {
+func (i *instancesClient) Create(ctx context.Context, req CreateInstanceRequest) (*Instance, error) {
 	// normalize into the from kraftcloud API expects:
 	image, err := util.NormalizeImageName(req.Image)
 	if err != nil {
@@ -65,10 +65,14 @@ func (i *InstanceClient) Create(ctx context.Context, req CreateInstanceRequest) 
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
 
-	endpoint := i.BaseURL + Endpoint
+	if i.request == nil {
+		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
+	}
+
+	defer func() { i.request = nil }()
 
 	var response kraftcloud.ServiceResponse[Instance]
-	if err := i.DoRequest(ctx, http.MethodPost, endpoint, bytes.NewBuffer(body), &response); err != nil {
+	if err := i.request.DoRequest(ctx, http.MethodPost, Endpoint, bytes.NewBuffer(body), &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

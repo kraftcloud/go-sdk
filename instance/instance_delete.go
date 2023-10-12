@@ -18,15 +18,21 @@ import (
 // no longer valid. If the instance is currently running it is force stopped.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#delete
-func (i *InstanceClient) Delete(ctx context.Context, uuid string) error {
+func (i *instancesClient) Delete(ctx context.Context, uuid string) error {
 	if uuid == "" {
 		return errors.New("UUID cannot be empty")
 	}
-	base := i.BaseURL + Endpoint
-	endpoint := fmt.Sprintf("%s/%s", base, uuid)
+
+	endpoint := fmt.Sprintf("%s/%s", Endpoint, uuid)
+
+	if i.request == nil {
+		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
+	}
+
+	defer func() { i.request = nil }()
 
 	var response kraftcloud.ServiceResponse[Instance]
-	if err := i.DoRequest(ctx, http.MethodDelete, endpoint, nil, &response); err != nil {
+	if err := i.request.DoRequest(ctx, http.MethodDelete, endpoint, nil, &response); err != nil {
 		return fmt.Errorf("performing the request: %w", err)
 	}
 

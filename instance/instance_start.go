@@ -20,12 +20,12 @@ import (
 // already running.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#start
-func (i *InstanceClient) Start(ctx context.Context, uuid string, waitTimeoutMS int) (*Instance, error) {
+func (i *instancesClient) Start(ctx context.Context, uuid string, waitTimeoutMS int) (*Instance, error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
-	base := i.BaseURL + Endpoint
-	endpoint := fmt.Sprintf("%s/%s/start", base, uuid)
+
+	endpoint := fmt.Sprintf("%s/%s/start", Endpoint, uuid)
 
 	requestBody := map[string]interface{}{
 		"wait_timeout_ms": waitTimeoutMS,
@@ -36,8 +36,14 @@ func (i *InstanceClient) Start(ctx context.Context, uuid string, waitTimeoutMS i
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
+	if i.request == nil {
+		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
+	}
+
+	defer func() { i.request = nil }()
+
 	var response kraftcloud.ServiceResponse[Instance]
-	if err := i.DoRequest(ctx, http.MethodPut, endpoint, bytes.NewBuffer(body), &response); err != nil {
+	if err := i.request.DoRequest(ctx, http.MethodPut, endpoint, bytes.NewBuffer(body), &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

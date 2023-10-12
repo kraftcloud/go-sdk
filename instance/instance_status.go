@@ -17,15 +17,21 @@ import (
 // Status returns the current status and the configuration of an instance.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#status
-func (i *InstanceClient) Status(ctx context.Context, uuid string) (*Instance, error) {
+func (i *instancesClient) Status(ctx context.Context, uuid string) (*Instance, error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
-	base := i.BaseURL + Endpoint
-	endpoint := fmt.Sprintf("%s/%s", base, uuid)
+
+	endpoint := fmt.Sprintf("%s/%s", Endpoint, uuid)
+
+	if i.request == nil {
+		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
+	}
+
+	defer func() { i.request = nil }()
 
 	var response kraftcloud.ServiceResponse[Instance]
-	if err := i.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {
+	if err := i.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

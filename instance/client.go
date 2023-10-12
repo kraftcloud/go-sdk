@@ -6,27 +6,61 @@
 package instance
 
 import (
+	"time"
+
 	kraftcloud "sdk.kraft.cloud/v0"
 )
 
-// InstanceClient is a basic wrapper around for the v1 instance services of
+// instancesClient is a basic wrapper around the v1 instance client of
 // KraftCloud.
-type InstanceClient struct {
-	kraftcloud.RESTClient
+//
+// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html
+type instancesClient struct {
+	opts    *kraftcloud.Options
+	request *kraftcloud.ServiceRequest
 }
 
 // NewDefaultClient creates a sensible, default Kraftcloud instance API client.
-func NewDefaultInstanceClient(user, token string) *InstanceClient {
+func NewDefaultInstanceClient(user, token string) InstancesService {
 	return NewInstanceClient(kraftcloud.NewHTTPClient(), kraftcloud.BaseURL, user, token)
 }
 
-func NewInstanceClient(httpClient kraftcloud.HTTPClient, baseURL, user, token string) *InstanceClient {
-	return &InstanceClient{
-		RESTClient: kraftcloud.RESTClient{
-			HTTPClient: httpClient,
-			BaseURL:    baseURL,
-			User:       user,
-			Token:      token,
-		},
+// NewInstancesClient instantiates a client which interface's with KraftCloud's
+// instances API.
+func NewInstanceClient(httpClient kraftcloud.HTTPClient, baseURL, user, token string) InstancesService {
+	return &instancesClient{
+		opts: kraftcloud.NewDefaultOptions(
+			kraftcloud.WithUser(user),
+			kraftcloud.WithToken(token),
+			kraftcloud.WithHTTPClient(httpClient),
+		),
 	}
+}
+
+// WithMetro sets the just-in-time metro to use when connecting to the
+// KraftCloud API.
+func (i *instancesClient) WithMetro(metro string) InstancesService {
+	if i.request == nil {
+		i.request = kraftcloud.NewServiceRequest()
+	}
+	i.request.SetMetro(metro)
+	return i
+}
+
+// WithHTTPClient overwrites the base HTTP client.
+func (i *instancesClient) WithHTTPClient(httpClient kraftcloud.HTTPClient) InstancesService {
+	if i.request == nil {
+		i.request = kraftcloud.NewServiceRequest()
+	}
+	i.request.SetHTTPClient(httpClient)
+	return i
+}
+
+// WithTimeout sets the timeout when making a request.
+func (i *instancesClient) WithTimeout(timeout time.Duration) InstancesService {
+	if i.request == nil {
+		i.request = kraftcloud.NewServiceRequest()
+	}
+	i.request.SetTimeout(timeout)
+	return i
 }
