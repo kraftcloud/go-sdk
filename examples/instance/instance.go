@@ -55,7 +55,7 @@ func main() {
 	time.Sleep(time.Second * 1)
 
 	// get and print the console output
-	output, err := apiClient.ConsoleOutput(ctx, instance.UUID, -1, true)
+	output, err := apiClient.Logs(ctx, instance.UUID, -1, true)
 	if err != nil {
 		fmt.Printf("erred: %v\n", err)
 	}

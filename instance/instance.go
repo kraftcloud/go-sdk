@@ -93,8 +93,8 @@ type NetworkInterface struct {
 	MAC       string `json:"mac"`
 }
 
-// ConsoleOutputResponse holds console output data, as returned by the API.
-type ConsoleOutputResponse struct {
+// LogsResponse holds console output data, as returned by the API.
+type LogsResponse struct {
 	Status string `json:"status"`
 	Data   struct {
 		Instances []struct {
@@ -347,13 +347,14 @@ func (i *InstanceClient) Delete(ctx context.Context, uuid string) error {
 	return nil
 }
 
-// ConsoleOutput fetches console output of the specified instance.
-// see: https://docs.kraft.cloud/002-rest-api-v1-instances.html#console
-func (i *InstanceClient) ConsoleOutput(ctx context.Context, uuid string, maxLines int, latest bool) (string, error) {
+// Logs returns the console output of the specified instance.
+//
+// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#console
+func (i *InstanceClient) Logs(ctx context.Context, uuid string, maxLines int, latest bool) (string, error) {
 	base := i.BaseURL + Endpoint
 	endpoint := fmt.Sprintf("%s/%s/console", base, uuid)
 
-	response := &ConsoleOutputResponse{}
+	response := &LogsResponse{}
 
 	if err := i.DoRequest(ctx, http.MethodGet, endpoint, nil, response); err != nil {
 		return "", fmt.Errorf("performing the request: %w", err)
