@@ -28,6 +28,14 @@ func NewInstancesClient(opts ...kraftcloud.Option) InstancesService {
 	}
 }
 
+// NewInstancesClientFromOptions instantiates a new instances services client
+// based on the provided pre-existing options.
+func NewInstancesClientFromOptions(opts *kraftcloud.Options) InstancesService {
+	return &instancesClient{
+		opts: opts,
+	}
+}
+
 // WithMetro sets the just-in-time metro to use when connecting to the
 // KraftCloud API.
 func (i *instancesClient) WithMetro(metro string) InstancesService {
