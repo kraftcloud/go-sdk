@@ -1,13 +1,15 @@
-## Kraftcloud Go SDK
+# KraftCloud Go SDK
 
-This SDK is an early version of a Go-based client designed to interface with the kraftcloud API.
+This SDK is an early version of a Go-based client designed to interface with the [KraftCloud](https://kraft.cloud) API.
 
-📖 **Documentation**: For a comprehensive list of all API endpoints and detailed usage, refer to the [official Kraftcloud documentation](https://docs.kraft.cloud/).
+> 📖 **Documentation**
+>
+> For a comprehensive list of all API endpoints and detailed usage, refer to the [official KraftCloud documentation](https://docs.kraft.cloud/).
 
 ## Requirements
 
-- Go 1.20 or higher
-- Valid kraftcloud authentication credentials
+- Go 1.20 or higher.
+- Valid KraftCloud authentication credentials. [Sign up for the beta!](https://kraft.cloud)
 
 ## Quick start
 
@@ -16,18 +18,24 @@ package main
 
 import (
 	"fmt"
-    "context"
-    "sdk.kraft.cloud/v0/image"
+	"context"
+
+	kraftcloud "sdk.kraft.cloud/v0"
+	services "sdk.kraft.cloud/v0/services"
 )
 
 func main() {
-	client := image.NewDefaultImageClient("your_user", "your_password")
-	filter := make(map[string]interface{})
-	images, err := client.ListImages(context.Background(), filter)
+	client := services.NewServicesClient(
+		kraftcloud.WithUser("user"),
+		kraftcloud.WithToken("token"),
+	)
 
-    if err != nil {
-        fmt.Printf("failed: %v", err)
-    }
+	filter := make(map[string]interface{})
+	images, err := client.Images().List(context.Background(), filter)
+	if err != nil {
+		fmt.Printf("failed: %v", err)
+		return
+	}
 
 	for _, i := range images {
 		fmt.Println(i.Digest)
