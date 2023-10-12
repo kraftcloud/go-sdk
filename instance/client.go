@@ -20,20 +20,11 @@ type instancesClient struct {
 	request *kraftcloud.ServiceRequest
 }
 
-// NewDefaultClient creates a sensible, default Kraftcloud instance API client.
-func NewDefaultInstanceClient(user, token string) InstancesService {
-	return NewInstanceClient(kraftcloud.NewHTTPClient(), kraftcloud.BaseURL, user, token)
-}
-
 // NewInstancesClient instantiates a client which interface's with KraftCloud's
 // instances API.
-func NewInstanceClient(httpClient kraftcloud.HTTPClient, baseURL, user, token string) InstancesService {
+func NewInstancesClient(opts ...kraftcloud.Option) InstancesService {
 	return &instancesClient{
-		opts: kraftcloud.NewDefaultOptions(
-			kraftcloud.WithUser(user),
-			kraftcloud.WithToken(token),
-			kraftcloud.WithHTTPClient(httpClient),
-		),
+		opts: kraftcloud.NewDefaultOptions(opts...),
 	}
 }
 

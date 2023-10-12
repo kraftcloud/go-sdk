@@ -26,7 +26,10 @@ func main() {
 		return
 	}
 
-	apiClient := instance.NewDefaultInstanceClient(user, password)
+	apiClient := instance.NewInstancesClient(
+		kraftcloud.WithUser(user),
+		kraftcloud.WithToken(password),
+	)
 	ctx := context.Background()
 	instance, err := apiClient.Create(ctx, instance.CreateInstanceRequest{
 		// You have to build the kraft.cloud.yaml target from https://github.com/unikraft/app-nginx
