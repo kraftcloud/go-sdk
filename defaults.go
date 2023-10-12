@@ -7,7 +7,7 @@ package kraftcloud
 
 const (
 	// BaseURL defines the default location of the Kraftcloud API.
-	BaseURL = "https://api.fra0.kraft.cloud/v1"
+	BaseURL = "https://api." + DefaultMetro + ".kraft.cloud/v1"
 	// BaseV1FormatURL defines the default location of the KraftCloud API which is
 	// formatted to allow setting the metro.
 	BaseV1FormatURL = "https://api.%s.kraft.cloud/v1"
@@ -19,4 +19,6 @@ const (
 	// DefaultAutoStart is the default autostart value - whether the instance will
 	// start immediately after creation
 	DefaultAutoStart = true
+	// DefaultMetro is set to a default node based in Frankfurt.
+	DefaultMetro = "fra0"
 )
