@@ -269,10 +269,12 @@ func (i *InstanceClient) List(ctx context.Context) ([]Instance, error) {
 	return response.Data.Instances, nil
 }
 
-// StopInstance stops the specified instance, but does not destroy it. All volatile state (e.g., RAM contents) is lost.
-// Does nothing for an instance that is already stopped. The instance can be started again with the start endpoint.
-// see https://docs.kraft.cloud/002-rest-api-v1-instances.html#stop
-func (i *InstanceClient) StopInstance(ctx context.Context, uuid string, drainTimeoutMS int64) (*Instance, error) {
+// Stops the specified instance, but does not destroy it. All volatile state
+// (e.g., RAM contents) is lost. Does nothing for an instance that is already
+// stopped. The instance can be started again with the start endpoint.
+//
+// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#stop
+func (i *InstanceClient) Stop(ctx context.Context, uuid string, drainTimeoutMS int64) (*Instance, error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
