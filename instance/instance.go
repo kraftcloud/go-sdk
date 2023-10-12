@@ -298,9 +298,11 @@ func (i *InstanceClient) Stop(ctx context.Context, uuid string, drainTimeoutMS i
 	return firstInstanceOrErr(&response)
 }
 
-// StartInstance starts a previously stopped instance. Does nothing for an instance that is already running.
-// see: https://docs.kraft.cloud/002-rest-api-v1-instances.html#start
-func (i *InstanceClient) StartInstance(ctx context.Context, uuid string, waitTimeoutMS int) (*Instance, error) {
+// Starts a previously stopped instance. Does nothing for an instance that is
+// already running.
+//
+// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#start
+func (i *InstanceClient) Start(ctx context.Context, uuid string, waitTimeoutMS int) (*Instance, error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}

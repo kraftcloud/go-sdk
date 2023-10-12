@@ -68,7 +68,7 @@ func main() {
 		fmt.Printf("%v", err)
 	}
 	// start
-	instance, err = apiClient.StartInstance(ctx, instance.UUID, 0)
+	instance, err = apiClient.Start(ctx, instance.UUID, 0)
 	if err != nil {
 		fmt.Printf("%v", err)
 	}
