@@ -253,9 +253,10 @@ func (i *InstanceClient) Status(ctx context.Context, uuid string) (*Instance, er
 	return firstInstanceOrErr(&response)
 }
 
-// ListInstances fetches all instances from the Kraftcloud compute API.
-// see: https://docs.kraft.cloud/002-rest-api-v1-instances.html#list
-func (i *InstanceClient) ListInstances(ctx context.Context) ([]Instance, error) {
+// Lists all existing instances.
+//
+// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#list
+func (i *InstanceClient) List(ctx context.Context) ([]Instance, error) {
 	base := i.BaseURL + Endpoint
 	endpoint := fmt.Sprintf("%s/list", base)
 

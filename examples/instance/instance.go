@@ -73,7 +73,7 @@ func main() {
 		fmt.Printf("%v", err)
 	}
 	// list
-	instances, err := apiClient.ListInstances(ctx)
+	instances, err := apiClient.List(ctx)
 	if err != nil {
 		fmt.Printf("%v", err)
 	}
