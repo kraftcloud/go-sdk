@@ -28,7 +28,7 @@ func main() {
 
 	apiClient := instance.NewDefaultInstanceClient(user, password)
 	ctx := context.Background()
-	instance, err := apiClient.CreateInstance(ctx, instance.CreateInstancePayload{
+	instance, err := apiClient.CreateInstance(ctx, instance.CreateInstanceRequest{
 		// You have to build the kraft.cloud.yaml target from https://github.com/unikraft/app-nginx
 		// and upload it with kraft pkg push to make this image available to your account.
 		Image:        "unikraft.io/jayc.unikraft.io/nginx/latest",

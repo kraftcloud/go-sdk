@@ -43,9 +43,9 @@ func NewInstanceClient(httpClient kraftcloud.HTTPClient, baseURL, user, token st
 	}
 }
 
-// CreateInstancePayload holds all the data necessary to create an instance via the API.
+// CreateInstanceRequest holds all the data necessary to create an instance via the API.
 // see: https://docs.kraft.cloud/002-rest-api-v1-instances.html#create
-type CreateInstancePayload struct {
+type CreateInstanceRequest struct {
 	// Name of the Unikraft image to instantiate. Private images will be available under your user's namespace
 	Image string
 	// Application arguments
@@ -146,25 +146,25 @@ func (i *Instance) GetFieldByPrettyTag(tag string) string {
 
 // CreateInstance dispatches the request to create a Kraftcloud compute instance.
 // see: https://docs.kraft.cloud/002-rest-api-v1-instances.html#create
-func (i *InstanceClient) CreateInstance(ctx context.Context, data CreateInstancePayload) (*Instance, error) {
+func (i *InstanceClient) CreateInstance(ctx context.Context, req CreateInstanceRequest) (*Instance, error) {
 	// normalize into the from kraftcloud API expects:
-	image, err := util.NormalizeImageName(data.Image)
+	image, err := util.NormalizeImageName(req.Image)
 	if err != nil {
 		return nil, fmt.Errorf("normalizing image name: %w", err)
 	}
 
 	requestBody := map[string]interface{}{
 		"image":     image,
-		"args":      data.Args,
-		"memory_mb": data.Memory,
+		"args":      req.Args,
+		"memory_mb": req.Memory,
 		"services": []map[string]interface{}{
 			{
-				"port":          data.Port,
-				"internal_port": data.InternalPort,
-				"handlers":      data.Handlers,
+				"port":          req.Port,
+				"internal_port": req.InternalPort,
+				"handlers":      req.Handlers,
 			},
 		},
-		"autostart": data.Autostart,
+		"autostart": req.Autostart,
 	}
 
 	body, err := json.Marshal(requestBody)
