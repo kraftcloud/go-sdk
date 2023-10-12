@@ -20,7 +20,7 @@ const (
 
 // ImageClient wraps the v1 Image client of Kraftcloud.
 type ImageClient struct {
-	kraftcloud.Client
+	kraftcloud.RESTClient
 }
 
 // NewDefaultClient creates a sensible, default Kraftcloud image API client.
@@ -30,7 +30,7 @@ func NewDefaultImageClient(user, token string) *ImageClient {
 
 func NewImageClient(httpClient kraftcloud.HTTPClient, baseURL, user, token string) *ImageClient {
 	return &ImageClient{
-		Client: kraftcloud.Client{
+		RESTClient: kraftcloud.RESTClient{
 			HTTPClient: httpClient,
 			BaseURL:    baseURL,
 			User:       user,

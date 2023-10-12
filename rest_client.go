@@ -34,8 +34,9 @@ type HTTPClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
 
-// Client is our base API Client implementing the common HTTP/authentication behaviours.
-type Client struct {
+// RESTClient is our base API Client implementing the common HTTP/authentication
+// behaviours.
+type RESTClient struct {
 	HTTPClient HTTPClient
 	BaseURL    string
 	User       string
@@ -43,7 +44,7 @@ type Client struct {
 }
 
 // DoRequest performs the request and hydrates a target type with response body.
-func (c *Client) DoRequest(ctx context.Context, method, endpoint string, body io.Reader, v interface{}) error {
+func (c *RESTClient) DoRequest(ctx context.Context, method, endpoint string, body io.Reader, v interface{}) error {
 	req, err := http.NewRequestWithContext(ctx, method, endpoint, body)
 	if err != nil {
 		return fmt.Errorf("creating request: %w", err)
@@ -62,7 +63,7 @@ func (c *Client) DoRequest(ctx context.Context, method, endpoint string, body io
 	return json.NewDecoder(resp.Body).Decode(v)
 }
 
-func (c *Client) doWithAuth(req *http.Request) (*http.Response, error) {
+func (c *RESTClient) doWithAuth(req *http.Request) (*http.Response, error) {
 	bearer, err := c.getBearerToken()
 	if err != nil {
 		return nil, fmt.Errorf("getting the bearer token: %w", err)
@@ -74,7 +75,7 @@ func (c *Client) doWithAuth(req *http.Request) (*http.Response, error) {
 	return c.HTTPClient.Do(req)
 }
 
-func (c *Client) getBearerToken() (string, error) {
+func (c *RESTClient) getBearerToken() (string, error) {
 	if c.User == "" || c.Token == "" {
 		return "", errors.New("no auth details provided")
 	}
