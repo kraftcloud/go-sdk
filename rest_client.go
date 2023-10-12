@@ -15,20 +15,6 @@ import (
 	"net/http"
 )
 
-const (
-	// BaseURL defines the default location of the Kraftcloud API.
-	BaseURL = "https://api.fra0.kraft.cloud/v1"
-	// BaseV1FormatURL defines the default location of the KraftCloud API which is
-	// formatted to allow setting the metro.
-	BaseV1FormatURL = "https://api.%s.kraft.cloud/v1"
-	// DefaultPort is the port the instance will listen on externally by default.
-	DefaultPort = 443
-	// DefaultHandler sets the connection handler. The API only accepts "tls" for now.
-	DefaultHandler = "tls"
-	// DefaultAutoStart is the default autostart value - whether the instance will start immediately after creation
-	DefaultAutoStart = true
-)
-
 // HTTPClient interface abstracts a generic HTTP request issuing client.
 type HTTPClient interface {
 	Do(req *http.Request) (*http.Response, error)
