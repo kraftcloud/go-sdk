@@ -82,7 +82,7 @@ func main() {
 		fmt.Println(i.UUID)
 	}
 	// delete
-	err = apiClient.DeleteInstance(ctx, instance.UUID)
+	err = apiClient.Delete(ctx, instance.UUID)
 	if err != nil {
 		fmt.Printf("%v", err)
 	}

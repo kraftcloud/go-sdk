@@ -327,9 +327,11 @@ func (i *InstanceClient) Start(ctx context.Context, uuid string, waitTimeoutMS i
 	return firstInstanceOrErr(&response)
 }
 
-// DeleteInstance deletes the specified instance. After this call the UUID of the instance is no longer valid. If the instance is currently running it is force stopped.
-// see: https://docs.kraft.cloud/002-rest-api-v1-instances.html#delete
-func (i *InstanceClient) DeleteInstance(ctx context.Context, uuid string) error {
+// Deletes the specified instance. After this call the UUID of the instance is
+// no longer valid. If the instance is currently running it is force stopped.
+//
+// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#delete
+func (i *InstanceClient) Delete(ctx context.Context, uuid string) error {
 	if uuid == "" {
 		return errors.New("UUID cannot be empty")
 	}
