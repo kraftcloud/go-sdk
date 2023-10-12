@@ -234,9 +234,10 @@ func (i *InstanceClient) Create(ctx context.Context, req CreateInstanceRequest) 
 	return firstInstanceOrErr(&response)
 }
 
-// InstanceStatus queries the Kraftcloud compute API for details of a running instance.
-// see: https://docs.kraft.cloud/002-rest-api-v1-instances.html#status
-func (i *InstanceClient) InstanceStatus(ctx context.Context, uuid string) (*Instance, error) {
+// Status returns the current status and the configuration of an instance.
+//
+// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#status
+func (i *InstanceClient) Status(ctx context.Context, uuid string) (*Instance, error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}

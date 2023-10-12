@@ -44,7 +44,7 @@ func main() {
 		return
 	}
 
-	result, err := apiClient.InstanceStatus(ctx, instance.UUID)
+	result, err := apiClient.Status(ctx, instance.UUID)
 	if err != nil {
 		fmt.Printf("erred: %v\n", err)
 		return
