@@ -192,9 +192,13 @@ func (i *Instance) GetFieldByPrettyTag(tag string) string {
 	}
 }
 
-// CreateInstance dispatches the request to create a Kraftcloud compute instance.
-// see: https://docs.kraft.cloud/002-rest-api-v1-instances.html#create
-func (i *InstanceClient) CreateInstance(ctx context.Context, req CreateInstanceRequest) (*Instance, error) {
+// Creates one or more new instances of the specified Unikraft images. You can
+// describe the properties of the new instances such as their startup
+// arguments and amount of memory. Note that, the instance properties can only
+// be defined during creation. They cannot be changed later.
+//
+// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#create
+func (i *InstanceClient) Create(ctx context.Context, req CreateInstanceRequest) (*Instance, error) {
 	// normalize into the from kraftcloud API expects:
 	image, err := util.NormalizeImageName(req.Image)
 	if err != nil {
