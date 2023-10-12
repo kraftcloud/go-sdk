@@ -131,26 +131,6 @@ func (i *Instance) GetFieldByPrettyTag(tag string) string {
 	}
 }
 
-// Deletes the specified instance. After this call the UUID of the instance is
-// no longer valid. If the instance is currently running it is force stopped.
-//
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#delete
-func (i *InstanceClient) Delete(ctx context.Context, uuid string) error {
-	if uuid == "" {
-		return errors.New("UUID cannot be empty")
-	}
-	base := i.BaseURL + Endpoint
-	endpoint := fmt.Sprintf("%s/%s", base, uuid)
-
-	var response InstanceResponse
-
-	if err := i.DoRequest(ctx, http.MethodDelete, endpoint, nil, &response); err != nil {
-		return fmt.Errorf("performing the request: %w", err)
-	}
-
-	return nil
-}
-
 // Logs returns the console output of the specified instance.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#console
