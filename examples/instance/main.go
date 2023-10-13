@@ -19,16 +19,13 @@ import (
 // Here, you'll learn how to create an instance and display its console output.
 // Subsequent actions include stopping and starting the instance, listing all instances in the project, and, ultimately, deleting the created instance.
 func main() {
-	user := os.Getenv("KRAFTCLOUD_USER")
 	token := os.Getenv("KRAFTCLOUD_TOKEN")
-
-	if user == "" || token == "" {
-		fmt.Println("Please set KRAFTCLOUD_USER and KRAFTCLOUD_TOKEN environment variables")
+	if token == "" {
+		fmt.Println("Please set KRAFTCLOUD_TOKEN environment variable")
 		return
 	}
 
 	apiClient := instance.NewInstancesClient(
-		kraftcloud.WithUser(user),
 		kraftcloud.WithToken(token),
 	)
 	ctx := context.Background()
