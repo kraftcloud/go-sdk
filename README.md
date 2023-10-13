@@ -26,7 +26,6 @@ import (
 
 func main() {
 	client := services.NewServicesClient(
-		kraftcloud.WithUser("user"),
 		kraftcloud.WithToken("token"),
 	)
 

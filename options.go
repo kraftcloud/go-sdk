@@ -37,14 +37,6 @@ func NewDefaultOptions(opts ...Option) *Options {
 	return &options
 }
 
-// WithUser sets the username of the client connecting to KraftCloud.
-func WithUser(user string) Option {
-	return func(client *Options) error {
-		client.user = user
-		return nil
-	}
-}
-
 // WithToken sets the access token of the client connecting to KraftCloud.
 func WithToken(token string) Option {
 	return func(client *Options) error {

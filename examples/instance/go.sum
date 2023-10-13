@@ -8,3 +8,5 @@ github.com/mattn/go-isatty v0.0.17/go.mod h1:kYGgaQfpe5nmfYZH+SKPsOc2e4SrIfOl2e/
 golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.6.0 h1:MVltZSvRTcU2ljQOhs94SXPftV6DCNnZViHeQps87pQ=
 golang.org/x/sys v0.6.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+sdk.kraft.cloud v0.2.0 h1:yeUZVaE1q9WpnYbGfv5gBhDOzH1BwIA/ArH2bGH5nJ4=
+sdk.kraft.cloud v0.2.0/go.mod h1:8nWpenBQzgMvXDr5iJv2azfDyBfxQhTuG/Lm0OWRG9s=

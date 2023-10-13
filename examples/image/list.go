@@ -17,16 +17,13 @@ import (
 
 // This demonstrates how to list images in your project.
 func main() {
-	user := os.Getenv("KRAFTCLOUD_USER")
 	token := os.Getenv("KRAFTCLOUD_TOKEN")
-
-	if user == "" || token == "" {
-		fmt.Println("Please set KRAFTCLOUD_USER and KRAFTCLOUD_TOKEN environment variables")
+	if token == "" {
+		fmt.Println("Please set KRAFTCLOUD_TOKEN environment variable")
 		return
 	}
 
 	client := image.NewImagesClient(
-		kraftcloud.WithUser(user),
 		kraftcloud.WithToken(token),
 	)
 	filter := make(map[string]interface{})
