@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"net/http"
 
-	kraftcloud "sdk.kraft.cloud/v0"
+	kraftcloud "sdk.kraft.cloud"
 )
 
 // Deletes the specified instance. After this call the UUID of the instance is

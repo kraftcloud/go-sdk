@@ -8,7 +8,7 @@ package instance
 import (
 	"time"
 
-	kraftcloud "sdk.kraft.cloud/v0"
+	kraftcloud "sdk.kraft.cloud"
 )
 
 // instancesClient is a basic wrapper around the v1 instance client of

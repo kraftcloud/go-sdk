@@ -6,9 +6,9 @@
 package client
 
 import (
-	kraftcloud "sdk.kraft.cloud/v0"
-	"sdk.kraft.cloud/v0/image"
-	"sdk.kraft.cloud/v0/instance"
+	kraftcloud "sdk.kraft.cloud"
+	"sdk.kraft.cloud/image"
+	"sdk.kraft.cloud/instance"
 )
 
 // ServicesClient provides access to the KraftCloud API.

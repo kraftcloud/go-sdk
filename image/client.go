@@ -8,7 +8,7 @@ package image
 import (
 	"time"
 
-	kraftcloud "sdk.kraft.cloud/v0"
+	kraftcloud "sdk.kraft.cloud"
 )
 
 // imagesClient wraps the v1 Image client of KraftCloud.

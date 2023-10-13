@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"net/http"
 
-	kraftcloud "sdk.kraft.cloud/v0"
+	kraftcloud "sdk.kraft.cloud"
 )
 
 // Lists all existing instances.

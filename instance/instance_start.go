@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"net/http"
 
-	kraftcloud "sdk.kraft.cloud/v0"
+	kraftcloud "sdk.kraft.cloud"
 )
 
 // Starts a previously stopped instance. Does nothing for an instance that is

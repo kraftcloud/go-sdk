@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"context"
 
-	kraftcloud "sdk.kraft.cloud/v0"
-	services "sdk.kraft.cloud/v0/services"
+	kraftcloud "sdk.kraft.cloud"
+	services "sdk.kraft.cloud/services"
 )
 
 func main() {

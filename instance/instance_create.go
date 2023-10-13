@@ -12,8 +12,8 @@ import (
 	"fmt"
 	"net/http"
 
-	kraftcloud "sdk.kraft.cloud/v0"
-	"sdk.kraft.cloud/v0/util"
+	kraftcloud "sdk.kraft.cloud"
+	"sdk.kraft.cloud/util"
 )
 
 // CreateInstanceServicesRequest contains the description of an exposed network

@@ -8,7 +8,7 @@ package image
 import (
 	"context"
 
-	kraftcloud "sdk.kraft.cloud/v0"
+	kraftcloud "sdk.kraft.cloud"
 )
 
 type ImagesService interface {

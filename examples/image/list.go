@@ -11,8 +11,8 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	kraftcloud "sdk.kraft.cloud/v0"
-	"sdk.kraft.cloud/v0/image"
+	kraftcloud "sdk.kraft.cloud"
+	"sdk.kraft.cloud/image"
 )
 
 // This demonstrates how to list images in your project.
