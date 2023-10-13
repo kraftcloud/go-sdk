@@ -100,12 +100,7 @@ func (request *ServiceRequest) DoRequest(ctx context.Context, method, url string
 // DoWithAuth performs a request with headers defining the content type.  We
 // also inject the authentication details.
 func (request *ServiceRequest) DoWithAuth(req *http.Request) (*http.Response, error) {
-	bearer, err := request.GetBearerToken()
-	if err != nil {
-		return nil, fmt.Errorf("error getting the bearer token: %w", err)
-	}
-
-	req.Header.Set("Authorization", bearer)
+	req.Header.Set("Authorization", request.GetBearerToken())
 	req.Header.Set("Content-Type", "application/json")
 
 	if request.httpClient == nil {
@@ -115,8 +110,8 @@ func (request *ServiceRequest) DoWithAuth(req *http.Request) (*http.Response, er
 	return request.httpClient.Do(req)
 }
 
-// GetBearerToken uses the pre-defined user and user token to construct
-// the Bearer token used for authenticating requests.
-func (request *ServiceRequest) GetBearerToken() (string, error) {
-	return fmt.Sprintf("Bearer %s", request.opts.token), nil
+// GetBearerToken uses the pre-defined token to construct the Bearer token used
+// for authenticating requests.
+func (request *ServiceRequest) GetBearerToken() string {
+	return "Bearer " + request.opts.token
 }

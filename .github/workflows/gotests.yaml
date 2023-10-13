@@ -1,0 +1,47 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    paths:
+      - '**'
+      - '!.github/**'
+      - .github/workflows/gotests.yaml
+
+jobs:
+  gounit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v4
+        with:
+          go-version-file: go.mod
+          cache: false
+
+      - name: Set Go variables
+        id: goenv
+        run: |
+          mod=$(go env GOMOD)
+          {
+            echo "cache=$(go env GOCACHE)"
+            echo "modcache=$(go env GOMODCACHE)"
+            echo "sum=${mod/%.mod/.sum}"
+          } >>"$GITHUB_OUTPUT"
+
+      - name: Go caches
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ steps.goenv.outputs.cache }}
+            ${{ steps.goenv.outputs.modcache }}
+          key: ${{ github.job }}-${{ runner.os }}-go-${{ hashFiles(steps.goenv.outputs.sum) }}
+          restore-keys: |
+            ${{ github.job }}-${{ runner.os }}-go-
+
+      - run: go mod download
+
+      - name: Run tests
+        run: go test ./...

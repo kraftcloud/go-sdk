@@ -1,0 +1,69 @@
+name: Go static checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    paths:
+      - '**'
+      - '!.github/**'
+      - .github/workflows/gochecks.yaml
+
+jobs:
+  gochecks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v4
+        with:
+          go-version-file: go.mod
+          cache: false
+
+      - name: Set Go variables
+        id: goenv
+        run: |
+          mod=$(go env GOMOD)
+          {
+            echo "cache=$(go env GOCACHE)"
+            echo "modcache=$(go env GOMODCACHE)"
+            echo "sum=${mod/%.mod/.sum}"
+          } >>"$GITHUB_OUTPUT"
+
+      - name: Go caches
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ steps.goenv.outputs.cache }}
+            ${{ steps.goenv.outputs.modcache }}
+          key: ${{ github.job }}-${{ runner.os }}-go-${{ hashFiles(steps.goenv.outputs.sum) }}
+          restore-keys: |
+            ${{ github.job }}-${{ runner.os }}-go-
+
+      - run: go mod download
+
+      - name: Check that go.mod is tidy
+        run: |
+          go mod tidy
+          # check if go mod tidy modified or added any files
+          if ! git diff --compact-summary --exit-code -- go.mod go.sum; then
+            echo
+            echo "go mod tidy caused changes to the repository. Run 'go mod tidy' command and commit."
+            exit 1
+          fi
+
+      - name: gofumpt
+        if: success() || failure()  # run this step even if the previous one failed
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          args: --no-config --disable-all --enable=gofumpt --out-format=colored-line-number
+          skip-cache: true
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          args: --out-format=colored-line-number
+          skip-cache: true

@@ -80,7 +80,7 @@ type Instance struct {
 	Error int64 `json:"error,omitempty"`
 
 	// Base 64 encoded console output.
-	Output string `json:"output,omitempty,omitempty"`
+	Output string `json:"output,omitempty"`
 }
 
 func (i *Instance) GetFieldByPrettyTag(tag string) string {
