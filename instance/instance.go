@@ -16,13 +16,13 @@ const (
 // NetworkInterface holds interface data returned by the Instance API.
 type NetworkInterface struct {
 	// UUID of the network interface.
-	UUID string `json:"uuid"`
+	UUID string `json:"uuid,omitempty"`
 
 	// Private IPv4 of network interface in CIDR notation.
-	PrivateIP string `json:"private_ip"`
+	PrivateIP string `json:"private_ip,omitempty"`
 
 	// MAC address of the network interface.
-	MAC string `json:"mac"`
+	MAC string `json:"mac,omitempty"`
 }
 
 // Instance holds the description of the KraftCloud compute instance, as
