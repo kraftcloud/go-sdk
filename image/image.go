@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"sdk.kraft.cloud/v0/client"
+	"sdk.kraft.cloud/client"
 )
 
 const (

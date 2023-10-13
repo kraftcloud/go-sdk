@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"sdk.kraft.cloud/v0/client"
-	"sdk.kraft.cloud/v0/instance"
+	"sdk.kraft.cloud/client"
+	"sdk.kraft.cloud/instance"
 )
 
 // Here, you'll learn how to create an instance and display its console output.

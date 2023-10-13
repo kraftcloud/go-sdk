@@ -13,8 +13,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"sdk.kraft.cloud/v0/client"
-	"sdk.kraft.cloud/v0/util"
+	"sdk.kraft.cloud/client"
+	"sdk.kraft.cloud/util"
 )
 
 const (

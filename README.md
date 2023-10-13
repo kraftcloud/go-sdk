@@ -17,7 +17,7 @@ package main
 import (
 	"fmt"
     "context"
-    "sdk.kraft.cloud/v0/image"
+    "sdk.kraft.cloud/image"
 )
 
 func main() {
