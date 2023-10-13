@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
+
 	kraftcloud "sdk.kraft.cloud/v0"
 	"sdk.kraft.cloud/v0/instance"
 )
