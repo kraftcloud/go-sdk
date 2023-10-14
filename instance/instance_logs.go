@@ -27,7 +27,7 @@ func (i *instancesClient) Logs(ctx context.Context, uuid string, maxLines int, l
 	defer func() { i.request = nil }()
 
 	var resp kraftcloud.ServiceResponse[Instance]
-	if err := i.request.DoRequest(ctx, http.MethodGet, endpoint, nil, resp); err != nil {
+	if err := i.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &resp); err != nil {
 		return "", fmt.Errorf("performing the request: %w", err)
 	}
 
