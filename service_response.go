@@ -81,11 +81,11 @@ func (data *ServiceResponseData[T]) UnmarshalJSON(b []byte) error {
 // available.
 func (response *ServiceResponse[T]) FirstOrErr() (*T, error) {
 	entries, err := response.AllOrErr()
-	if err != nil {
-		return nil, err
+	if entries != nil && len(entries) > 0 {
+		return &entries[0], err
 	}
 
-	return &entries[0], nil
+	return nil, err
 }
 
 // FirstOrErr returns the all data entrypoints or an error if it is not
@@ -95,16 +95,16 @@ func (response *ServiceResponse[T]) AllOrErr() ([]T, error) {
 		return nil, errors.New("response is nil")
 	}
 
+	if response.Status == "error" {
+		return response.Data.Entries, fmt.Errorf(response.Message)
+	}
+
 	if response.Data.Entries == nil {
 		return nil, errors.New("data entries are nil")
 	}
 
 	if len(response.Data.Entries) == 0 {
 		return nil, errors.New("no data entries returned from the server")
-	}
-
-	if response.Status == "error" {
-		return nil, fmt.Errorf(response.Message)
 	}
 
 	return response.Data.Entries, nil
