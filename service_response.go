@@ -81,7 +81,7 @@ func (data *ServiceResponseData[T]) UnmarshalJSON(b []byte) error {
 // available.
 func (response *ServiceResponse[T]) FirstOrErr() (*T, error) {
 	entries, err := response.AllOrErr()
-	if entries != nil {
+	if len(entries) > 0 {
 		return &entries[0], err
 	}
 
