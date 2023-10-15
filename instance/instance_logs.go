@@ -32,8 +32,8 @@ func (i *instancesClient) Logs(ctx context.Context, uuid string, maxLines int, l
 	}
 
 	instance, err := resp.FirstOrErr()
-	if err != nil {
-		return "", err
+	if instance != nil && instance.Message != "" {
+		return "", fmt.Errorf("%w: %s", err, instance.Message)
 	}
 
 	output, err := base64.StdEncoding.DecodeString(instance.Output)

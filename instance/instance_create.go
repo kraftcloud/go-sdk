@@ -85,5 +85,9 @@ func (i *instancesClient) Create(ctx context.Context, req CreateInstanceRequest)
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	return response.FirstOrErr()
+	instance, err := response.FirstOrErr()
+	if instance != nil && instance.Message != "" {
+		err = fmt.Errorf("%w: %s", err, instance.Message)
+	}
+	return instance, err
 }
