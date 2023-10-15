@@ -2,11 +2,10 @@
 // Copyright (c) 2022, Unikraft GmbH and The KraftKit Authors.
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
+
 package instance
 
-import (
-	"fmt"
-)
+import "fmt"
 
 const (
 	// Endpoint is the public path for the instances service.

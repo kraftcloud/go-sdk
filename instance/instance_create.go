@@ -74,12 +74,6 @@ func (c *instancesClient) Create(ctx context.Context, req CreateInstanceRequest)
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
 
-	if c.request == nil {
-		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
-	}
-
-	defer func() { c.request = nil }()
-
 	var response kraftcloud.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodPost, Endpoint, bytes.NewBuffer(body), &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)

@@ -18,13 +18,7 @@ import (
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#console
 func (c *instancesClient) Logs(ctx context.Context, uuid string, maxLines int, latest bool) (string, error) {
-	endpoint := fmt.Sprintf("%s/%s/console", Endpoint, uuid)
-
-	if c.request == nil {
-		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
-	}
-
-	defer func() { c.request = nil }()
+	endpoint := Endpoint + "/" + uuid + "/console"
 
 	var resp kraftcloud.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &resp); err != nil {

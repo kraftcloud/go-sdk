@@ -25,7 +25,7 @@ func (c *instancesClient) Start(ctx context.Context, uuid string, waitTimeoutMS 
 		return nil, errors.New("UUID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/start", Endpoint, uuid)
+	endpoint := Endpoint + "/" + uuid + "/start"
 
 	requestBody := map[string]interface{}{
 		"wait_timeout_ms": waitTimeoutMS,
@@ -35,12 +35,6 @@ func (c *instancesClient) Start(ctx context.Context, uuid string, waitTimeoutMS 
 	if err != nil {
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
-
-	if c.request == nil {
-		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
-	}
-
-	defer func() { c.request = nil }()
 
 	var response kraftcloud.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodPut, endpoint, bytes.NewBuffer(body), &response); err != nil {

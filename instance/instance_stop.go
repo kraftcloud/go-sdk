@@ -36,7 +36,7 @@ func (c *instancesClient) Stop(ctx context.Context, uuid string, drainTimeoutMS 
 		return nil, errors.New("UUID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s/stop", Endpoint, uuid)
+	endpoint := Endpoint + "/" + uuid + "/stop"
 
 	requestBody := InstanceStopRequest{
 		DrainTimeoutMS: drainTimeoutMS,
@@ -46,12 +46,6 @@ func (c *instancesClient) Stop(ctx context.Context, uuid string, drainTimeoutMS 
 	if err != nil {
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
-
-	if c.request == nil {
-		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
-	}
-
-	defer func() { c.request = nil }()
 
 	var response kraftcloud.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodPut, endpoint, bytes.NewBuffer(body), &response); err != nil {

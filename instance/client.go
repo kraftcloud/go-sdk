@@ -16,7 +16,7 @@ import (
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html
 type instancesClient struct {
-	defOpts *kraftcloud.Options
+	// constructors must ensure that request is non-nil
 	request *kraftcloud.ServiceRequest
 }
 
@@ -26,7 +26,7 @@ var _ InstancesService = (*instancesClient)(nil)
 // instances API.
 func NewInstancesClient(opts ...kraftcloud.Option) InstancesService {
 	return &instancesClient{
-		defOpts: kraftcloud.NewDefaultOptions(opts...),
+		request: kraftcloud.NewServiceRequestFromDefaultOptions(kraftcloud.NewDefaultOptions(opts...)),
 	}
 }
 
@@ -34,34 +34,34 @@ func NewInstancesClient(opts ...kraftcloud.Option) InstancesService {
 // based on the provided pre-existing options.
 func NewInstancesClientFromOptions(opts *kraftcloud.Options) InstancesService {
 	return &instancesClient{
-		defOpts: opts,
+		request: kraftcloud.NewServiceRequestFromDefaultOptions(opts),
 	}
 }
 
 // WithMetro sets the just-in-time metro to use when connecting to the
 // KraftCloud API.
-func (c *instancesClient) WithMetro(metro string) InstancesService {
-	if c.request == nil {
-		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
-	}
-	c.request.SetMetro(metro)
-	return c
+func (c *instancesClient) WithMetro(m string) InstancesService {
+	ccpy := c.clone()
+	ccpy.request = c.request.WithMetro(m)
+	return ccpy
 }
 
 // WithHTTPClient overwrites the base HTTP client.
-func (c *instancesClient) WithHTTPClient(httpClient kraftcloud.HTTPClient) InstancesService {
-	if c.request == nil {
-		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
-	}
-	c.request.SetHTTPClient(httpClient)
-	return c
+func (c *instancesClient) WithHTTPClient(hc kraftcloud.HTTPClient) InstancesService {
+	ccpy := c.clone()
+	ccpy.request = c.request.WithHTTPClient(hc)
+	return ccpy
 }
 
 // WithTimeout sets the timeout when making a request.
-func (c *instancesClient) WithTimeout(timeout time.Duration) InstancesService {
-	if c.request == nil {
-		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
-	}
-	c.request.SetTimeout(timeout)
-	return c
+func (c *instancesClient) WithTimeout(to time.Duration) InstancesService {
+	ccpy := c.clone()
+	ccpy.request = c.request.WithTimeout(to)
+	return ccpy
+}
+
+// clone returns a shallow copy of c.
+func (c *instancesClient) clone() *instancesClient {
+	ccpy := *c
+	return &ccpy
 }

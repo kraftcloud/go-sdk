@@ -23,13 +23,7 @@ func (c *instancesClient) Delete(ctx context.Context, uuid string) error {
 		return errors.New("UUID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", Endpoint, uuid)
-
-	if c.request == nil {
-		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
-	}
-
-	defer func() { c.request = nil }()
+	endpoint := Endpoint + "/" + uuid
 
 	var response kraftcloud.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodDelete, endpoint, nil, &response); err != nil {

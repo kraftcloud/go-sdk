@@ -15,7 +15,7 @@ import (
 //
 // See: https://docs.kraft.cloud/004-rest-api-v1-images.html
 type imagesClient struct {
-	defOpts *kraftcloud.Options
+	// constructors must ensure that request is non-nil
 	request *kraftcloud.ServiceRequest
 }
 
@@ -25,7 +25,7 @@ var _ ImagesService = (*imagesClient)(nil)
 // provided options.
 func NewImagesClient(opts ...kraftcloud.Option) ImagesService {
 	return &imagesClient{
-		defOpts: kraftcloud.NewDefaultOptions(opts...),
+		request: kraftcloud.NewServiceRequestFromDefaultOptions(kraftcloud.NewDefaultOptions(opts...)),
 	}
 }
 
@@ -33,34 +33,34 @@ func NewImagesClient(opts ...kraftcloud.Option) ImagesService {
 // the provided pre-existing options.
 func NewImagesFromOptions(opts *kraftcloud.Options) ImagesService {
 	return &imagesClient{
-		defOpts: opts,
+		request: kraftcloud.NewServiceRequestFromDefaultOptions(opts),
 	}
 }
 
 // WithMetro sets the just-in-time metro to use when connecting to the
 // KraftCloud API.
-func (c *imagesClient) WithMetro(metro string) ImagesService {
-	if c.request == nil {
-		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
-	}
-	c.request.SetMetro(metro)
-	return c
+func (c *imagesClient) WithMetro(m string) ImagesService {
+	ccpy := c.clone()
+	ccpy.request = c.request.WithMetro(m)
+	return ccpy
 }
 
 // WithHTTPClient overwrites the base HTTP client.
-func (c *imagesClient) WithHTTPClient(httpClient kraftcloud.HTTPClient) ImagesService {
-	if c.request == nil {
-		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
-	}
-	c.request.SetHTTPClient(httpClient)
-	return c
+func (c *imagesClient) WithHTTPClient(hc kraftcloud.HTTPClient) ImagesService {
+	ccpy := c.clone()
+	ccpy.request = c.request.WithHTTPClient(hc)
+	return ccpy
 }
 
 // WithTimeout sets the timeout when making a request.
-func (c *imagesClient) WithTimeout(timeout time.Duration) ImagesService {
-	if c.request == nil {
-		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
-	}
-	c.request.SetTimeout(timeout)
-	return c
+func (c *imagesClient) WithTimeout(to time.Duration) ImagesService {
+	ccpy := c.clone()
+	ccpy.request = c.request.WithTimeout(to)
+	return ccpy
+}
+
+// clone returns a shallow copy of c.
+func (c *imagesClient) clone() *imagesClient {
+	ccpy := *c
+	return &ccpy
 }

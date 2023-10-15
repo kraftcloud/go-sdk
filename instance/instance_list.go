@@ -17,13 +17,7 @@ import (
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#list
 func (c *instancesClient) List(ctx context.Context) ([]Instance, error) {
-	endpoint := fmt.Sprintf("%s/list", Endpoint)
-
-	if c.request == nil {
-		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
-	}
-
-	defer func() { c.request = nil }()
+	endpoint := Endpoint + "/list"
 
 	var response kraftcloud.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {

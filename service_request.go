@@ -18,7 +18,10 @@ import (
 // ServiceRequest is the utility structure for performing individual requests to
 // a service location at KraftCloud.
 type ServiceRequest struct {
-	opts       *Options
+	// constructors must ensure that opts is non-nil, and that all its nested
+	// fields are populated to at least a default value
+	opts *Options
+
 	metro      string
 	httpClient HTTPClient
 	timeout    time.Duration
@@ -27,13 +30,15 @@ type ServiceRequest struct {
 // NewServiceRequest is a constructor method which prepares an individual
 // request.
 func NewServiceRequest(copts ...Option) *ServiceRequest {
-	opts := Options{}
+	opts := &Options{}
 
 	for _, opt := range copts {
-		opt(&opts)
+		opt(opts)
 	}
 
-	return &ServiceRequest{}
+	return &ServiceRequest{
+		opts: opts,
+	}
 }
 
 // NewServiceRequest is a constructor method which uses the prebuilt set of
@@ -44,31 +49,40 @@ func NewServiceRequestFromDefaultOptions(opts *Options) *ServiceRequest {
 	}
 }
 
-// SetMetro to use on the request.
-func (r *ServiceRequest) SetMetro(metro string) {
-	r.metro = metro
+// WithMetro returns a ServiceRequest that uses the given metro in API
+// requests.
+func (r *ServiceRequest) WithMetro(m string) *ServiceRequest {
+	rcpy := r.clone()
+	rcpy.metro = m
+	return rcpy
 }
 
-// SetTimeout sets how long to wait for the request before erroring.
-func (r *ServiceRequest) SetTimeout(timeout time.Duration) {
-	r.timeout = timeout
+// WithTimeout returns a ServiceRequest that uses the specified timeout
+// duration in API requests.
+func (r *ServiceRequest) WithTimeout(to time.Duration) *ServiceRequest {
+	rcpy := r.clone()
+	rcpy.timeout = to
+	return rcpy
 }
 
-// SetHTTPClient sets the underlying HTTP client to use when performing the
-// request.
-func (r *ServiceRequest) SetHTTPClient(httpClient HTTPClient) {
-	r.httpClient = httpClient
+// WithHTTPClient returns a ServiceRequest which performs API requests using
+// the given HTTPClient.
+func (r *ServiceRequest) WithHTTPClient(hc HTTPClient) *ServiceRequest {
+	rcpy := r.clone()
+	rcpy.httpClient = hc
+	return rcpy
 }
 
 // Metrolink returns the full URI representing the API endpoint of a KraftCloud
 // metro.
 func (r *ServiceRequest) Metrolink(path string) string {
-	if r.metro == "" {
-		r.metro = r.opts.defaultMetro
+	m := r.opts.defaultMetro
+	if r.metro != "" {
+		m = r.metro
 	}
 
 	// We discard the error because we are working with well-known path constant.
-	u, _ := url.Parse(fmt.Sprintf(BaseV1FormatURL, r.metro))
+	u, _ := url.Parse(fmt.Sprintf(BaseV1FormatURL, m))
 	return u.JoinPath(path).String()
 }
 
@@ -103,15 +117,22 @@ func (r *ServiceRequest) DoWithAuth(req *http.Request) (*http.Response, error) {
 	req.Header.Set("Authorization", r.GetBearerToken())
 	req.Header.Set("Content-Type", "application/json")
 
-	if r.httpClient == nil {
-		r.httpClient = r.opts.http
+	hc := r.opts.http
+	if r.httpClient != nil {
+		hc = r.httpClient
 	}
 
-	return r.httpClient.Do(req)
+	return hc.Do(req)
 }
 
 // GetBearerToken uses the pre-defined token to construct the Bearer token used
 // for authenticating requests.
 func (r *ServiceRequest) GetBearerToken() string {
 	return "Bearer " + r.opts.token
+}
+
+// clone returns a shallow copy of r.
+func (r *ServiceRequest) clone() *ServiceRequest {
+	rcpy := *r
+	return &rcpy
 }

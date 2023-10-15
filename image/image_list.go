@@ -31,13 +31,7 @@ func (c *imagesClient) List(ctx context.Context, filter map[string]interface{}) 
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
-	endpoint := fmt.Sprintf("%s/list", Endpoint)
-
-	if c.request == nil {
-		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
-	}
-
-	defer func() { c.request = nil }()
+	endpoint := Endpoint + "/list"
 
 	var response kraftcloud.ServiceResponse[Image]
 	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, bytes.NewBuffer(body), &response); err != nil {

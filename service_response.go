@@ -26,7 +26,7 @@ type ErrorResponse struct {
 // working with instances the response contains an instances array.
 //
 // See: https://docs.kraft.cloud/001-rest-api-v1-introduction.html
-type ServiceResponse[T interface{}] struct {
+type ServiceResponse[T any] struct {
 	// Status contains the top-level information about a server response, and
 	// returns either `success`, `partial_success` or `error`.
 	Status string `json:"status,omitempty"`
@@ -45,7 +45,7 @@ type ServiceResponse[T interface{}] struct {
 // ServiceResponseData is the embedded list of structures defined by T.  The
 // results are always available at the attribute `Entries` and uses a custom
 // JSON unmarshaler to determine the JSON tag associated with these entries.
-type ServiceResponseData[T interface{}] struct {
+type ServiceResponseData[T any] struct {
 	Entries []T
 }
 

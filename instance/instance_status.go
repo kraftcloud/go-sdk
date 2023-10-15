@@ -22,13 +22,7 @@ func (c *instancesClient) Status(ctx context.Context, uuid string) (*Instance, e
 		return nil, errors.New("UUID cannot be empty")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", Endpoint, uuid)
-
-	if c.request == nil {
-		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
-	}
-
-	defer func() { c.request = nil }()
+	endpoint := Endpoint + "/" + uuid
 
 	var response kraftcloud.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {

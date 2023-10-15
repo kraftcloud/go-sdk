@@ -11,7 +11,7 @@ import "time"
 // implement.  These methods are used to customize the request just-in-time,
 // enabling deep customization of each request without having to re-instantiate
 // the client.
-type ServiceClient[T interface{}] interface {
+type ServiceClient[T any] interface {
 	// WithMetro sets the just-in-time metro to use when connecting to the
 	// KraftCloud API.
 	WithMetro(string) T
