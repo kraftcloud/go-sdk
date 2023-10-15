@@ -16,17 +16,17 @@ import (
 // Lists all existing instances.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#list
-func (i *instancesClient) List(ctx context.Context) ([]Instance, error) {
+func (c *instancesClient) List(ctx context.Context) ([]Instance, error) {
 	endpoint := fmt.Sprintf("%s/list", Endpoint)
 
-	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
+	if c.request == nil {
+		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
 	}
 
-	defer func() { i.request = nil }()
+	defer func() { c.request = nil }()
 
 	var response kraftcloud.ServiceResponse[Instance]
-	if err := i.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

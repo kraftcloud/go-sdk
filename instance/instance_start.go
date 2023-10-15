@@ -20,7 +20,7 @@ import (
 // already running.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#start
-func (i *instancesClient) Start(ctx context.Context, uuid string, waitTimeoutMS int) (*Instance, error) {
+func (c *instancesClient) Start(ctx context.Context, uuid string, waitTimeoutMS int) (*Instance, error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
@@ -36,14 +36,14 @@ func (i *instancesClient) Start(ctx context.Context, uuid string, waitTimeoutMS 
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
-	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
+	if c.request == nil {
+		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
 	}
 
-	defer func() { i.request = nil }()
+	defer func() { c.request = nil }()
 
 	var response kraftcloud.ServiceResponse[Instance]
-	if err := i.request.DoRequest(ctx, http.MethodPut, endpoint, bytes.NewBuffer(body), &response); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodPut, endpoint, bytes.NewBuffer(body), &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

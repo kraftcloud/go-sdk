@@ -83,33 +83,33 @@ type Instance struct {
 	Output string `json:"output,omitempty"`
 }
 
-func (i *Instance) GetFieldByPrettyTag(tag string) string {
+func (c *Instance) GetFieldByPrettyTag(tag string) string {
 	// TODO(jake-ciolek): Use reflection?
 	switch tag {
 	case "UUID":
-		return i.UUID
+		return c.UUID
 	case "DNS":
-		return i.DNS
+		return c.DNS
 	case "PrivateIP":
-		return i.PrivateIP
+		return c.PrivateIP
 	case "Status":
-		return i.Status
+		return c.Status
 	case "Created At":
-		return i.CreatedAt
+		return c.CreatedAt
 	case "Image":
-		return i.Image
+		return c.Image
 	case "Memory (MB)":
-		return fmt.Sprintf("%d", i.MemoryMB)
+		return fmt.Sprintf("%d", c.MemoryMB)
 	case "Args":
-		return fmt.Sprintf("%v", i.Args)
+		return fmt.Sprintf("%v", c.Args)
 	case "Env":
-		return fmt.Sprintf("%v", i.Env)
+		return fmt.Sprintf("%v", c.Env)
 	case "Service Group":
-		return i.ServiceGroup
+		return c.ServiceGroup
 	case "Network Interfaces":
-		return fmt.Sprintf("%v", i.NetworkInterfaces)
+		return fmt.Sprintf("%v", c.NetworkInterfaces)
 	case "Boot Time (ms)":
-		return fmt.Sprintf("%d", i.BootTimeUS)
+		return fmt.Sprintf("%d", c.BootTimeUS)
 	default:
 		return ""
 	}

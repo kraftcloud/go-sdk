@@ -17,17 +17,17 @@ import (
 // Logs returns the console output of the specified instance.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#console
-func (i *instancesClient) Logs(ctx context.Context, uuid string, maxLines int, latest bool) (string, error) {
+func (c *instancesClient) Logs(ctx context.Context, uuid string, maxLines int, latest bool) (string, error) {
 	endpoint := fmt.Sprintf("%s/%s/console", Endpoint, uuid)
 
-	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
+	if c.request == nil {
+		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
 	}
 
-	defer func() { i.request = nil }()
+	defer func() { c.request = nil }()
 
 	var resp kraftcloud.ServiceResponse[Instance]
-	if err := i.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &resp); err != nil {
 		return "", fmt.Errorf("performing the request: %w", err)
 	}
 

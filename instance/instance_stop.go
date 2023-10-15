@@ -31,7 +31,7 @@ type InstanceStopRequest struct {
 // stopped. The instance can be started again with the start endpoint.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#stop
-func (i *instancesClient) Stop(ctx context.Context, uuid string, drainTimeoutMS int64) (*Instance, error) {
+func (c *instancesClient) Stop(ctx context.Context, uuid string, drainTimeoutMS int64) (*Instance, error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
@@ -47,14 +47,14 @@ func (i *instancesClient) Stop(ctx context.Context, uuid string, drainTimeoutMS 
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
-	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
+	if c.request == nil {
+		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
 	}
 
-	defer func() { i.request = nil }()
+	defer func() { c.request = nil }()
 
 	var response kraftcloud.ServiceResponse[Instance]
-	if err := i.request.DoRequest(ctx, http.MethodPut, endpoint, bytes.NewBuffer(body), &response); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodPut, endpoint, bytes.NewBuffer(body), &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

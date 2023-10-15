@@ -50,7 +50,7 @@ type ServiceResponseData[T interface{}] struct {
 }
 
 // UnmarshalJSON implements json.Unmarshaler.
-func (data *ServiceResponseData[T]) UnmarshalJSON(b []byte) error {
+func (d *ServiceResponseData[T]) UnmarshalJSON(b []byte) error {
 	var res map[string]json.RawMessage
 
 	if err := json.Unmarshal(b, &res); err != nil {
@@ -58,7 +58,7 @@ func (data *ServiceResponseData[T]) UnmarshalJSON(b []byte) error {
 	}
 
 	if len(res) == 0 {
-		data.Entries = make([]T, 0)
+		d.Entries = make([]T, 0)
 		return nil
 	}
 
@@ -71,7 +71,7 @@ func (data *ServiceResponseData[T]) UnmarshalJSON(b []byte) error {
 	}
 
 	for _, entries := range res {
-		return json.Unmarshal(entries, &data.Entries)
+		return json.Unmarshal(entries, &d.Entries)
 	}
 
 	return nil // Unreachable
@@ -79,8 +79,8 @@ func (data *ServiceResponseData[T]) UnmarshalJSON(b []byte) error {
 
 // FirstOrErr returns the first data entrypoint or an error if it is not
 // available.
-func (response *ServiceResponse[T]) FirstOrErr() (*T, error) {
-	entries, err := response.AllOrErr()
+func (r *ServiceResponse[T]) FirstOrErr() (*T, error) {
+	entries, err := r.AllOrErr()
 	if len(entries) > 0 {
 		return &entries[0], err
 	}
@@ -90,22 +90,22 @@ func (response *ServiceResponse[T]) FirstOrErr() (*T, error) {
 
 // FirstOrErr returns the all data entrypoints or an error if it is not
 // available.
-func (response *ServiceResponse[T]) AllOrErr() ([]T, error) {
-	if response == nil {
+func (r *ServiceResponse[T]) AllOrErr() ([]T, error) {
+	if r == nil {
 		return nil, errors.New("response is nil")
 	}
 
-	if response.Status == "error" {
-		return response.Data.Entries, fmt.Errorf(response.Message)
+	if r.Status == "error" {
+		return r.Data.Entries, fmt.Errorf(r.Message)
 	}
 
-	if response.Data.Entries == nil {
+	if r.Data.Entries == nil {
 		return nil, errors.New("data entries are nil")
 	}
 
-	if len(response.Data.Entries) == 0 {
+	if len(r.Data.Entries) == 0 {
 		return nil, errors.New("no data entries returned from the server")
 	}
 
-	return response.Data.Entries, nil
+	return r.Data.Entries, nil
 }

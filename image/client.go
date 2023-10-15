@@ -15,15 +15,17 @@ import (
 //
 // See: https://docs.kraft.cloud/004-rest-api-v1-images.html
 type imagesClient struct {
-	opts    *kraftcloud.Options
+	defOpts *kraftcloud.Options
 	request *kraftcloud.ServiceRequest
 }
+
+var _ ImagesService = (*imagesClient)(nil)
 
 // NewImagesClient instantiates a new image services client based on the
 // provided options.
 func NewImagesClient(opts ...kraftcloud.Option) ImagesService {
 	return &imagesClient{
-		opts: kraftcloud.NewDefaultOptions(opts...),
+		defOpts: kraftcloud.NewDefaultOptions(opts...),
 	}
 }
 
@@ -31,34 +33,34 @@ func NewImagesClient(opts ...kraftcloud.Option) ImagesService {
 // the provided pre-existing options.
 func NewImagesFromOptions(opts *kraftcloud.Options) ImagesService {
 	return &imagesClient{
-		opts: opts,
+		defOpts: opts,
 	}
 }
 
 // WithMetro sets the just-in-time metro to use when connecting to the
 // KraftCloud API.
-func (i *imagesClient) WithMetro(metro string) ImagesService {
-	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
+func (c *imagesClient) WithMetro(metro string) ImagesService {
+	if c.request == nil {
+		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
 	}
-	i.request.SetMetro(metro)
-	return i
+	c.request.SetMetro(metro)
+	return c
 }
 
 // WithHTTPClient overwrites the base HTTP client.
-func (i *imagesClient) WithHTTPClient(httpClient kraftcloud.HTTPClient) ImagesService {
-	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
+func (c *imagesClient) WithHTTPClient(httpClient kraftcloud.HTTPClient) ImagesService {
+	if c.request == nil {
+		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
 	}
-	i.request.SetHTTPClient(httpClient)
-	return i
+	c.request.SetHTTPClient(httpClient)
+	return c
 }
 
 // WithTimeout sets the timeout when making a request.
-func (i *imagesClient) WithTimeout(timeout time.Duration) ImagesService {
-	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
+func (c *imagesClient) WithTimeout(timeout time.Duration) ImagesService {
+	if c.request == nil {
+		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
 	}
-	i.request.SetTimeout(timeout)
-	return i
+	c.request.SetTimeout(timeout)
+	return c
 }

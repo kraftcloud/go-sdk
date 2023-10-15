@@ -41,28 +41,28 @@ type Image struct {
 	KernelArgs string `json:"kernel_args" pretty:"Kernel Args"`
 }
 
-func (i *Image) GetFieldByPrettyTag(tag string) string {
+func (c *Image) GetFieldByPrettyTag(tag string) string {
 	switch tag {
 	case "Digest":
-		return i.Digest
+		return c.Digest
 	case "Tags":
-		return fmt.Sprintf("%v", i.Tags)
+		return fmt.Sprintf("%v", c.Tags)
 	case "Public":
-		if i.Public {
+		if c.Public {
 			return "true"
 		}
 		return "false"
 	case "Initrd":
-		if i.Public {
+		if c.Public {
 			return "true"
 		}
 		return "false"
 	case "SizeInBytes":
-		return fmt.Sprintf("%d", i.SizeInBytes)
+		return fmt.Sprintf("%d", c.SizeInBytes)
 	case "Args":
-		return i.Args
+		return c.Args
 	case "KernelArgs":
-		return i.KernelArgs
+		return c.KernelArgs
 	default:
 		return ""
 	}

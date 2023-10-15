@@ -16,15 +16,17 @@ import (
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html
 type instancesClient struct {
-	opts    *kraftcloud.Options
+	defOpts *kraftcloud.Options
 	request *kraftcloud.ServiceRequest
 }
 
-// NewInstancesClient instantiates a client which interface's with KraftCloud's
+var _ InstancesService = (*instancesClient)(nil)
+
+// NewInstancesClient instantiates a client which interfaces with KraftCloud's
 // instances API.
 func NewInstancesClient(opts ...kraftcloud.Option) InstancesService {
 	return &instancesClient{
-		opts: kraftcloud.NewDefaultOptions(opts...),
+		defOpts: kraftcloud.NewDefaultOptions(opts...),
 	}
 }
 
@@ -32,34 +34,34 @@ func NewInstancesClient(opts ...kraftcloud.Option) InstancesService {
 // based on the provided pre-existing options.
 func NewInstancesClientFromOptions(opts *kraftcloud.Options) InstancesService {
 	return &instancesClient{
-		opts: opts,
+		defOpts: opts,
 	}
 }
 
 // WithMetro sets the just-in-time metro to use when connecting to the
 // KraftCloud API.
-func (i *instancesClient) WithMetro(metro string) InstancesService {
-	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
+func (c *instancesClient) WithMetro(metro string) InstancesService {
+	if c.request == nil {
+		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
 	}
-	i.request.SetMetro(metro)
-	return i
+	c.request.SetMetro(metro)
+	return c
 }
 
 // WithHTTPClient overwrites the base HTTP client.
-func (i *instancesClient) WithHTTPClient(httpClient kraftcloud.HTTPClient) InstancesService {
-	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
+func (c *instancesClient) WithHTTPClient(httpClient kraftcloud.HTTPClient) InstancesService {
+	if c.request == nil {
+		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
 	}
-	i.request.SetHTTPClient(httpClient)
-	return i
+	c.request.SetHTTPClient(httpClient)
+	return c
 }
 
 // WithTimeout sets the timeout when making a request.
-func (i *instancesClient) WithTimeout(timeout time.Duration) InstancesService {
-	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
+func (c *instancesClient) WithTimeout(timeout time.Duration) InstancesService {
+	if c.request == nil {
+		c.request = kraftcloud.NewServiceRequestFromDefaultOptions(c.defOpts)
 	}
-	i.request.SetTimeout(timeout)
-	return i
+	c.request.SetTimeout(timeout)
+	return c
 }
