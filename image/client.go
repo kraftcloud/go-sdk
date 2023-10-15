@@ -39,7 +39,7 @@ func NewImagesFromOptions(opts *kraftcloud.Options) ImagesService {
 // KraftCloud API.
 func (i *imagesClient) WithMetro(metro string) ImagesService {
 	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequest()
+		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
 	}
 	i.request.SetMetro(metro)
 	return i
@@ -48,7 +48,7 @@ func (i *imagesClient) WithMetro(metro string) ImagesService {
 // WithHTTPClient overwrites the base HTTP client.
 func (i *imagesClient) WithHTTPClient(httpClient kraftcloud.HTTPClient) ImagesService {
 	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequest()
+		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
 	}
 	i.request.SetHTTPClient(httpClient)
 	return i
@@ -57,7 +57,7 @@ func (i *imagesClient) WithHTTPClient(httpClient kraftcloud.HTTPClient) ImagesSe
 // WithTimeout sets the timeout when making a request.
 func (i *imagesClient) WithTimeout(timeout time.Duration) ImagesService {
 	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequest()
+		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
 	}
 	i.request.SetTimeout(timeout)
 	return i

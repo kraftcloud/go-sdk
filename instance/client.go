@@ -40,7 +40,7 @@ func NewInstancesClientFromOptions(opts *kraftcloud.Options) InstancesService {
 // KraftCloud API.
 func (i *instancesClient) WithMetro(metro string) InstancesService {
 	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequest()
+		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
 	}
 	i.request.SetMetro(metro)
 	return i
@@ -49,7 +49,7 @@ func (i *instancesClient) WithMetro(metro string) InstancesService {
 // WithHTTPClient overwrites the base HTTP client.
 func (i *instancesClient) WithHTTPClient(httpClient kraftcloud.HTTPClient) InstancesService {
 	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequest()
+		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
 	}
 	i.request.SetHTTPClient(httpClient)
 	return i
@@ -58,7 +58,7 @@ func (i *instancesClient) WithHTTPClient(httpClient kraftcloud.HTTPClient) Insta
 // WithTimeout sets the timeout when making a request.
 func (i *instancesClient) WithTimeout(timeout time.Duration) InstancesService {
 	if i.request == nil {
-		i.request = kraftcloud.NewServiceRequest()
+		i.request = kraftcloud.NewServiceRequestFromDefaultOptions(i.opts)
 	}
 	i.request.SetTimeout(timeout)
 	return i
