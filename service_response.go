@@ -103,9 +103,5 @@ func (r *ServiceResponse[T]) AllOrErr() ([]T, error) {
 		return nil, errors.New("data entries are nil")
 	}
 
-	if len(r.Data.Entries) == 0 {
-		return nil, errors.New("no data entries returned from the server")
-	}
-
 	return r.Data.Entries, nil
 }
