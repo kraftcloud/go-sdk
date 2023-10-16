@@ -52,6 +52,13 @@ type CreateInstanceRequest struct {
 	// Autostart behavior. If true the instance will start immediately after
 	// creation.
 	Autostart bool `json:"autostart,omitempty"`
+
+	// Number of instances to create with these properties.
+	Instances int `json:"instances,omitempty"`
+
+	// Key/value pairs to be set as environment variables at boot time.
+	// Values must be strings.
+	Env map[string]string `json:"env,omitempty"`
 }
 
 // Creates one or more new instances of the specified Unikraft images. You can
