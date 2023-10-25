@@ -53,21 +53,3 @@ This example lists all images in your project
 - [Instance Management](/examples/instance/instance.go)
 
 Here, you'll learn how to create an instance and display its console output. Subsequent actions include stopping and starting the instance, listing all instances in the project, and, ultimately, deleting the created instance.
-
-
-## Implemented functionality
-
-Here's a breakdown of the available requests:
-
-### Instance:
-1. [Create](https://docs.kraft.cloud/002-rest-api-v1-instances.html#create)
-2. [Status](https://docs.kraft.cloud/002-rest-api-v1-instances.html#status)
-3. [List](https://docs.kraft.cloud/002-rest-api-v1-instances.html#list)
-4. [Stop](https://docs.kraft.cloud/002-rest-api-v1-instances.html#stop)
-5. [Start](https://docs.kraft.cloud/002-rest-api-v1-instances.html#start)
-6. [Delete](https://docs.kraft.cloud/002-rest-api-v1-instances.html#delete)
-7. [Console output](https://docs.kraft.cloud/002-rest-api-v1-instances.html#console)
-
-### Image:
-1. [List](https://docs.kraft.cloud/004-rest-api-v1-images.html#list)
-
