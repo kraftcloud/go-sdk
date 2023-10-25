@@ -14,6 +14,7 @@ import (
 
 	kraftcloud "sdk.kraft.cloud"
 	"sdk.kraft.cloud/instance"
+	kraftcloudinstance "sdk.kraft.cloud/instance"
 )
 
 // Here, you'll learn how to create an instance and display its console output.
@@ -25,24 +26,24 @@ func main() {
 		return
 	}
 
-	apiClient := instance.NewInstancesClient(
+	apiClient := kraftcloud.NewInstancesClient(
 		kraftcloud.WithToken(token),
 	)
 	ctx := context.Background()
-	instance, err := apiClient.Create(ctx, instance.CreateInstanceRequest{
+	instance, err := apiClient.Create(ctx, kraftcloudinstance.CreateInstanceRequest{
 		// You have to build the kraft.cloud.yaml target from https://github.com/unikraft/app-nginx
 		// and upload it with kraft pkg push to make this image available to your account.
 		Image:    "unikraft.io/jayc.unikraft.io/nginx:latest",
 		Args:     []string{"-c", "/nginx/conf/nginx.conf"},
 		MemoryMB: 16,
-		Services: []instance.CreateInstanceServicesRequest{
+		Services: []kraftcloudinstance.CreateInstanceServicesRequest{
 			{
 				Port:         443,
-				Handlers:     []string{instance.DefaultHandler},
+				Handlers:     []string{kraftcloudinstance.DefaultHandler},
 				InternalPort: 80,
 			},
 		},
-		Autostart: instance.DefaultAutoStart,
+		Autostart: kraftcloudinstance.DefaultAutoStart,
 	})
 	if err != nil {
 		fmt.Printf("could not create instance: %s\n", err)

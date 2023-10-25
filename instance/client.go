@@ -8,7 +8,9 @@ package instance
 import (
 	"time"
 
-	kraftcloud "sdk.kraft.cloud"
+	"sdk.kraft.cloud/client"
+	"sdk.kraft.cloud/client/httpclient"
+	"sdk.kraft.cloud/client/options"
 )
 
 // instancesClient is a basic wrapper around the v1 instance client of
@@ -17,24 +19,16 @@ import (
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html
 type instancesClient struct {
 	// constructors must ensure that request is non-nil
-	request *kraftcloud.ServiceRequest
+	request *client.ServiceRequest
 }
 
 var _ InstancesService = (*instancesClient)(nil)
 
-// NewInstancesClient instantiates a client which interfaces with KraftCloud's
-// instances API.
-func NewInstancesClient(opts ...kraftcloud.Option) InstancesService {
-	return &instancesClient{
-		request: kraftcloud.NewServiceRequestFromDefaultOptions(kraftcloud.NewDefaultOptions(opts...)),
-	}
-}
-
 // NewInstancesClientFromOptions instantiates a new instances services client
 // based on the provided pre-existing options.
-func NewInstancesClientFromOptions(opts *kraftcloud.Options) InstancesService {
+func NewInstancesClientFromOptions(opts *options.Options) InstancesService {
 	return &instancesClient{
-		request: kraftcloud.NewServiceRequestFromDefaultOptions(opts),
+		request: client.NewServiceRequestFromDefaultOptions(opts),
 	}
 }
 
@@ -47,7 +41,7 @@ func (c *instancesClient) WithMetro(m string) InstancesService {
 }
 
 // WithHTTPClient overwrites the base HTTP client.
-func (c *instancesClient) WithHTTPClient(hc kraftcloud.HTTPClient) InstancesService {
+func (c *instancesClient) WithHTTPClient(hc httpclient.HTTPClient) InstancesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithHTTPClient(hc)
 	return ccpy

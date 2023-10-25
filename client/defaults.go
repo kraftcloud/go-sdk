@@ -3,7 +3,7 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package kraftcloud
+package client
 
 const (
 	// BaseURL defines the default location of the Kraftcloud API.

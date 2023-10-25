@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"net/http"
 
-	kraftcloud "sdk.kraft.cloud"
+	"sdk.kraft.cloud/client"
 )
 
 // Starts a previously stopped instance. Does nothing for an instance that is
@@ -36,7 +36,7 @@ func (c *instancesClient) Start(ctx context.Context, uuid string, waitTimeoutMS 
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
-	var response kraftcloud.ServiceResponse[Instance]
+	var response client.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodPut, endpoint, bytes.NewBuffer(body), &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

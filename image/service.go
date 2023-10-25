@@ -8,11 +8,11 @@ package image
 import (
 	"context"
 
-	kraftcloud "sdk.kraft.cloud"
+	"sdk.kraft.cloud/client"
 )
 
 type ImagesService interface {
-	kraftcloud.ServiceClient[ImagesService]
+	client.ServiceClient[ImagesService]
 
 	// Lists all existing images. You can filter by digest, tag and based on
 	// whether the image is public or not. The returned groups fulfill all

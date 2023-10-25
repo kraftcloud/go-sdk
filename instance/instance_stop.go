@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"net/http"
 
-	kraftcloud "sdk.kraft.cloud"
+	"sdk.kraft.cloud/client"
 )
 
 // InstanceStopRequest carries the data used by stop instance requests.
@@ -47,7 +47,7 @@ func (c *instancesClient) Stop(ctx context.Context, uuid string, drainTimeoutMS 
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
-	var response kraftcloud.ServiceResponse[Instance]
+	var response client.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodPut, endpoint, bytes.NewBuffer(body), &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

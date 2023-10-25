@@ -3,9 +3,13 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package kraftcloud
+package client
 
-import "time"
+import (
+	"time"
+
+	"sdk.kraft.cloud/client/httpclient"
+)
 
 // ServiceClient is an interface of mandatory methods that a service must
 // implement.  These methods are used to customize the request just-in-time,
@@ -20,5 +24,5 @@ type ServiceClient[T any] interface {
 	WithTimeout(time.Duration) T
 
 	// WithHTTPClient overwrites the base HTTP client.
-	WithHTTPClient(HTTPClient) T
+	WithHTTPClient(httpclient.HTTPClient) T
 }

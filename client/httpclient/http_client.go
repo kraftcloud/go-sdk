@@ -3,13 +3,11 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package kraftcloud
+// Package httpclient provides an interface for enabling manipulating the
+// underelying HTTP request performed by a client.
+package httpclient
 
-import (
-	"fmt"
-	"io"
-	"net/http"
-)
+import "net/http"
 
 // HTTPClient interface abstracts a generic HTTP request issuing client.
 type HTTPClient interface {
@@ -24,15 +22,4 @@ func NewHTTPClient() *http.Client {
 			DisableKeepAlives: true,
 		},
 	}
-}
-
-func checkResponse(resp *http.Response) error {
-	if resp.StatusCode == http.StatusOK {
-		return nil
-	}
-	bodyBytes, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return fmt.Errorf("reading response body: %w", err)
-	}
-	return &Error{StatusCode: resp.StatusCode, Message: string(bodyBytes)}
 }

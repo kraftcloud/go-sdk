@@ -16,7 +16,6 @@ import (
 	"testing"
 
 	kraftcloud "sdk.kraft.cloud"
-	"sdk.kraft.cloud/instance"
 )
 
 const (
@@ -28,7 +27,7 @@ const (
 func TestClientThreadSafety(t *testing.T) {
 	const requests = 100
 
-	cli := instance.NewInstancesClient(
+	cli := kraftcloud.NewInstancesClient(
 		kraftcloud.WithHTTPClient(httpMockStatusClient()),
 	)
 

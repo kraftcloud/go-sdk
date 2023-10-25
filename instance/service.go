@@ -8,11 +8,11 @@ package instance
 import (
 	"context"
 
-	kraftcloud "sdk.kraft.cloud"
+	"sdk.kraft.cloud/client"
 )
 
 type InstancesService interface {
-	kraftcloud.ServiceClient[InstancesService]
+	client.ServiceClient[InstancesService]
 
 	// Creates one or more new instances of the specified Unikraft images. You can
 	// describe the properties of the new instances such as their startup

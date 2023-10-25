@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"net/http"
 
-	kraftcloud "sdk.kraft.cloud"
+	"sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/util"
 )
 
@@ -81,7 +81,7 @@ func (c *instancesClient) Create(ctx context.Context, req CreateInstanceRequest)
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
 
-	var response kraftcloud.ServiceResponse[Instance]
+	var response client.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodPost, Endpoint, bytes.NewBuffer(body), &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

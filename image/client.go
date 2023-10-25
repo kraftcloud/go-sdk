@@ -8,7 +8,9 @@ package image
 import (
 	"time"
 
-	kraftcloud "sdk.kraft.cloud"
+	"sdk.kraft.cloud/client"
+	"sdk.kraft.cloud/client/httpclient"
+	"sdk.kraft.cloud/client/options"
 )
 
 // imagesClient wraps the v1 Image client of KraftCloud.
@@ -16,24 +18,16 @@ import (
 // See: https://docs.kraft.cloud/004-rest-api-v1-images.html
 type imagesClient struct {
 	// constructors must ensure that request is non-nil
-	request *kraftcloud.ServiceRequest
+	request *client.ServiceRequest
 }
 
 var _ ImagesService = (*imagesClient)(nil)
 
-// NewImagesClient instantiates a new image services client based on the
-// provided options.
-func NewImagesClient(opts ...kraftcloud.Option) ImagesService {
-	return &imagesClient{
-		request: kraftcloud.NewServiceRequestFromDefaultOptions(kraftcloud.NewDefaultOptions(opts...)),
-	}
-}
-
 // NewImagesClientFromOptions instantiates a new image services client based on
 // the provided pre-existing options.
-func NewImagesFromOptions(opts *kraftcloud.Options) ImagesService {
+func NewImagesClientFromOptions(opts *options.Options) ImagesService {
 	return &imagesClient{
-		request: kraftcloud.NewServiceRequestFromDefaultOptions(opts),
+		request: client.NewServiceRequestFromDefaultOptions(opts),
 	}
 }
 
@@ -46,7 +40,7 @@ func (c *imagesClient) WithMetro(m string) ImagesService {
 }
 
 // WithHTTPClient overwrites the base HTTP client.
-func (c *imagesClient) WithHTTPClient(hc kraftcloud.HTTPClient) ImagesService {
+func (c *imagesClient) WithHTTPClient(hc httpclient.HTTPClient) ImagesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithHTTPClient(hc)
 	return ccpy

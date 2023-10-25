@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"net/http"
 
-	kraftcloud "sdk.kraft.cloud"
+	"sdk.kraft.cloud/client"
 )
 
 // Status returns the current status and the configuration of an instance.
@@ -24,7 +24,7 @@ func (c *instancesClient) Status(ctx context.Context, uuid string) (*Instance, e
 
 	endpoint := Endpoint + "/" + uuid
 
-	var response kraftcloud.ServiceResponse[Instance]
+	var response client.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

@@ -21,11 +21,10 @@ import (
 	"context"
 
 	kraftcloud "sdk.kraft.cloud"
-	services "sdk.kraft.cloud/services"
 )
 
 func main() {
-	client := services.NewServicesClient(
+	client := kraftcloud.NewClient(
 		kraftcloud.WithToken("token"),
 	)
 

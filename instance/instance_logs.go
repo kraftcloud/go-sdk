@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"net/http"
 
-	kraftcloud "sdk.kraft.cloud"
+	"sdk.kraft.cloud/client"
 )
 
 // Logs returns the console output of the specified instance.
@@ -20,7 +20,7 @@ import (
 func (c *instancesClient) Logs(ctx context.Context, uuid string, maxLines int, latest bool) (string, error) {
 	endpoint := Endpoint + "/" + uuid + "/console"
 
-	var resp kraftcloud.ServiceResponse[Instance]
+	var resp client.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &resp); err != nil {
 		return "", fmt.Errorf("performing the request: %w", err)
 	}
