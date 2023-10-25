@@ -44,7 +44,7 @@ jobs:
       - run: go mod download
 
       - name: Run race detection tests
-        run: go test -count=1 -race ./instance
+        run: go test -count=1 -race ./instances
 
       - name: Run tests
         run: go test ./...

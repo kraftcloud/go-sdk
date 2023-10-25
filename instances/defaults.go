@@ -3,7 +3,7 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package instance
+package instances
 
 const (
 	// DefaultHandler sets the connection handler. The API only accepts "tls" for

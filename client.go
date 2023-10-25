@@ -7,20 +7,20 @@ package client
 
 import (
 	"sdk.kraft.cloud/client/options"
-	"sdk.kraft.cloud/image"
-	"sdk.kraft.cloud/instance"
+	"sdk.kraft.cloud/images"
+	"sdk.kraft.cloud/instances"
 )
 
 // Client provides access to the KraftCloud API.
 type Client struct {
-	instances instance.InstancesService
-	images    image.ImagesService
+	instances instances.InstancesService
+	images    images.ImagesService
 }
 
 // KraftCloud are the public endpoint categories for the KraftCloud API.
 type KraftCloud interface {
-	Instances() instance.InstancesService
-	Images() image.ImagesService
+	Instances() instances.InstancesService
+	Images() images.ImagesService
 }
 
 // NewClient is the top-level KraftCloud Services client used to speak
@@ -36,8 +36,8 @@ func NewClientFromOptions(opts *options.Options) (KraftCloud, error) {
 	// user-requested services. For now, instantiate all services.
 
 	client := Client{
-		instances: instance.NewInstancesClientFromOptions(opts),
-		images:    image.NewImagesClientFromOptions(opts),
+		instances: instances.NewInstancesClientFromOptions(opts),
+		images:    images.NewImagesClientFromOptions(opts),
 	}
 
 	return &client, nil
@@ -45,22 +45,22 @@ func NewClientFromOptions(opts *options.Options) (KraftCloud, error) {
 
 // NewImagesClient instantiates a new image services client based on the
 // provided options.
-func NewImagesClient(opts ...Option) image.ImagesService {
-	return image.NewImagesClientFromOptions(NewDefaultOptions(opts...))
+func NewImagesClient(opts ...Option) images.ImagesService {
+	return images.NewImagesClientFromOptions(NewDefaultOptions(opts...))
 }
 
 // NewInstancesClient instantiates a client which interfaces with KraftCloud's
 // instances API.
-func NewInstancesClient(opts ...Option) instance.InstancesService {
-	return instance.NewInstancesClientFromOptions(NewDefaultOptions(opts...))
+func NewInstancesClient(opts ...Option) instances.InstancesService {
+	return instances.NewInstancesClientFromOptions(NewDefaultOptions(opts...))
 }
 
 // Instances returns InstancesService.
-func (client *Client) Instances() instance.InstancesService {
+func (client *Client) Instances() instances.InstancesService {
 	return client.instances
 }
 
 // Images returns ImagesService.
-func (client *Client) Images() image.ImagesService {
+func (client *Client) Images() images.ImagesService {
 	return client.images
 }

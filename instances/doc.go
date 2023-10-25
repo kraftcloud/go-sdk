@@ -3,5 +3,5 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-// Package instance manages instances on KraftCloud.
-package instance
+// package instances manages instances on KraftCloud.
+package instances

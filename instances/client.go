@@ -3,7 +3,7 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package image
+package instances
 
 import (
 	"time"
@@ -13,48 +13,49 @@ import (
 	"sdk.kraft.cloud/client/options"
 )
 
-// imagesClient wraps the v1 Image client of KraftCloud.
+// instancesClient is a basic wrapper around the v1 instance client of
+// KraftCloud.
 //
-// See: https://docs.kraft.cloud/004-rest-api-v1-images.html
-type imagesClient struct {
+// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html
+type instancesClient struct {
 	// constructors must ensure that request is non-nil
 	request *client.ServiceRequest
 }
 
-var _ ImagesService = (*imagesClient)(nil)
+var _ InstancesService = (*instancesClient)(nil)
 
-// NewImagesClientFromOptions instantiates a new image services client based on
-// the provided pre-existing options.
-func NewImagesClientFromOptions(opts *options.Options) ImagesService {
-	return &imagesClient{
+// NewInstancesClientFromOptions instantiates a new instances services client
+// based on the provided pre-existing options.
+func NewInstancesClientFromOptions(opts *options.Options) InstancesService {
+	return &instancesClient{
 		request: client.NewServiceRequestFromDefaultOptions(opts),
 	}
 }
 
 // WithMetro sets the just-in-time metro to use when connecting to the
 // KraftCloud API.
-func (c *imagesClient) WithMetro(m string) ImagesService {
+func (c *instancesClient) WithMetro(m string) InstancesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithMetro(m)
 	return ccpy
 }
 
 // WithHTTPClient overwrites the base HTTP client.
-func (c *imagesClient) WithHTTPClient(hc httpclient.HTTPClient) ImagesService {
+func (c *instancesClient) WithHTTPClient(hc httpclient.HTTPClient) InstancesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithHTTPClient(hc)
 	return ccpy
 }
 
 // WithTimeout sets the timeout when making a request.
-func (c *imagesClient) WithTimeout(to time.Duration) ImagesService {
+func (c *instancesClient) WithTimeout(to time.Duration) InstancesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithTimeout(to)
 	return ccpy
 }
 
 // clone returns a shallow copy of c.
-func (c *imagesClient) clone() *imagesClient {
+func (c *instancesClient) clone() *instancesClient {
 	ccpy := *c
 	return &ccpy
 }
