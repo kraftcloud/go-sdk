@@ -19,10 +19,32 @@ import (
 func (c *instancesClient) List(ctx context.Context) ([]Instance, error) {
 	endpoint := Endpoint + "/list"
 
+	// Save the metro such that we can force using it again due to the compromise
+	// below.
+	metro := c.request.Metro()
+
 	var response client.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	return response.AllOrErr()
+	// TODO(nderjung): For now, the KraftCloud API does not support
+	// returning the full details of each instance.  Temporarily request a
+	// status for each instance.
+	uuids, err := response.AllOrErr()
+	if err != nil {
+		return nil, err
+	}
+
+	var instances []Instance
+	for _, uuid := range uuids {
+		instance, err := c.WithMetro(metro).Status(ctx, uuid.UUID)
+		if err != nil {
+			return nil, fmt.Errorf("could not get instance status: %w", err)
+		}
+
+		instances = append(instances, *instance)
+	}
+
+	return instances, nil
 }
