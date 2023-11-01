@@ -35,6 +35,9 @@ type CreateInstanceRequest struct {
 	// Description of exposed network services.
 	Services []services.Service `json:"services,omitempty"`
 
+	// UUID of an existing service group.
+	ServiceGroup string `json:"service_group,omitempty"`
+
 	// Autostart behavior. If true the instance will start immediately after
 	// creation.
 	Autostart bool `json:"autostart,omitempty"`
