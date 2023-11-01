@@ -28,13 +28,13 @@ type KraftCloud interface {
 
 // NewClient is the top-level KraftCloud Services client used to speak
 // with the API.
-func NewClient(copts ...Option) (KraftCloud, error) {
+func NewClient(copts ...Option) KraftCloud {
 	return NewClientFromOptions(NewDefaultOptions(copts...))
 }
 
 // NewClientFromOptions is the top-level KraftCloud Services client used
 // to speak with the API with pre-defined options.
-func NewClientFromOptions(opts *options.Options) (KraftCloud, error) {
+func NewClientFromOptions(opts *options.Options) KraftCloud {
 	// TODO(nderjung): Use dependency injection to dynamically instantiate all or
 	// user-requested services. For now, instantiate all services.
 
@@ -44,7 +44,7 @@ func NewClientFromOptions(opts *options.Options) (KraftCloud, error) {
 		services:  services.NewServicesClientFromOptions(opts),
 	}
 
-	return &client, nil
+	return &client
 }
 
 // NewImagesClient instantiates a new image services client based on the
