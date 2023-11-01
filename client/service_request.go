@@ -63,6 +63,11 @@ func (r *ServiceRequest) WithHTTPClient(hc httpclient.HTTPClient) *ServiceReques
 	return rcpy
 }
 
+// Metro returns the metro that this request will perform against.
+func (r *ServiceRequest) Metro() string {
+	return r.metro
+}
+
 // Metrolink returns the full URI representing the API endpoint of a KraftCloud
 // metro.
 func (r *ServiceRequest) Metrolink(path string) string {
