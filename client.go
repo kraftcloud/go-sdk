@@ -10,6 +10,7 @@ import (
 	"sdk.kraft.cloud/images"
 	"sdk.kraft.cloud/instances"
 	"sdk.kraft.cloud/services"
+	"sdk.kraft.cloud/users"
 )
 
 // Client provides access to the KraftCloud API.
@@ -17,6 +18,7 @@ type Client struct {
 	instances instances.InstancesService
 	images    images.ImagesService
 	services  services.ServicesService
+	users     users.UsersService
 }
 
 // KraftCloud are the public endpoint categories for the KraftCloud API.
@@ -24,6 +26,7 @@ type KraftCloud interface {
 	Instances() instances.InstancesService
 	Images() images.ImagesService
 	Services() services.ServicesService
+	Users() users.UsersService
 }
 
 // NewClient is the top-level KraftCloud Services client used to speak
@@ -42,6 +45,7 @@ func NewClientFromOptions(opts *options.Options) KraftCloud {
 		instances: instances.NewInstancesClientFromOptions(opts),
 		images:    images.NewImagesClientFromOptions(opts),
 		services:  services.NewServicesClientFromOptions(opts),
+		users:     users.NewUsersClientFromOptions(opts),
 	}
 
 	return &client
@@ -65,6 +69,12 @@ func NewServicesClient(opts ...Option) services.ServicesService {
 	return services.NewServicesClientFromOptions(NewDefaultOptions(opts...))
 }
 
+// NewUsersClient instantiates a client which interfaces with KraftCloud's users
+// API.
+func NewUsersClient(opts ...Option) users.UsersService {
+	return users.NewUsersClientFromOptions(NewDefaultOptions(opts...))
+}
+
 // Instances returns InstancesService.
 func (client *Client) Instances() instances.InstancesService {
 	return client.instances
@@ -78,4 +88,9 @@ func (client *Client) Images() images.ImagesService {
 // Services returns ServicesService.
 func (client *Client) Services() services.ServicesService {
 	return client.services
+}
+
+// Users returns UsersService.
+func (client *Client) Users() users.UsersService {
+	return client.users
 }
