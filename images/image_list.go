@@ -26,6 +26,10 @@ type ImageListResponse struct {
 // List fetches all images from the Kraftcloud API.
 // see: https://docs.kraft.cloud/004-rest-api-v1-images.html#list
 func (c *imagesClient) List(ctx context.Context, filter map[string]interface{}) ([]Image, error) {
+	if filter == nil {
+		filter = make(map[string]interface{})
+	}
+
 	body, err := json.Marshal(filter)
 	if err != nil {
 		return nil, fmt.Errorf("marshalling request body: %w", err)
