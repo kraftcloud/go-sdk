@@ -6,10 +6,6 @@
 package instances
 
 const (
-	// DefaultHandler sets the connection handler. The API only accepts "tls" for
-	// now.
-	DefaultHandler = "tls"
-
 	// DefaultAutoStart is the default autostart value - whether the instance will
 	// start immediately after creation
 	DefaultAutoStart = true
