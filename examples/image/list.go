@@ -8,11 +8,8 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"strings"
-	"text/tabwriter"
 
 	kraftcloud "sdk.kraft.cloud"
-	kraftcloudimage "sdk.kraft.cloud/image"
 )
 
 // This demonstrates how to list images in your project.
@@ -36,23 +33,4 @@ func main() {
 	for _, i := range images {
 		fmt.Println(i.Digest)
 	}
-
-	printImages(images, []string{"Tags", "Digest", "SizeInBytes"})
-}
-
-func printImages(images []kraftcloudimage.Image, fields []string) {
-	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-
-	// print headers
-	fmt.Fprintln(w, strings.Join(fields, "\t"))
-
-	for _, image := range images {
-		values := []string{}
-		for _, field := range fields {
-			values = append(values, image.GetFieldByPrettyTag(field))
-		}
-		fmt.Fprintln(w, strings.Join(values, "\t"))
-	}
-
-	w.Flush()
 }

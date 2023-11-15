@@ -5,8 +5,6 @@
 
 package instances
 
-import "fmt"
-
 const (
 	// Endpoint is the public path for the instances service.
 	Endpoint = "/instances"
@@ -30,46 +28,46 @@ type NetworkInterface struct {
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#response_2
 type Instance struct {
 	// UUID of the instance.
-	UUID string `json:"uuid,omitempty" pretty:"UUID"`
+	UUID string `json:"uuid,omitempty"`
 
 	// Publicly accessible DNS name of the instance.
-	DNS string `json:"dns,omitempty" pretty:"DNS"`
+	DNS string `json:"dns,omitempty"`
 
 	// Private IPv4 of the instance in CIDR notation for communication between
 	// instances of the same user. This is equivalent to the IPv4 address of the
 	// first network interface.
-	PrivateIP string `json:"private_ip,omitempty" pretty:"PrivateIP"`
+	PrivateIP string `json:"private_ip,omitempty"`
 
 	// Current state of the instance or error if the request failed.
-	Status string `json:"status,omitempty" pretty:"Status"`
+	Status string `json:"status,omitempty"`
 
 	// Date and time of creation in ISO8601.
-	CreatedAt string `json:"created_at,omitempty" pretty:"Created At"`
+	CreatedAt string `json:"created_at,omitempty"`
 
 	// Digest of the image that the instance uses.  Note that the image tag (e.g.,
 	// latest) is translated by KraftCloud to the image digest that was assigned
 	// the tag at the time of instance creation. The image is pinned to this
 	// particular version.
-	Image string `json:"image,omitempty" pretty:"Image"`
+	Image string `json:"image,omitempty"`
 
 	// Amount of memory assigned to the instance in megabytes.
-	MemoryMB int `json:"memory_mb,omitempty" pretty:"Memory (MB)"`
+	MemoryMB int `json:"memory_mb,omitempty"`
 
 	// Application arguments.
-	Args []string `json:"args,omitempty" pretty:"Args"`
+	Args []string `json:"args,omitempty"`
 
 	// Key/value pairs to be set as environment variables at boot time.
-	Env map[string]string `json:"env,omitempty" pretty:"Env"`
+	Env map[string]string `json:"env,omitempty"`
 
 	// UUID of the service group that the instance is part of.
-	ServiceGroup string `json:"service_group,omitempty" pretty:"Service Group"`
+	ServiceGroup string `json:"service_group,omitempty"`
 
 	// List of network interfaces attached to the instance.
-	NetworkInterfaces []NetworkInterface `json:"network_interfaces,omitempty" pretty:"Network Interfaces"`
+	NetworkInterfaces []NetworkInterface `json:"network_interfaces,omitempty"`
 
 	// Time it took to start the instance including booting Unikraft in
 	// microseconds.
-	BootTimeUS int64 `json:"boot_time_us,omitempty" pretty:"Boot Time (ms)"`
+	BootTimeUS int64 `json:"boot_time_us,omitempty"`
 
 	// When an instance has a specific issue an accompanying message is included
 	// to help diagnose the state of the instance.
@@ -80,36 +78,4 @@ type Instance struct {
 
 	// Base 64 encoded console output.
 	Output string `json:"output,omitempty"`
-}
-
-func (c *Instance) GetFieldByPrettyTag(tag string) string {
-	// TODO(jake-ciolek): Use reflection?
-	switch tag {
-	case "UUID":
-		return c.UUID
-	case "DNS":
-		return c.DNS
-	case "PrivateIP":
-		return c.PrivateIP
-	case "Status":
-		return c.Status
-	case "Created At":
-		return c.CreatedAt
-	case "Image":
-		return c.Image
-	case "Memory (MB)":
-		return fmt.Sprintf("%d", c.MemoryMB)
-	case "Args":
-		return fmt.Sprintf("%v", c.Args)
-	case "Env":
-		return fmt.Sprintf("%v", c.Env)
-	case "Service Group":
-		return c.ServiceGroup
-	case "Network Interfaces":
-		return fmt.Sprintf("%v", c.NetworkInterfaces)
-	case "Boot Time (ms)":
-		return fmt.Sprintf("%d", c.BootTimeUS)
-	default:
-		return ""
-	}
 }
