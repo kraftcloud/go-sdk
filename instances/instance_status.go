@@ -17,12 +17,12 @@ import (
 // Status returns the current status and the configuration of an instance.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#status
-func (c *instancesClient) Status(ctx context.Context, uuid string) (*Instance, error) {
-	if uuid == "" {
+func (c *instancesClient) Status(ctx context.Context, uuidOrName string) (*Instance, error) {
+	if uuidOrName == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
 
-	endpoint := Endpoint + "/" + uuid
+	endpoint := Endpoint + "/" + uuidOrName
 
 	var response client.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {

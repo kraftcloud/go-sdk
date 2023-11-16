@@ -17,8 +17,8 @@ import (
 // Logs returns the console output of the specified instance.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#console
-func (c *instancesClient) Logs(ctx context.Context, uuid string, maxLines int, latest bool) (string, error) {
-	endpoint := Endpoint + "/" + uuid + "/console"
+func (c *instancesClient) Logs(ctx context.Context, uuidOrName string, maxLines int, latest bool) (string, error) {
+	endpoint := Endpoint + "/" + uuidOrName + "/console"
 
 	var resp client.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &resp); err != nil {

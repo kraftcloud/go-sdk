@@ -14,12 +14,13 @@ import (
 	"sdk.kraft.cloud/client"
 )
 
-func (c *servicesClient) Status(ctx context.Context, uuid string) (*ServiceGroup, error) {
-	if uuid == "" {
+// Status returns the current status and the configuration of a service group.
+func (c *servicesClient) Status(ctx context.Context, uuidOrName string) (*ServiceGroup, error) {
+	if uuidOrName == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
 
-	endpoint := Endpoint + "/" + uuid
+	endpoint := Endpoint + "/" + uuidOrName
 
 	var response client.ServiceResponse[ServiceGroup]
 	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {

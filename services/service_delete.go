@@ -15,18 +15,17 @@ import (
 )
 
 // Deletes the specified service group. Fails if there are still instances
-// attached to group. After this call the UUID of the group is no longer
-// valid.
+// attached to group. After this call the UUID of the group is no longer valid.
 //
 // This operation cannot be undone.
 //
 // See: https://docs.kraft.cloud/003-rest-api-v1-services.html#deleting-a-service-group
-func (c *servicesClient) Delete(ctx context.Context, uuid string) (*ServiceGroup, error) {
-	if uuid == "" {
+func (c *servicesClient) Delete(ctx context.Context, uuidOrName string) (*ServiceGroup, error) {
+	if uuidOrName == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
 
-	endpoint := Endpoint + "/" + uuid
+	endpoint := Endpoint + "/" + uuidOrName
 
 	var response client.ServiceResponse[ServiceGroup]
 	if err := c.request.DoRequest(ctx, http.MethodDelete, endpoint, nil, &response); err != nil {

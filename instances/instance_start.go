@@ -20,12 +20,12 @@ import (
 // already running.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#start
-func (c *instancesClient) Start(ctx context.Context, uuid string, waitTimeoutMS int) (*Instance, error) {
-	if uuid == "" {
-		return nil, errors.New("UUID cannot be empty")
+func (c *instancesClient) Start(ctx context.Context, uuidOrName string, waitTimeoutMS int) (*Instance, error) {
+	if uuidOrName == "" {
+		return nil, errors.New("UUID or Name cannot be empty")
 	}
 
-	endpoint := Endpoint + "/" + uuid + "/start"
+	endpoint := Endpoint + "/" + uuidOrName + "/start"
 
 	requestBody := map[string]interface{}{
 		"wait_timeout_ms": waitTimeoutMS,

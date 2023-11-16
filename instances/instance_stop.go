@@ -31,12 +31,12 @@ type InstanceStopRequest struct {
 // stopped. The instance can be started again with the start endpoint.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#stop
-func (c *instancesClient) Stop(ctx context.Context, uuid string, drainTimeoutMS int64) (*Instance, error) {
-	if uuid == "" {
-		return nil, errors.New("UUID cannot be empty")
+func (c *instancesClient) Stop(ctx context.Context, uuidOrName string, drainTimeoutMS int64) (*Instance, error) {
+	if uuidOrName == "" {
+		return nil, errors.New("UUID or Name cannot be empty")
 	}
 
-	endpoint := Endpoint + "/" + uuid + "/stop"
+	endpoint := Endpoint + "/" + uuidOrName + "/stop"
 
 	requestBody := InstanceStopRequest{
 		DrainTimeoutMS: drainTimeoutMS,
