@@ -19,6 +19,9 @@ type Quotas struct {
 	// UUID of your user
 	UUID string `json:"uuid,omitempty"`
 
+	// The name of your user
+	Name string `json:"name,omitempty"`
+
 	// Used quota.
 	Used struct {
 		// Number of instances

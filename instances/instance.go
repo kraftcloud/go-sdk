@@ -15,6 +15,9 @@ type NetworkInterface struct {
 	// UUID of the network interface.
 	UUID string `json:"uuid,omitempty"`
 
+	// Name of the network interface.
+	Name string `json:"name,omitempty"`
+
 	// Private IPv4 of network interface in CIDR notation.
 	PrivateIP string `json:"private_ip,omitempty"`
 
@@ -29,6 +32,9 @@ type NetworkInterface struct {
 type Instance struct {
 	// UUID of the instance.
 	UUID string `json:"uuid,omitempty"`
+
+	// Name of the instance.
+	Name string `json:"name,omitempty"`
 
 	// Publicly accessible FQDN name of the instance.
 	FQDN string `json:"fqdn,omitempty"`

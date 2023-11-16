@@ -78,6 +78,9 @@ type ServiceGroup struct {
 	// request failed.
 	Status string `json:"status,omitempty"`
 
+	// Name of the service group.
+	Name string `json:"name,omitempty"`
+
 	// UUID of the group.
 	UUID string `json:"uuid,omitempty"`
 
