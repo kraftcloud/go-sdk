@@ -28,10 +28,10 @@ type ServicesService interface {
 	// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#creating-new-service-groups
 	Create(ctx context.Context, req ServiceCreateRequest) (*ServiceGroup, error)
 
-	// Returns the current status and the configuration of a service group.
+	// Returns the current state and the configuration of a service group.
 	//
-	// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#getting-the-status-of-a-service-group
-	Status(ctx context.Context, uuid string) (*ServiceGroup, error)
+	// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#getting-the-state-of-a-service-group
+	State(ctx context.Context, uuid string) (*ServiceGroup, error)
 
 	// Lists all existing service groups. You can filter by persistence and DNS
 	// name. The latter can be used to lookup the UUID of the service group that

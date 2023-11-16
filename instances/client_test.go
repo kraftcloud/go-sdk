@@ -47,7 +47,7 @@ func TestClientThreadSafety(t *testing.T) {
 			go func(uuid string) {
 				defer wg.Done()
 				for i := 0; i < requests; i++ {
-					ins, err := cli.Status(ctx, uuid)
+					ins, err := cli.State(ctx, uuid)
 					if err != nil {
 						select {
 						case <-ctx.Done():

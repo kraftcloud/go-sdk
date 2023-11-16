@@ -45,7 +45,7 @@ func (c *volumesClient) List(ctx context.Context) ([]Volume, error) {
 
 	var volumes []Volume
 	for _, uuid := range uuids {
-		instance, err := c.WithMetro(metro).Status(ctx, uuid.UUID)
+		instance, err := c.WithMetro(metro).State(ctx, uuid.UUID)
 		if err != nil {
 			return nil, fmt.Errorf("could not get instance status: %w", err)
 		}

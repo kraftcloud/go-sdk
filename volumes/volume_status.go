@@ -14,10 +14,10 @@ import (
 	"sdk.kraft.cloud/client"
 )
 
-// Returns the current status and the configuration of a volume.
+// Returns the current state and the configuration of a volume.
 //
-// See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#status
-func (c *volumesClient) Status(ctx context.Context, uuid string) (*Volume, error) {
+// See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#state
+func (c *volumesClient) State(ctx context.Context, uuid string) (*Volume, error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}

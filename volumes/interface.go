@@ -23,10 +23,10 @@ type VolumesService interface {
 	// See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#create
 	Create(ctx context.Context, req VolumeCreateRequest) (*Volume, error)
 
-	// Returns the current status and the configuration of a volume.
+	// Returns the current state and the configuration of a volume.
 	//
-	// See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#status
-	Status(ctx context.Context, uuid string) (*Volume, error)
+	// See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#state
+	State(ctx context.Context, uuid string) (*Volume, error)
 
 	// Attaches a volume to an instance so that the volume is mounted when the
 	// instance starts. The volume needs to be in available state and the instance
