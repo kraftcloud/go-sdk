@@ -30,13 +30,17 @@ type Instance struct {
 	// UUID of the instance.
 	UUID string `json:"uuid,omitempty"`
 
-	// Publicly accessible DNS name of the instance.
-	DNS string `json:"dns,omitempty"`
+	// Publicly accessible FQDN name of the instance.
+	FQDN string `json:"fqdn,omitempty"`
 
 	// Private IPv4 of the instance in CIDR notation for communication between
 	// instances of the same user. This is equivalent to the IPv4 address of the
 	// first network interface.
 	PrivateIP string `json:"private_ip,omitempty"`
+
+	// Private fully qualified domain name of the instance for communication
+	// between instances of the same user.
+	PrivateFQDN string `json:"private_fqdn,omitempty"`
 
 	// Current state of the instance or error if the request failed.
 	Status string `json:"status,omitempty"`
