@@ -18,6 +18,12 @@ import (
 type ServiceCreateRequest struct {
 	// Services is a list of descriptiosn of exposed network services.
 	Services []Service `json:"services"`
+
+	// Name is the name of the service.
+	Name string `json:"name,omitempty"`
+
+	// DNS is the DNS name of the service.
+	DNS string `json:"dns,omitempty"`
 }
 
 // Creates one or more service groups with the given configuration. Note that,
