@@ -31,11 +31,8 @@ type CreateInstanceRequest struct {
 	// Amount of memory to assign to the instance in megabytes.
 	MemoryMB int64 `json:"memory_mb,omitempty"`
 
-	// Description of exposed network services.
-	Services []services.Service `json:"services,omitempty"`
-
 	// UUID of an existing service group.
-	ServiceGroup string `json:"service_group,omitempty"`
+	ServiceGroup services.ServiceGroup `json:"service_group,omitempty"`
 
 	// Autostart behavior. If true the instance will start immediately after
 	// creation.
