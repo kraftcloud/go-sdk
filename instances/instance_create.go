@@ -38,8 +38,8 @@ type CreateInstanceRequest struct {
 	// creation.
 	Autostart bool `json:"autostart,omitempty"`
 
-	// Number of instances to create with these properties.
-	Instances int `json:"instances,omitempty"`
+	// Number of replicas to create with these properties.
+	Replicas int `json:"replicas,omitempty"`
 
 	// Key/value pairs to be set as environment variables at boot time.
 	// Values must be strings.
