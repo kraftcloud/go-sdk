@@ -14,7 +14,6 @@ import (
 
 	"sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/services"
-	"sdk.kraft.cloud/util"
 )
 
 // CreateInstanceRequest holds all the data necessary to create an instance via
@@ -57,14 +56,6 @@ type CreateInstanceRequest struct {
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#create
 func (c *instancesClient) Create(ctx context.Context, req CreateInstanceRequest) (*Instance, error) {
-	// normalize into the from kraftcloud API expects:
-	image, err := util.NormalizeImageName(req.Image)
-	if err != nil {
-		return nil, fmt.Errorf("normalizing image name: %w", err)
-	}
-
-	req.Image = image
-
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
