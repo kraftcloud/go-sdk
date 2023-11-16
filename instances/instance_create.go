@@ -31,7 +31,7 @@ type CreateInstanceRequest struct {
 	// Amount of memory to assign to the instance in megabytes.
 	MemoryMB int64 `json:"memory_mb,omitempty"`
 
-	// UUID of an existing service group.
+	// Service group to assign the instance to.
 	ServiceGroup services.ServiceGroup `json:"service_group,omitempty"`
 
 	// Autostart behavior. If true the instance will start immediately after
@@ -44,6 +44,9 @@ type CreateInstanceRequest struct {
 	// Key/value pairs to be set as environment variables at boot time.
 	// Values must be strings.
 	Env map[string]string `json:"env,omitempty"`
+
+	// Name of the created instance. If not set, a random name will be generated.
+	Name string `json:"name,omitempty"`
 }
 
 // Creates one or more new instances of the specified Unikraft images. You can
