@@ -12,10 +12,6 @@ const (
 
 // Quotas associated with an account.
 type Quotas struct {
-	// The status of the response. success on success, or error if the request
-	// failed
-	Status string `json:"status,omitempty"`
-
 	// UUID of your user
 	UUID string `json:"uuid,omitempty"`
 

@@ -74,9 +74,8 @@ type Service struct {
 // to publish. For example, if you run a web server you would publish port 80
 // (HTTP) and/or port 443 (HTTPS).
 type ServiceGroup struct {
-	// The status of the service group. 'success' on success, or 'error' if the
-	// request failed.
-	Status string `json:"status,omitempty"`
+	// The state of the service group.
+	State string `json:"state,omitempty"`
 
 	// Name of the service group.
 	Name string `json:"name,omitempty"`

@@ -5,6 +5,8 @@
 
 package instances
 
+import "sdk.kraft.cloud/services"
+
 const (
 	// Endpoint is the public path for the instances service.
 	Endpoint = "/instances"
@@ -49,7 +51,7 @@ type Instance struct {
 	PrivateFQDN string `json:"private_fqdn,omitempty"`
 
 	// Current state of the instance or error if the request failed.
-	Status string `json:"status,omitempty"`
+	State string `json:"state,omitempty"`
 
 	// Date and time of creation in ISO8601.
 	CreatedAt string `json:"created_at,omitempty"`
@@ -69,8 +71,8 @@ type Instance struct {
 	// Key/value pairs to be set as environment variables at boot time.
 	Env map[string]string `json:"env,omitempty"`
 
-	// UUID of the service group that the instance is part of.
-	ServiceGroup string `json:"service_group,omitempty"`
+	// The service group that the instance is part of.
+	ServiceGroup services.ServiceGroup `json:"service_group,omitempty"`
 
 	// List of network interfaces attached to the instance.
 	NetworkInterfaces []NetworkInterface `json:"network_interfaces,omitempty"`

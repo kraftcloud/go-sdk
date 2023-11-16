@@ -27,10 +27,5 @@ func (c *volumesClient) State(ctx context.Context, uuid string) (*Volume, error)
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	volume, err := response.FirstOrErr()
-	if volume != nil && volume.Message != "" {
-		err = fmt.Errorf("%w: %s", err, volume.Message)
-	}
-
-	return volume, err
+	return response.FirstOrErr()
 }
