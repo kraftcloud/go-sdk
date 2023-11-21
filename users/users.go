@@ -82,4 +82,7 @@ type Quotas struct {
 		// Maximum size of a volume in megabytes
 		MaxVolumeMb int `json:"max_volume_mb,omitempty"`
 	} `json:"limits,omitempty"`
+
+	// Message contains the error message either on `partial_success` or `error`.
+	Message string `json:"message,omitempty"`
 }

@@ -61,6 +61,9 @@ type Volume struct {
 	// List of instances that this volume is attached to.
 	AttachedTo []string `json:"attached_to,omitempty"`
 
+	// Message contains the error message either on `partial_success` or `error`.
+	Message string `json:"message,omitempty"`
+
 	// Indicates if the volume will stay alive when the last instance is deleted
 	// that this volume is attached to.
 	Persistent bool `json:"persistent,omitempty"`

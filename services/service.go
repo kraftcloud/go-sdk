@@ -93,6 +93,9 @@ type ServiceGroup struct {
 	// Services contains the descriptions of exposed network services.
 	Services []Service `json:"services,omitempty"`
 
+	// Message contains the error message either on `partial_success` or `error`.
+	Message string `json:"message,omitempty"`
+
 	// Persistent indicates if the group will stay alive even after the last
 	// instance detached.
 	Persistent bool `json:"persistent,omitempty"`
