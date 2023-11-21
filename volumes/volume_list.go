@@ -9,6 +9,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"sdk.kraft.cloud/client"
 )
@@ -40,7 +41,14 @@ func (c *volumesClient) List(ctx context.Context) ([]Volume, error) {
 	// status for each volume.
 	uuids, err := response.AllOrErr()
 	if err != nil {
-		return nil, err
+		var errMsgs []string
+
+		for _, volume := range uuids {
+			if volume.Message != "" {
+				errMsgs = append(errMsgs, volume.Message)
+			}
+		}
+		return nil, fmt.Errorf("%w: %s", err, strings.Join(errMsgs, ", "))
 	}
 
 	var volumes []Volume

@@ -50,5 +50,10 @@ func (c *volumesClient) Attach(ctx context.Context, uuid string, req VolumeAttac
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	return response.FirstOrErr()
+	volume, err := response.FirstOrErr()
+	if volume != nil && volume.Message != "" {
+		err = fmt.Errorf("%w: %s", err, volume.Message)
+	}
+
+	return volume, err
 }

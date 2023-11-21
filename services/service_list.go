@@ -9,6 +9,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"sdk.kraft.cloud/client"
 )
@@ -31,5 +32,14 @@ func (c *servicesClient) List(ctx context.Context) ([]ServiceGroup, error) {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	return response.AllOrErr()
+	services, err := response.AllOrErr()
+
+	var errMsgs []string
+	for _, service := range services {
+		if service.Message != "" {
+			errMsgs = append(errMsgs, service.Message)
+		}
+	}
+
+	return nil, fmt.Errorf("%w: %s", err, strings.Join(errMsgs, ", "))
 }

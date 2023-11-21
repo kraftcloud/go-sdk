@@ -28,5 +28,10 @@ func (c *servicesClient) State(ctx context.Context, uuidOrName string) (*Service
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	return response.FirstOrErr()
+	service, err := response.FirstOrErr()
+	if service != nil && service.Message != "" {
+		err = fmt.Errorf("%w: %s", err, service.Message)
+	}
+
+	return service, err
 }
