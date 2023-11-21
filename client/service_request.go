@@ -100,7 +100,7 @@ func (r *ServiceRequest) DoRequest(ctx context.Context, method, url string, body
 	}
 
 	if err := json.NewDecoder(resp.Body).Decode(target); err != nil {
-		return fmt.Errorf("error parsing response: %v", err)
+		return fmt.Errorf("error parsing response: %w", err)
 	}
 
 	return nil
