@@ -18,7 +18,7 @@ import (
 
 type VolumeAttachRequest struct {
 	// UUID of the instance to attach the volume to.
-	AttachTo string `json:"attach_to"`
+	AttachTo VolumeAttachedToInstance `json:"attach_to"`
 
 	// Path of the mountpoint.
 	At string `json:"at"`
@@ -36,6 +36,10 @@ type VolumeAttachRequest struct {
 func (c *volumesClient) Attach(ctx context.Context, uuid string, req VolumeAttachRequest) (*Volume, error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
+	}
+
+	if req.AttachTo.UUID == "" && req.AttachTo.Name == "" {
+		return nil, errors.New("attach_to UUID or name cannot be empty")
 	}
 
 	body, err := json.Marshal(req)

@@ -41,6 +41,15 @@ const (
 	StateSuccess = State("success")
 )
 
+// VolumeAttachedToInstance represents an instance that a volume is attached to.
+type VolumeAttachedToInstance struct {
+	// UUID of the instance.
+	UUID string `json:"uuid,omitempty"`
+
+	// Name of the instance.
+	Name string `json:"name,omitempty"`
+}
+
 // Compared to an initrd (initial ramdisk), volumes serve different purposes. An
 // initrd is a file system loaded into memory during the boot process of the
 // unikernel. Any new files created as well as any modifications made to files
@@ -59,7 +68,7 @@ type Volume struct {
 	SizeMB int `json:"size_mb,omitempty"`
 
 	// List of instances that this volume is attached to.
-	AttachedTo []string `json:"attached_to,omitempty"`
+	AttachedTo []VolumeAttachedToInstance `json:"attached_to,omitempty"`
 
 	// Message contains the error message either on `partial_success` or `error`.
 	Message string `json:"message,omitempty"`
