@@ -20,12 +20,12 @@ import (
 // deletion of the instance).
 //
 // See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#detach
-func (c *volumesClient) Detach(ctx context.Context, uuid string) (*Volume, error) {
-	if uuid == "" {
-		return nil, errors.New("UUID cannot be empty")
+func (c *volumesClient) Detach(ctx context.Context, uuidOrName string) (*Volume, error) {
+	if uuidOrName == "" {
+		return nil, errors.New("UUID or Name cannot be empty")
 	}
 
-	endpoint := Endpoint + "/" + uuid + "/detach"
+	endpoint := Endpoint + "/" + uuidOrName + "/detach"
 
 	var response client.ServiceResponse[Volume]
 	if err := c.request.DoRequest(ctx, http.MethodPut, endpoint, nil, &response); err != nil {

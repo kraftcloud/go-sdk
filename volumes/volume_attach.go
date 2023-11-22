@@ -33,8 +33,8 @@ type VolumeAttachRequest struct {
 // attached at most.
 //
 // See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#attach
-func (c *volumesClient) Attach(ctx context.Context, uuid string, req VolumeAttachRequest) (*Volume, error) {
-	if uuid == "" {
+func (c *volumesClient) Attach(ctx context.Context, uuidOrName string, req VolumeAttachRequest) (*Volume, error) {
+	if uuidOrName == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
 
@@ -47,7 +47,7 @@ func (c *volumesClient) Attach(ctx context.Context, uuid string, req VolumeAttac
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
 
-	endpoint := Endpoint + "/" + uuid + "/attach"
+	endpoint := Endpoint + "/" + uuidOrName + "/attach"
 
 	var response client.ServiceResponse[Volume]
 	if err := c.request.DoRequest(ctx, http.MethodPut, endpoint, bytes.NewBuffer(body), &response); err != nil {

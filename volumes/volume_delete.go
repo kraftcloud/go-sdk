@@ -18,12 +18,12 @@ import (
 // instance. After this call the UUID of the volumes is no longer valid.
 //
 // See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#delete
-func (c *volumesClient) Delete(ctx context.Context, uuid string) (*Volume, error) {
-	if uuid == "" {
-		return nil, errors.New("UUID cannot be empty")
+func (c *volumesClient) Delete(ctx context.Context, uuidOrName string) (*Volume, error) {
+	if uuidOrName == "" {
+		return nil, errors.New("UUID or Name cannot be empty")
 	}
 
-	endpoint := Endpoint + "/" + uuid
+	endpoint := Endpoint + "/" + uuidOrName
 
 	var response client.ServiceResponse[Volume]
 	if err := c.request.DoRequest(ctx, http.MethodDelete, endpoint, nil, &response); err != nil {

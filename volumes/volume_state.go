@@ -17,13 +17,13 @@ import (
 // Returns the current state and the configuration of a volume.
 //
 // See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#state
-func (c *volumesClient) State(ctx context.Context, uuid string) (*Volume, error) {
-	if uuid == "" {
-		return nil, errors.New("UUID cannot be empty")
+func (c *volumesClient) State(ctx context.Context, uuidOrName string) (*Volume, error) {
+	if uuidOrName == "" {
+		return nil, errors.New("UUID or Name cannot be empty")
 	}
 
 	var response client.ServiceResponse[Volume]
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/"+uuid, nil, &response); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/"+uuidOrName, nil, &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
