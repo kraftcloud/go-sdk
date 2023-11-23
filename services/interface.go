@@ -31,7 +31,7 @@ type ServicesService interface {
 	// Returns the current state and the configuration of a service group.
 	//
 	// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#getting-the-state-of-a-service-group
-	State(ctx context.Context, uuid string) (*ServiceGroup, error)
+	Get(ctx context.Context, uuid string) (*ServiceGroup, error)
 
 	// Lists all existing service groups. You can filter by persistence and DNS
 	// name. The latter can be used to lookup the UUID of the service group that

@@ -38,7 +38,7 @@ func (c *instancesClient) List(ctx context.Context) ([]Instance, error) {
 
 	var instances []Instance
 	for _, uuid := range uuids {
-		instance, err := c.WithMetro(metro).State(ctx, uuid.UUID)
+		instance, err := c.WithMetro(metro).Get(ctx, uuid.UUID)
 		if err != nil {
 			return nil, fmt.Errorf("could not get instance status: %w", err)
 		}

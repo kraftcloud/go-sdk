@@ -3,7 +3,7 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package instances
+package services
 
 import (
 	"context"
@@ -14,25 +14,24 @@ import (
 	"sdk.kraft.cloud/client"
 )
 
-// State returns the current state and the configuration of an instance.
+// Get returns the current state and the configuration of a service group.
 // UUIDs can also be names.
-//
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#state
-func (c *instancesClient) State(ctx context.Context, uuidOrName string) (*Instance, error) {
+func (c *servicesClient) Get(ctx context.Context, uuidOrName string) (*ServiceGroup, error) {
 	if uuidOrName == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
 
 	endpoint := Endpoint + "/" + uuidOrName
 
-	var response client.ServiceResponse[Instance]
+	var response client.ServiceResponse[ServiceGroup]
 	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	instance, err := response.FirstOrErr()
-	if instance != nil && instance.Message != "" {
-		err = fmt.Errorf("%w: %s", err, instance.Message)
+	service, err := response.FirstOrErr()
+	if service != nil && service.Message != "" {
+		err = fmt.Errorf("%w: %s", err, service.Message)
 	}
-	return instance, err
+
+	return service, err
 }

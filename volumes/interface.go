@@ -26,7 +26,7 @@ type VolumesService interface {
 	// Returns the current state and the configuration of a volume.
 	//
 	// See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#state
-	State(ctx context.Context, uuid string) (*Volume, error)
+	Get(ctx context.Context, uuid string) (*Volume, error)
 
 	// Attaches a volume to an instance so that the volume is mounted when the
 	// instance starts. The volume needs to be in available state and the instance

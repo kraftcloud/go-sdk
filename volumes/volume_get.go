@@ -17,7 +17,7 @@ import (
 // Returns the current state and the configuration of a volume.
 //
 // See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#state
-func (c *volumesClient) State(ctx context.Context, uuidOrName string) (*Volume, error) {
+func (c *volumesClient) Get(ctx context.Context, uuidOrName string) (*Volume, error) {
 	if uuidOrName == "" {
 		return nil, errors.New("UUID or Name cannot be empty")
 	}

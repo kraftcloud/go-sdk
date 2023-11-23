@@ -22,10 +22,10 @@ type InstancesService interface {
 	// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#create
 	Create(ctx context.Context, req CreateInstanceRequest) (*Instance, error)
 
-	// State returns the current state and the configuration of an instance.
+	// Get returns the current state and the configuration of an instance.
 	//
 	// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#state
-	State(ctx context.Context, uuid string) (*Instance, error)
+	Get(ctx context.Context, uuid string) (*Instance, error)
 
 	// Lists all existing instances.
 	//
