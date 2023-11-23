@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"sdk.kraft.cloud/client"
 )
@@ -34,5 +35,9 @@ func (c *instancesClient) Get(ctx context.Context, uuidOrName string) (*Instance
 	if instance != nil && instance.Message != "" {
 		err = fmt.Errorf("%w: %s", err, instance.Message)
 	}
+
+	// Clean FQDN with trailing dot
+	instance.FQDN = strings.TrimSuffix(instance.FQDN, ".")
+
 	return instance, err
 }
