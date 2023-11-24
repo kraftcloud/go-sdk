@@ -9,7 +9,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"sdk.kraft.cloud/client"
 )
@@ -39,26 +38,18 @@ func (c *volumesClient) List(ctx context.Context) ([]Volume, error) {
 	// TODO(nderjung): For now, the KraftCloud API does not support
 	// returning the full details of each volume.  Temporarily request a
 	// status for each volume.
-	uuids, err := response.AllOrErr()
+	volumes, err := response.AllOrErr()
 	if err != nil {
-		var errMsgs []string
-
-		for _, volume := range uuids {
-			if volume.Message != "" {
-				errMsgs = append(errMsgs, volume.Message)
-			}
-		}
-		return nil, fmt.Errorf("%w: %s", err, strings.Join(errMsgs, ", "))
+		return nil, err
 	}
 
-	var volumes []Volume
-	for _, uuid := range uuids {
-		instance, err := c.WithMetro(metro).Get(ctx, uuid.UUID)
+	for i, volume := range volumes {
+		volume, err := c.WithMetro(metro).GetByUUID(ctx, volume.UUID)
 		if err != nil {
-			return nil, fmt.Errorf("could not get instance status: %w", err)
+			return nil, fmt.Errorf("could not get volume status: %w", err)
 		}
 
-		volumes = append(volumes, *instance)
+		volumes[i] = *volume
 	}
 
 	return volumes, nil

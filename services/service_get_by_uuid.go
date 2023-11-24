@@ -10,19 +10,18 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"sdk.kraft.cloud/client"
 )
 
-// Get returns the current state and the configuration of a service group.
-// UUIDs can also be names.
-func (c *servicesClient) Get(ctx context.Context, uuidOrName string) (*ServiceGroup, error) {
-	if uuidOrName == "" {
+// GetByUUID returns the current state and the configuration of a service group
+// given its UUID.
+func (c *servicesClient) GetByUUID(ctx context.Context, uuid string) (*ServiceGroup, error) {
+	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
 
-	endpoint := Endpoint + "/" + uuidOrName
+	endpoint := Endpoint + "/" + uuid
 
 	var response client.ServiceResponse[ServiceGroup]
 	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {
@@ -31,11 +30,8 @@ func (c *servicesClient) Get(ctx context.Context, uuidOrName string) (*ServiceGr
 
 	service, err := response.FirstOrErr()
 	if service != nil && service.Message != "" {
-		err = fmt.Errorf("%w: %s", err, service.Message)
+		err = errors.Join(err, fmt.Errorf(service.Message))
 	}
-
-	// Clean FQDN with trailing dot
-	service.FQDN = strings.TrimSuffix(service.FQDN, ".")
 
 	return service, err
 }

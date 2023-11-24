@@ -22,37 +22,74 @@ type InstancesService interface {
 	// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#create
 	Create(ctx context.Context, req CreateInstanceRequest) (*Instance, error)
 
-	// Get returns the current state and the configuration of an instance.
+	// GetByUUID returns the current state and the configuration of an instance
+	// based on the provided UUID.
 	//
 	// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#state
-	Get(ctx context.Context, uuid string) (*Instance, error)
+	GetByUUID(ctx context.Context, uuid string) (*Instance, error)
+
+	// GetByName returns the current state and the configuration of an instance
+	// based on the provided name.
+	//
+	// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#state
+	GetByName(ctx context.Context, name string) (*Instance, error)
 
 	// Lists all existing instances.
 	//
 	// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#list
 	List(ctx context.Context) ([]Instance, error)
 
-	// Stops the specified instance, but does not destroy it. All volatile state
-	// (e.g., RAM contents) is lost. Does nothing for an instance that is already
-	// stopped. The instance can be started again with the start endpoint.
+	// StopByUUID the specified instance based on its UUID, but does not destroy
+	// it.  All volatile state (e.g., RAM contents) is lost. Does nothing for an
+	// instance that is already stopped. The instance can be started again with
+	// the start endpoint.
 	//
 	// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#stop
-	Stop(ctx context.Context, uuid string, drainTimeoutMS int64) (*Instance, error)
+	StopByUUID(ctx context.Context, uuid string, drainTimeoutMS int64) (*Instance, error)
 
-	// Starts a previously stopped instance. Does nothing for an instance that is
-	// already running.
+	// Stops the specified instance based on its name, but does not destroy it.
+	// All volatile state (e.g., RAM contents) is lost. Does nothing for an
+	// instance that is already stopped. The instance can be started again with
+	// the start endpoint.
+	//
+	// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#stop
+	StopByName(ctx context.Context, name string, drainTimeoutMS int64) (*Instance, error)
+
+	// Starts a previously stopped instance based on its UUID. Does nothing for an
+	// instance that is already running.
 	//
 	// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#start
-	Start(ctx context.Context, uuid string, waitTimeoutMS int) (*Instance, error)
+	StartByUUID(ctx context.Context, uuid string, waitTimeoutMS int) (*Instance, error)
 
-	// Deletes the specified instance. After this call the UUID of the instance is
-	// no longer valid. If the instance is currently running it is force stopped.
+	// Starts a previously stopped instance based on its name. Does nothing for an
+	// instance that is already running.
+	//
+	// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#start
+	StartByName(ctx context.Context, name string, waitTimeoutMS int) (*Instance, error)
+
+	// DeleteByUUID the specified instance based on its UUID. After this call the
+	// UUID of the instance is no longer valid. If the instance is currently
+	// running it is force stopped.
 	//
 	// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#delete
-	Delete(ctx context.Context, uuid string) error
+	DeleteByUUID(ctx context.Context, uuid string) error
 
-	// Logs returns the console output of the specified instance.
+	// DeleteByName deletes the specified instance based on its name. After this
+	// call the UUID of the instance is no longer valid. If the instance is
+	// currently running it is force stopped.
+	//
+	// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#delete
+	DeleteByName(ctx context.Context, name string) error
+
+	// LogsByName returns the console output of the specified instance based on
+	// its name.
 	//
 	// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#console
-	Logs(ctx context.Context, uuid string, maxLines int, latest bool) (string, error)
+	LogsByName(ctx context.Context, name string, maxLines int, latest bool) (string, error)
+
+	// LogsByUUID returns the console output of the specified instance based on its
+	// UUID.
+	//
+	// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#console
+	LogsByUUID(ctx context.Context, uuid string, maxLines int, latest bool) (string, error)
 }

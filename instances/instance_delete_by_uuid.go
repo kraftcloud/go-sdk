@@ -14,19 +14,18 @@ import (
 	"sdk.kraft.cloud/client"
 )
 
-// Deletes the specified instance. After this call the UUID of the instance is
-// no longer valid. If the instance is currently running it is force stopped.
+// DeleteByUUID the specified instance based on its UUID. After this call the
+// UUID of the instance is no longer valid. If the instance is currently running
+// it is force stopped.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#delete
-func (c *instancesClient) Delete(ctx context.Context, uuidOrName string) error {
-	if uuidOrName == "" {
-		return errors.New("UUID or Name cannot be empty")
+func (c *instancesClient) DeleteByUUID(ctx context.Context, uuid string) error {
+	if uuid == "" {
+		return errors.New("UUID cannot be empty")
 	}
 
-	endpoint := Endpoint + "/" + uuidOrName
-
 	var response client.ServiceResponse[Instance]
-	if err := c.request.DoRequest(ctx, http.MethodDelete, endpoint, nil, &response); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint+"/"+uuid, nil, &response); err != nil {
 		return fmt.Errorf("performing the request: %w", err)
 	}
 

@@ -16,34 +16,32 @@ import (
 	"sdk.kraft.cloud/client"
 )
 
-// Starts a previously stopped instance. Does nothing for an instance that is
-// already running.
+// StartByName starts a previously stopped instance based on its name. Does
+// nothing for an instance that is already running.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#start
-func (c *instancesClient) Start(ctx context.Context, uuidOrName string, waitTimeoutMS int) (*Instance, error) {
-	if uuidOrName == "" {
-		return nil, errors.New("UUID or Name cannot be empty")
+func (c *instancesClient) StartByName(ctx context.Context, name string, waitTimeoutMS int) (*Instance, error) {
+	if name == "" {
+		return nil, errors.New("name cannot be empty")
 	}
 
-	endpoint := Endpoint + "/" + uuidOrName + "/start"
-
-	requestBody := map[string]interface{}{
+	body, err := json.Marshal([]map[string]interface{}{{
+		"name":            name,
 		"wait_timeout_ms": waitTimeoutMS,
-	}
-
-	body, err := json.Marshal(requestBody)
+	}})
 	if err != nil {
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
 	var response client.ServiceResponse[Instance]
-	if err := c.request.DoRequest(ctx, http.MethodPut, endpoint, bytes.NewBuffer(body), &response); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/start", bytes.NewBuffer(body), &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
 	instance, err := response.FirstOrErr()
 	if instance != nil && instance.Message != "" {
-		err = fmt.Errorf("%w: %s", err, instance.Message)
+		err = errors.Join(err, fmt.Errorf(instance.Message))
 	}
+
 	return instance, err
 }

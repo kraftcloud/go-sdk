@@ -38,19 +38,18 @@ func (c *servicesClient) List(ctx context.Context) ([]ServiceGroup, error) {
 	// TODO(nderjung): For now, the KraftCloud API does not support
 	// returning the full details of each instance.  Temporarily request a
 	// status for each instance.
-	uuids, err := response.AllOrErr()
+	groups, err := response.AllOrErr()
 	if err != nil {
 		return nil, err
 	}
 
-	var groups []ServiceGroup
-	for _, uuid := range uuids {
-		group, err := c.WithMetro(metro).Get(ctx, uuid.UUID)
+	for i, group := range groups {
+		group, err := c.WithMetro(metro).GetByUUID(ctx, group.UUID)
 		if err != nil {
 			return nil, fmt.Errorf("could not get service group: %w", err)
 		}
 
-		groups = append(groups, *group)
+		groups[i] = *group
 	}
 
 	return groups, nil

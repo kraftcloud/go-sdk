@@ -5,7 +5,9 @@
 
 package instances
 
-import "sdk.kraft.cloud/services"
+import (
+	"sdk.kraft.cloud/services"
+)
 
 const (
 	// Endpoint is the public path for the instances service.
@@ -25,6 +27,20 @@ type NetworkInterface struct {
 
 	// MAC address of the network interface.
 	MAC string `json:"mac,omitempty"`
+}
+
+type InstanceVolume struct {
+	// UUID of the volume
+	UUID string `json:"uuid,omitempty"`
+
+	// Name of the volume
+	Name string `json:"name,omitempty"`
+
+	// Path of the mountpoint
+	At string `json:"at,omitempty"`
+
+	// Whether the volume is mounted read-only
+	ReadOnly bool `json:"readonly,omitempty"`
 }
 
 // Instance holds the description of the KraftCloud compute instance, as
@@ -73,6 +89,9 @@ type Instance struct {
 
 	// The service group that the instance is part of.
 	ServiceGroup services.ServiceGroup `json:"service_group,omitempty"`
+
+	// Description of volumes.
+	Volumes []InstanceVolume `json:"volumes,omitempty"`
 
 	// List of network interfaces attached to the instance.
 	NetworkInterfaces []NetworkInterface `json:"network_interfaces,omitempty"`
