@@ -9,7 +9,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"sdk.kraft.cloud/client"
 )
@@ -27,19 +26,32 @@ import (
 func (c *servicesClient) List(ctx context.Context) ([]ServiceGroup, error) {
 	endpoint := Endpoint + "/list"
 
+	// Save the metro such that we can force using it again due to the compromise
+	// below.
+	metro := c.request.Metro()
+
 	var response client.ServiceResponse[ServiceGroup]
 	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	services, err := response.AllOrErr()
-
-	var errMsgs []string
-	for _, service := range services {
-		if service.Message != "" {
-			errMsgs = append(errMsgs, service.Message)
-		}
+	// TODO(nderjung): For now, the KraftCloud API does not support
+	// returning the full details of each instance.  Temporarily request a
+	// status for each instance.
+	uuids, err := response.AllOrErr()
+	if err != nil {
+		return nil, err
 	}
 
-	return nil, fmt.Errorf("%w: %s", err, strings.Join(errMsgs, ", "))
+	var groups []ServiceGroup
+	for _, uuid := range uuids {
+		group, err := c.WithMetro(metro).Get(ctx, uuid.UUID)
+		if err != nil {
+			return nil, fmt.Errorf("could not get service group: %w", err)
+		}
+
+		groups = append(groups, *group)
+	}
+
+	return groups, nil
 }
