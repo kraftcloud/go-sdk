@@ -32,6 +32,24 @@ type CreateInstanceServiceGroupRequest struct {
 	Services []services.Service `json:"services,omitempty"`
 }
 
+type CreateInstanceVolumeRequest struct {
+	// Name of the existing service group.
+	Name string `json:"name,omitempty"`
+
+	// UUID of the existing service group.
+	UUID string `json:"uuid,omitempty"`
+
+	// Size of the new volume in megabytes.
+	SizeMB int `json:"size_mb,omitempty"`
+
+	// Path of the mountpoint. Must be empty. Automatically created if it does not
+	// exist.
+	At string `json:"at,omitempty"`
+
+	// Whether the volume should be mounted read-only.
+	ReadOnly bool `json:"readonly,omitempty"`
+}
+
 // CreateInstanceRequest holds all the data necessary to create an instance via
 // the API.
 //
@@ -49,6 +67,9 @@ type CreateInstanceRequest struct {
 
 	// Service group to assign the instance to.
 	ServiceGroup CreateInstanceServiceGroupRequest `json:"service_group,omitempty"`
+
+	// Description of volumes
+	Volumes []CreateInstanceVolumeRequest `json:"volumes,omitempty"`
 
 	// Autostart behavior. If true the instance will start immediately after
 	// creation.
