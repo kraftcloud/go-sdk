@@ -54,6 +54,9 @@ type Volume struct {
 	// UUID of the volume.
 	UUID string `json:"uuid,omitempty"`
 
+	// Name of the volume.
+	Name string `json:"name,omitempty"`
+
 	// Size of the volume in megabytes.
 	SizeMB int `json:"size_mb,omitempty"`
 
