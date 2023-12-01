@@ -11,12 +11,6 @@ const (
 
 // Image describes a KraftCloud image as returned by the API server.
 type Image struct {
-	// UUID of the image.
-	UUID string `json:"uuid"`
-
-	// Name of the image.
-	Name string `json:"name"`
-
 	// Image digest to uniquely identify this image.
 	Digest string `json:"digest"`
 
