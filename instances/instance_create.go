@@ -16,6 +16,22 @@ import (
 	"sdk.kraft.cloud/services"
 )
 
+type CreateInstanceServiceGroupRequest struct {
+	// Name of the existing service group.
+	Name string `json:"name,omitempty"`
+
+	// UUID of the existing service group.
+	UUID string `json:"uuid,omitempty"`
+
+	// The DNS name under which the group is accessible from the internet.  If the
+	// DNSName is terminates with a `.` it represents a FQDN, otherwise the
+	// provided string will be used as subdomain on the given metro.
+	DNSName string `json:"dns_name,omitempty"`
+
+	// Services contains the descriptions of exposed network services.
+	Services []services.Service `json:"services,omitempty"`
+}
+
 // CreateInstanceRequest holds all the data necessary to create an instance via
 // the API.
 //
@@ -32,7 +48,7 @@ type CreateInstanceRequest struct {
 	MemoryMB int64 `json:"memory_mb,omitempty"`
 
 	// Service group to assign the instance to.
-	ServiceGroup services.ServiceGroup `json:"service_group,omitempty"`
+	ServiceGroup CreateInstanceServiceGroupRequest `json:"service_group,omitempty"`
 
 	// Autostart behavior. If true the instance will start immediately after
 	// creation.
