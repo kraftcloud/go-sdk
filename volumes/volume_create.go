@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -38,7 +39,7 @@ func (c *volumesClient) Create(ctx context.Context, name string, sizeMB int) (*V
 
 	volume, err := response.FirstOrErr()
 	if volume != nil && volume.Message != "" {
-		err = fmt.Errorf("%w: %s", err, volume.Message)
+		err = errors.Join(err, fmt.Errorf(volume.Message))
 	}
 
 	return volume, err
