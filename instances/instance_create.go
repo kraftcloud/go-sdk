@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -105,7 +106,8 @@ func (c *instancesClient) Create(ctx context.Context, req CreateInstanceRequest)
 
 	instance, err := response.FirstOrErr()
 	if instance != nil && instance.Message != "" {
-		err = fmt.Errorf("%w: %s", err, instance.Message)
+		err = errors.Join(err, fmt.Errorf(instance.Message))
 	}
+
 	return instance, err
 }
