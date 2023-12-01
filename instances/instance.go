@@ -5,6 +5,10 @@
 
 package instances
 
+import (
+	"sdk.kraft.cloud/services"
+)
+
 const (
 	// Endpoint is the public path for the instances service.
 	Endpoint = "/instances"
@@ -15,11 +19,28 @@ type NetworkInterface struct {
 	// UUID of the network interface.
 	UUID string `json:"uuid,omitempty"`
 
+	// Name of the network interface.
+	Name string `json:"name,omitempty"`
+
 	// Private IPv4 of network interface in CIDR notation.
 	PrivateIP string `json:"private_ip,omitempty"`
 
 	// MAC address of the network interface.
 	MAC string `json:"mac,omitempty"`
+}
+
+type InstanceVolume struct {
+	// UUID of the volume
+	UUID string `json:"uuid,omitempty"`
+
+	// Name of the volume
+	Name string `json:"name,omitempty"`
+
+	// Path of the mountpoint
+	At string `json:"at,omitempty"`
+
+	// Whether the volume is mounted read-only
+	ReadOnly bool `json:"readonly,omitempty"`
 }
 
 // Instance holds the description of the KraftCloud compute instance, as
@@ -30,16 +51,23 @@ type Instance struct {
 	// UUID of the instance.
 	UUID string `json:"uuid,omitempty"`
 
-	// Publicly accessible DNS name of the instance.
-	DNS string `json:"dns,omitempty"`
+	// Name of the instance.
+	Name string `json:"name,omitempty"`
+
+	// Publicly accessible FQDN name of the instance.
+	FQDN string `json:"fqdn,omitempty"`
 
 	// Private IPv4 of the instance in CIDR notation for communication between
 	// instances of the same user. This is equivalent to the IPv4 address of the
 	// first network interface.
 	PrivateIP string `json:"private_ip,omitempty"`
 
+	// Private fully qualified domain name of the instance for communication
+	// between instances of the same user.
+	PrivateFQDN string `json:"private_fqdn,omitempty"`
+
 	// Current state of the instance or error if the request failed.
-	Status string `json:"status,omitempty"`
+	State string `json:"state,omitempty"`
 
 	// Date and time of creation in ISO8601.
 	CreatedAt string `json:"created_at,omitempty"`
@@ -59,8 +87,11 @@ type Instance struct {
 	// Key/value pairs to be set as environment variables at boot time.
 	Env map[string]string `json:"env,omitempty"`
 
-	// UUID of the service group that the instance is part of.
-	ServiceGroup string `json:"service_group,omitempty"`
+	// The service group that the instance is part of.
+	ServiceGroup services.ServiceGroup `json:"service_group,omitempty"`
+
+	// Description of volumes.
+	Volumes []InstanceVolume `json:"volumes,omitempty"`
 
 	// List of network interfaces attached to the instance.
 	NetworkInterfaces []NetworkInterface `json:"network_interfaces,omitempty"`

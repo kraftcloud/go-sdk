@@ -14,7 +14,9 @@ import (
 	"sdk.kraft.cloud/client"
 )
 
-func (c *servicesClient) Status(ctx context.Context, uuid string) (*ServiceGroup, error) {
+// GetByUUID returns the current state and the configuration of a service group
+// given its UUID.
+func (c *servicesClient) GetByUUID(ctx context.Context, uuid string) (*ServiceGroup, error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
@@ -26,5 +28,10 @@ func (c *servicesClient) Status(ctx context.Context, uuid string) (*ServiceGroup
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	return response.FirstOrErr()
+	service, err := response.FirstOrErr()
+	if service != nil && service.Message != "" {
+		err = errors.Join(err, fmt.Errorf(service.Message))
+	}
+
+	return service, err
 }

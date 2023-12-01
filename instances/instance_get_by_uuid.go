@@ -10,14 +10,15 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"sdk.kraft.cloud/client"
 )
 
-// Status returns the current status and the configuration of an instance.
+// Get returns the current state and the configuration of an instance.
 //
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#status
-func (c *instancesClient) Status(ctx context.Context, uuid string) (*Instance, error) {
+// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#state
+func (c *instancesClient) GetByUUID(ctx context.Context, uuid string) (*Instance, error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
@@ -31,7 +32,11 @@ func (c *instancesClient) Status(ctx context.Context, uuid string) (*Instance, e
 
 	instance, err := response.FirstOrErr()
 	if instance != nil && instance.Message != "" {
-		err = fmt.Errorf("%w: %s", err, instance.Message)
+		err = errors.Join(err, fmt.Errorf(instance.Message))
 	}
+
+	// Clean FQDN with trailing dot
+	instance.FQDN = strings.TrimSuffix(instance.FQDN, ".")
+
 	return instance, err
 }

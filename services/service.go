@@ -74,15 +74,17 @@ type Service struct {
 // to publish. For example, if you run a web server you would publish port 80
 // (HTTP) and/or port 443 (HTTPS).
 type ServiceGroup struct {
-	// The status of the service group. 'success' on success, or 'error' if the
-	// request failed.
+	// The status of the service group.
 	Status string `json:"status,omitempty"`
+
+	// Name of the service group.
+	Name string `json:"name,omitempty"`
 
 	// UUID of the group.
 	UUID string `json:"uuid,omitempty"`
 
-	// Public DNS name under which the group is accessible from the Internet.
-	DNS string `json:"dns,omitempty"`
+	// The Fully Qualified Domain Name which the service is accessible from.
+	FQDN string `json:"fqdn,omitempty"`
 
 	// Instances contains a list of UUID representing instances attached to this
 	// group.
@@ -90,6 +92,9 @@ type ServiceGroup struct {
 
 	// Services contains the descriptions of exposed network services.
 	Services []Service `json:"services,omitempty"`
+
+	// Message contains the error message either on `partial_success` or `error`.
+	Message string `json:"message,omitempty"`
 
 	// Persistent indicates if the group will stay alive even after the last
 	// instance detached.

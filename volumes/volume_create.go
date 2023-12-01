@@ -9,16 +9,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
 	"sdk.kraft.cloud/client"
 )
-
-type VolumeCreateRequest struct {
-	// Size of the volume in megabytes.
-	SizeMB int `json:"size_mb,omitempty"`
-}
 
 // Creates one or more volumes with the given configuration. The volumes are
 // automatically initialized with an empty file system. After initialization
@@ -27,8 +23,11 @@ type VolumeCreateRequest struct {
 // be changed after creation.
 //
 // See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#create
-func (c *volumesClient) Create(ctx context.Context, req VolumeCreateRequest) (*Volume, error) {
-	body, err := json.Marshal(req)
+func (c *volumesClient) Create(ctx context.Context, name string, sizeMB int) (*Volume, error) {
+	body, err := json.Marshal(map[string]interface{}{
+		"name":    name,
+		"size_mb": sizeMB,
+	})
 	if err != nil {
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
@@ -38,5 +37,10 @@ func (c *volumesClient) Create(ctx context.Context, req VolumeCreateRequest) (*V
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	return response.FirstOrErr()
+	volume, err := response.FirstOrErr()
+	if volume != nil && volume.Message != "" {
+		err = errors.Join(err, fmt.Errorf(volume.Message))
+	}
+
+	return volume, err
 }

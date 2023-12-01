@@ -20,5 +20,8 @@ type ImagesService interface {
 	// part of the request.
 	//
 	// See: https://docs.kraft.cloud/004-rest-api-v1-images.html#list-existing-images
-	List(ctx context.Context, filter map[string]interface{}) ([]Image, error)
+	List(ctx context.Context) ([]Image, error)
+
+	// Delete an image by its provided name.
+	DeleteByName(ctx context.Context, name string) error
 }

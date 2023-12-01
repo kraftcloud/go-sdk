@@ -23,8 +23,7 @@ func main() {
 	client := kraftcloud.NewImagesClient(
 		kraftcloud.WithToken(token),
 	)
-	filter := make(map[string]interface{})
-	images, err := client.List(context.Background(), filter)
+	images, err := client.List(context.Background())
 	if err != nil {
 		fmt.Printf("%s\n", err)
 		return

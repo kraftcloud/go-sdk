@@ -31,19 +31,18 @@ func (c *instancesClient) List(ctx context.Context) ([]Instance, error) {
 	// TODO(nderjung): For now, the KraftCloud API does not support
 	// returning the full details of each instance.  Temporarily request a
 	// status for each instance.
-	uuids, err := response.AllOrErr()
+	instances, err := response.AllOrErr()
 	if err != nil {
 		return nil, err
 	}
 
-	var instances []Instance
-	for _, uuid := range uuids {
-		instance, err := c.WithMetro(metro).Status(ctx, uuid.UUID)
+	for i, instance := range instances {
+		instance, err := c.WithMetro(metro).GetByUUID(ctx, instance.UUID)
 		if err != nil {
 			return nil, fmt.Errorf("could not get instance status: %w", err)
 		}
 
-		instances = append(instances, *instance)
+		instances[i] = *instance
 	}
 
 	return instances, nil

@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -18,6 +19,12 @@ import (
 type ServiceCreateRequest struct {
 	// Services is a list of descriptiosn of exposed network services.
 	Services []Service `json:"services"`
+
+	// Name is the name of the service.
+	Name string `json:"name,omitempty"`
+
+	// DNSName is the DNS name of the service.
+	DNSName string `json:"dns_name,omitempty"`
 }
 
 // Creates one or more service groups with the given configuration. Note that,
@@ -43,5 +50,10 @@ func (c *servicesClient) Create(ctx context.Context, req ServiceCreateRequest) (
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	return response.FirstOrErr()
+	service, err := response.FirstOrErr()
+	if service != nil && service.Message != "" {
+		err = errors.Join(err, fmt.Errorf(service.Message))
+	}
+
+	return service, err
 }

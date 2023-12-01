@@ -28,10 +28,15 @@ type ServicesService interface {
 	// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#creating-new-service-groups
 	Create(ctx context.Context, req ServiceCreateRequest) (*ServiceGroup, error)
 
-	// Returns the current status and the configuration of a service group.
+	// GetByUUID returns the current state and the configuration of a service group.
 	//
-	// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#getting-the-status-of-a-service-group
-	Status(ctx context.Context, uuid string) (*ServiceGroup, error)
+	// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#getting-the-state-of-a-service-group
+	GetByUUID(ctx context.Context, uuid string) (*ServiceGroup, error)
+
+	// GetByName returns the current state and the configuration of a service group.
+	//
+	// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#getting-the-state-of-a-service-group
+	GetByName(ctx context.Context, name string) (*ServiceGroup, error)
 
 	// Lists all existing service groups. You can filter by persistence and DNS
 	// name. The latter can be used to lookup the UUID of the service group that
@@ -45,12 +50,23 @@ type ServicesService interface {
 	// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#list-existing-service-groups
 	List(ctx context.Context) ([]ServiceGroup, error)
 
-	// Deletes the specified service group. Fails if there are still instances
-	// attached to group. After this call the UUID of the group is no longer
-	// valid.
+	// DeleteByUUID the specified service group based on its UUID.  Fails if there
+	// are still instances attached to group. After this call the UUID of the
+	// group is no longer valid.
 	//
 	// This operation cannot be undone.
 	//
-	// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#deleting-a-service-group
-	Delete(ctx context.Context, uuid string) (*ServiceGroup, error)
+	// See:
+	// https://docs.kraft.cloud/003-rest-api-v1-services.html#deleting-a-service-group
+	DeleteByUUID(ctx context.Context, uuid string) error
+
+	// DeleteByName the specified service group based on its name.  Fails if there
+	// are still instances attached to group. After this call the UUID of the
+	// group is no longer valid.
+	//
+	// This operation cannot be undone.
+	//
+	// See:
+	// https://docs.kraft.cloud/003-rest-api-v1-services.html#deleting-a-service-group
+	DeleteByName(ctx context.Context, name string) error
 }

@@ -100,7 +100,7 @@ func (r *ServiceRequest) DoRequest(ctx context.Context, method, url string, body
 	}
 
 	if err := json.NewDecoder(resp.Body).Decode(target); err != nil {
-		return fmt.Errorf("error parsing response: %v", err)
+		return fmt.Errorf("error parsing response: %w", err)
 	}
 
 	return nil
@@ -120,10 +120,16 @@ func (r *ServiceRequest) DoWithAuth(req *http.Request) (*http.Response, error) {
 	return hc.Do(req)
 }
 
-// GetBearerToken uses the pre-defined token to construct the Bearer token used
-// for authenticating requests.
+// GetBearerToken uses the pre-defined token to construct the header used for
+// authenticating requests.
 func (r *ServiceRequest) GetBearerToken() string {
 	return "Bearer " + r.opts.Token()
+}
+
+// GetToken uses the pre-defined token to construct the Bearer token used
+// for authenticating requests.
+func (r *ServiceRequest) GetToken() string {
+	return r.opts.Token()
 }
 
 // clone returns a shallow copy of r.

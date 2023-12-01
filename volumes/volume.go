@@ -32,14 +32,16 @@ const (
 
 	// There are maintenance tasks running on the volume.
 	StateBusy = State("busy")
-
-	// The volume is in an error state that needs inspection by a KraftCloud
-	// engineer.
-	StateError = State("error")
-
-	// The request was successful.
-	StateSuccess = State("success")
 )
+
+// VolumeAttachedToInstance represents an instance that a volume is attached to.
+type VolumeAttachedToInstance struct {
+	// UUID of the instance.
+	UUID string `json:"uuid,omitempty"`
+
+	// Name of the instance.
+	Name string `json:"name,omitempty"`
+}
 
 // Compared to an initrd (initial ramdisk), volumes serve different purposes. An
 // initrd is a file system loaded into memory during the boot process of the
@@ -49,17 +51,26 @@ const (
 // can be initialized with a set of files with one instance and then be detached
 // and attached to a another one.
 type Volume struct {
-	// Current state of the volume (see states) or error if the request failed
-	Status State `json:"status,omitempty"`
-
 	// UUID of the volume.
 	UUID string `json:"uuid,omitempty"`
+
+	// Name of the volume.
+	Name string `json:"name,omitempty"`
 
 	// Size of the volume in megabytes.
 	SizeMB int `json:"size_mb,omitempty"`
 
 	// List of instances that this volume is attached to.
-	AttachedTo []string `json:"attached_to,omitempty"`
+	AttachedTo []VolumeAttachedToInstance `json:"attached_to,omitempty"`
+
+	// Current state of the volume (see states) or error if the request failed
+	State State `json:"State,omitempty"`
+
+	// Status indicates the success or failure of the response.
+	Status string `json:"status,omitempty"`
+
+	// Message contains the error message either on `partial_success` or `error`.
+	Message string `json:"message,omitempty"`
 
 	// Indicates if the volume will stay alive when the last instance is deleted
 	// that this volume is attached to.

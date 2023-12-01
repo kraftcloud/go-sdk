@@ -6,28 +6,41 @@
 package instances
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
 	"sdk.kraft.cloud/client"
 )
 
-// Logs returns the console output of the specified instance.
+// LogsByName returns the console output of the specified instance based on its
+// UUID.
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#console
-func (c *instancesClient) Logs(ctx context.Context, uuid string, maxLines int, latest bool) (string, error) {
-	endpoint := Endpoint + "/" + uuid + "/console"
+func (c *instancesClient) LogsByName(ctx context.Context, name string, maxLines int, latest bool) (string, error) {
+	if len(name) == 0 {
+		return "", fmt.Errorf("namae cannot be empty")
+	}
+
+	body, err := json.Marshal([]map[string]interface{}{{
+		"name": name,
+	}})
+	if err != nil {
+		return "", fmt.Errorf("marshalling request body: %w", err)
+	}
 
 	var resp client.ServiceResponse[Instance]
-	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/console", bytes.NewBuffer(body), &resp); err != nil {
 		return "", fmt.Errorf("performing the request: %w", err)
 	}
 
 	instance, err := resp.FirstOrErr()
 	if instance != nil && instance.Message != "" {
-		return "", fmt.Errorf("%w: %s", err, instance.Message)
+		return "", errors.Join(err, fmt.Errorf(instance.Message))
 	}
 
 	output, err := base64.StdEncoding.DecodeString(instance.Output)

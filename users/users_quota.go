@@ -23,5 +23,10 @@ func (c *usersClient) Quotas(ctx context.Context) (*Quotas, error) {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	return response.FirstOrErr()
+	user, err := response.FirstOrErr()
+	if user != nil && user.Message != "" {
+		err = fmt.Errorf("%w: %s", err, user.Message)
+	}
+
+	return user, err
 }

@@ -35,4 +35,7 @@ type Image struct {
 	// Unikraft kernel arguments hardcoded into the image. Prepended to the kernel
 	// arguments set by KraftCloud
 	KernelArgs string `json:"kernel_args"`
+
+	// Message contains the error message either on `partial_success` or `error`.
+	Message string `json:"message,omitempty"`
 }
