@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -51,7 +52,7 @@ func (c *servicesClient) Create(ctx context.Context, req ServiceCreateRequest) (
 
 	service, err := response.FirstOrErr()
 	if service != nil && service.Message != "" {
-		err = fmt.Errorf("%w: %s", err, service.Message)
+		err = errors.Join(err, fmt.Errorf(service.Message))
 	}
 
 	return service, err
