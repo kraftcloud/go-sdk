@@ -83,7 +83,7 @@ type ServiceGroup struct {
 	// UUID of the group.
 	UUID string `json:"uuid,omitempty"`
 
-	// Public FQDN name under which the group is accessible from the Internet.
+	// The Fully Qualified Domain Name which the service is accessible from.
 	FQDN string `json:"fqdn,omitempty"`
 
 	// Instances contains a list of UUID representing instances attached to this
