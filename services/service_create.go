@@ -23,8 +23,8 @@ type ServiceCreateRequest struct {
 	// Name is the name of the service.
 	Name string `json:"name,omitempty"`
 
-	// DNS is the DNS name of the service.
-	DNS string `json:"dns,omitempty"`
+	// DNSName is the DNS name of the service.
+	DNSName string `json:"dns_name,omitempty"`
 }
 
 // Creates one or more service groups with the given configuration. Note that,
