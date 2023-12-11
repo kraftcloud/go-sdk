@@ -6,7 +6,9 @@
 package instances
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -17,32 +19,34 @@ import (
 //
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#list
 func (c *instancesClient) List(ctx context.Context) ([]Instance, error) {
-	endpoint := Endpoint + "/list"
-
-	// Save the metro such that we can force using it again due to the compromise
-	// below.
-	metro := c.request.Metro()
-
 	var response client.ServiceResponse[Instance]
-	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/list", nil, &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	// TODO(nderjung): For now, the KraftCloud API does not support
-	// returning the full details of each instance.  Temporarily request a
-	// status for each instance.
 	instances, err := response.AllOrErr()
 	if err != nil {
 		return nil, err
 	}
 
-	for i, instance := range instances {
-		instance, err := c.WithMetro(metro).GetByUUID(ctx, instance.UUID)
-		if err != nil {
-			return nil, fmt.Errorf("could not get instance status: %w", err)
-		}
+	// TODO(nderjung): For now, the KraftCloud API does not support
+	// returning the full details of each instance.  Temporarily request a
+	// status for each instance.
 
-		instances[i] = *instance
+	req := make([]map[string]interface{}, len(instances))
+	for i, instance := range instances {
+		req[i] = map[string]interface{}{
+			"uuid": instance.UUID,
+		}
+	}
+
+	body, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("marshalling request body: %w", err)
+	}
+
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/status", bytes.NewBuffer(body), &response); err != nil {
+		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
 	return instances, nil
