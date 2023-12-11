@@ -6,7 +6,9 @@
 package volumes
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -24,32 +26,34 @@ import (
 //
 // See: https://docs.kraft.cloud/003-rest-api-v1-services.html#list-existing-service-groups
 func (c *volumesClient) List(ctx context.Context) ([]Volume, error) {
-	endpoint := Endpoint + "/list"
-
-	// Save the metro such that we can force using it again due to the compromise
-	// below.
-	metro := c.request.Metro()
-
 	var response client.ServiceResponse[Volume]
-	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &response); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/list", nil, &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	// TODO(nderjung): For now, the KraftCloud API does not support
-	// returning the full details of each volume.  Temporarily request a
-	// status for each volume.
 	volumes, err := response.AllOrErr()
 	if err != nil {
 		return nil, err
 	}
 
-	for i, volume := range volumes {
-		volume, err := c.WithMetro(metro).GetByUUID(ctx, volume.UUID)
-		if err != nil {
-			return nil, fmt.Errorf("could not get volume status: %w", err)
-		}
+	// TODO(nderjung): For now, the KraftCloud API does not support
+	// returning the full details of each volume.  Temporarily request a
+	// status for each volume.
 
-		volumes[i] = *volume
+	req := make([]map[string]interface{}, len(volumes))
+	for i, instance := range volumes {
+		req[i] = map[string]interface{}{
+			"uuid": instance.UUID,
+		}
+	}
+
+	body, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("marshalling request body: %w", err)
+	}
+
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewBuffer(body), &response); err != nil {
+		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
 	return volumes, nil
