@@ -24,10 +24,8 @@ func (c *instancesClient) LogsByUUID(ctx context.Context, uuid string, maxLines 
 		return "", fmt.Errorf("UUID cannot be empty")
 	}
 
-	endpoint := Endpoint + "/" + uuid + "/console"
-
 	var resp client.ServiceResponse[Instance]
-	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/"+uuid+"/console", nil, &resp); err != nil {
 		return "", fmt.Errorf("performing the request: %w", err)
 	}
 
