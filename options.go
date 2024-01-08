@@ -6,6 +6,8 @@
 package client
 
 import (
+	"os"
+
 	"sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/client/httpclient"
 	"sdk.kraft.cloud/client/options"
@@ -21,6 +23,10 @@ func NewDefaultOptions(opts ...Option) *options.Options {
 
 	for _, opt := range opts {
 		opt(&options)
+	}
+
+	if options.Token() == "" {
+		options.SetToken(os.Getenv("KRAFTCLOUD_TOKEN"))
 	}
 
 	if options.DefaultMetro() == "" {
