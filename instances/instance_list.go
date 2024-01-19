@@ -45,7 +45,7 @@ func (c *instancesClient) List(ctx context.Context) ([]Instance, error) {
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/status", bytes.NewBuffer(body), &response); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewBuffer(body), &response); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
