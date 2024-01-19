@@ -1,0 +1,43 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright (c) 2024, Unikraft GmbH.
+// Licensed under the BSD-3-Clause License (the "License").
+// You may not use this file except in compliance with the License.
+
+package services
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+
+	"sdk.kraft.cloud/client"
+)
+
+// DeleteConfigurationByName deletes an autoscale configuration given its name.
+func (c *autoscaleClient) DeleteConfigurationByName(ctx context.Context, name string) error {
+	if name == "" {
+		return errors.New("name cannot be empty")
+	}
+
+	body, err := json.Marshal([]map[string]interface{}{{
+		"name": name,
+	}})
+	if err != nil {
+		return fmt.Errorf("marshalling request body: %w", err)
+	}
+
+	var response client.ServiceResponse[AutoscaleConfiguration]
+	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint, bytes.NewBuffer(body), &response); err != nil {
+		return fmt.Errorf("performing the request: %w", err)
+	}
+
+	service, err := response.FirstOrErr()
+	if service != nil && service.Message != "" {
+		err = errors.Join(err, fmt.Errorf(service.Message))
+	}
+
+	return err
+}
