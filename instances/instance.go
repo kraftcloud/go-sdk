@@ -14,6 +14,14 @@ const (
 	Endpoint = "/instances"
 )
 
+// InstanceFeature is a special feature of an instance.
+type InstanceFeature string
+
+const (
+	// FeatureScaleToZero indicates that the instance can be scaled to zero.
+	FeatureScaleToZero InstanceFeature = "scale-to-zero"
+)
+
 // NetworkInterface holds interface data returned by the Instance API.
 type NetworkInterface struct {
 	// UUID of the network interface.
@@ -92,6 +100,9 @@ type Instance struct {
 
 	// Description of volumes.
 	Volumes []InstanceVolume `json:"volumes,omitempty"`
+
+	// Special features of the instance.
+	Features []InstanceFeature `json:"features,omitempty"`
 
 	// List of network interfaces attached to the instance.
 	NetworkInterfaces []NetworkInterface `json:"network_interfaces,omitempty"`

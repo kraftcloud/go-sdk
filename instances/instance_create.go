@@ -72,6 +72,9 @@ type CreateInstanceRequest struct {
 	// Description of volumes
 	Volumes []CreateInstanceVolumeRequest `json:"volumes,omitempty"`
 
+	// Any special features to enable.
+	Features []InstanceFeature `json:"features,omitempty"`
+
 	// Autostart behavior. If true the instance will start immediately after
 	// creation.
 	Autostart bool `json:"autostart,omitempty"`
