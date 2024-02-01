@@ -27,7 +27,8 @@ func (c *instancesClient) LogsByName(ctx context.Context, name string, maxLines 
 	}
 
 	body, err := json.Marshal([]map[string]interface{}{{
-		"name": name,
+		"name":      name,
+		"max_lines": maxLines,
 	}})
 	if err != nil {
 		return "", fmt.Errorf("marshalling request body: %w", err)

@@ -6,8 +6,10 @@
 package instances
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -24,8 +26,15 @@ func (c *instancesClient) LogsByUUID(ctx context.Context, uuid string, maxLines 
 		return "", fmt.Errorf("UUID cannot be empty")
 	}
 
+	body, err := json.Marshal([]map[string]interface{}{{
+		"max_lines": maxLines,
+	}})
+	if err != nil {
+		return "", fmt.Errorf("marshalling request body: %w", err)
+	}
+
 	var resp client.ServiceResponse[Instance]
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/"+uuid+"/console", nil, &resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/"+uuid+"/console", bytes.NewBuffer(body), &resp); err != nil {
 		return "", fmt.Errorf("performing the request: %w", err)
 	}
 
