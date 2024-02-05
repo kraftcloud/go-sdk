@@ -80,7 +80,7 @@ func TestClientThreadSafety(t *testing.T) {
 }
 
 // httpClientMockStatusRoundTripper returns a http.Client that returns static
-// responses to requests towards the /status endpoint of the instance API.
+// responses to requests towards the default GET endpoint of the instance API.
 func httpMockStatusClient() *http.Client {
 	return &http.Client{
 		Transport: (*mockStatusRoundTripper)(nil),
