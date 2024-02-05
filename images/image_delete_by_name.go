@@ -73,7 +73,20 @@ func (c *imagesClient) DeleteByName(ctx context.Context, name string) error {
 		return fmt.Errorf("could not parse name: %w", err)
 	}
 
-	if err := remote.Delete(ref, ropts...); err != nil {
+	desc, err := remote.Get(ref, ropts...)
+	if err != nil {
+		return fmt.Errorf("could not get image: %w", err)
+	}
+
+	fullref, err := names.ParseReference(
+		fmt.Sprintf("%s@%s", strings.SplitN(ref.Name(), ":", 2)[0], desc.Digest),
+		names.WithDefaultRegistry("index.unikraft.io"),
+	)
+	if err != nil {
+		return fmt.Errorf("could not parse full reference: %w", err)
+	}
+
+	if err := remote.Delete(fullref, ropts...); err != nil {
 		return fmt.Errorf("could not delete image: %w", err)
 	}
 
