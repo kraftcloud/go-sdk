@@ -96,7 +96,7 @@ type Instance struct {
 	Env map[string]string `json:"env,omitempty"`
 
 	// The service group that the instance is part of.
-	ServiceGroup services.ServiceGroup `json:"service_group,omitempty"`
+	ServiceGroup *services.ServiceGroup `json:"service_group,omitempty"`
 
 	// Description of volumes.
 	Volumes []InstanceVolume `json:"volumes,omitempty"`
