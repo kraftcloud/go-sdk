@@ -121,3 +121,8 @@ type Instance struct {
 	// Base 64 encoded console output.
 	Output string `json:"output,omitempty"`
 }
+
+// String implements fmt.Stringer
+func (i Instance) String() string {
+	return i.Name
+}
