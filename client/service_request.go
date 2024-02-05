@@ -71,6 +71,13 @@ func (r *ServiceRequest) Metro() string {
 // Metrolink returns the full URI representing the API endpoint of a KraftCloud
 // metro.
 func (r *ServiceRequest) Metrolink(path string) string {
+	// If the metro contains a full URL, quantified by the presence of a scheme,
+	// we assume it is a full URL to a metro and we use it as is.
+	if strings.Contains(r.metro, "://") {
+		p, _ := url.JoinPath(r.metro, path)
+		return p
+	}
+
 	m := r.opts.DefaultMetro()
 	if r.metro != "" {
 		m = r.metro
