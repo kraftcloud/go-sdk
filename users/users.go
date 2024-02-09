@@ -15,9 +15,6 @@ type Quotas struct {
 	// UUID of your user
 	UUID string `json:"uuid,omitempty"`
 
-	// The name of your user
-	Name string `json:"name,omitempty"`
-
 	// Used quota.
 	Used struct {
 		// Number of instances
@@ -81,6 +78,12 @@ type Quotas struct {
 
 		// Maximum size of a volume in megabytes
 		MaxVolumeMb int `json:"max_volume_mb,omitempty"`
+
+		// Minimum amount of scaled instances
+		MinAutoscaleSize int `json:"min_autoscale_size,omitempty"`
+
+		// Maximum amount of scaled instances
+		MaxAutoscaleSize int `json:"max_autoscale_size,omitempty"`
 	} `json:"limits,omitempty"`
 
 	// Message contains the error message either on `partial_success` or `error`.
