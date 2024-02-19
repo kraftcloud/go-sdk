@@ -23,7 +23,7 @@ import (
 // See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#delete
 func (c *instancesClient) DeleteByName(ctx context.Context, name string) error {
 	if name == "" {
-		return errors.New("UUID cannot be empty")
+		return errors.New("name cannot be empty")
 	}
 
 	body, err := json.Marshal([]map[string]interface{}{{"name": name}})
@@ -36,5 +36,9 @@ func (c *instancesClient) DeleteByName(ctx context.Context, name string) error {
 		return fmt.Errorf("performing the request: %w", err)
 	}
 
-	return nil
+	instance, err := response.FirstOrErr()
+	if instance != nil && instance.Message != "" {
+		err = fmt.Errorf("%w: %s", err, instance.Message)
+	}
+	return err
 }

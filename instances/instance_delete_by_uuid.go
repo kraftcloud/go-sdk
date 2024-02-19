@@ -29,5 +29,9 @@ func (c *instancesClient) DeleteByUUID(ctx context.Context, uuid string) error {
 		return fmt.Errorf("performing the request: %w", err)
 	}
 
-	return nil
+	instance, err := response.FirstOrErr()
+	if instance != nil && instance.Message != "" {
+		err = fmt.Errorf("%w: %s", err, instance.Message)
+	}
+	return err
 }
