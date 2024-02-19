@@ -23,7 +23,7 @@ import (
 // See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#delete
 func (c *volumesClient) DeleteByName(ctx context.Context, name string) error {
 	if name == "" {
-		return errors.New("UUID or Name cannot be empty")
+		return errors.New("name cannot be empty")
 	}
 
 	body, err := json.Marshal([]map[string]interface{}{{"name": name}})
