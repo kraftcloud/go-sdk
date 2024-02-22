@@ -78,8 +78,11 @@ func (c *imagesClient) DeleteByName(ctx context.Context, name string) error {
 		return fmt.Errorf("could not get image: %w", err)
 	}
 
+	name = strings.SplitN(ref.Name(), ":", 2)[0]
+	name = strings.TrimSuffix(name, "@sha256")
+
 	fullref, err := names.ParseReference(
-		fmt.Sprintf("%s@%s", strings.SplitN(ref.Name(), ":", 2)[0], desc.Digest),
+		fmt.Sprintf("%s@%s", name, desc.Digest),
 		names.WithDefaultRegistry("index.unikraft.io"),
 	)
 	if err != nil {
