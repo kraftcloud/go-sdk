@@ -63,13 +63,13 @@ const (
 
 type AutoscaleStepPolicyStep struct {
 	// LowerBound is the lower bound of the autoscale policy step.
-	LowerBound int `json:"lower_bound"` // 'omitempty' is not used here because 0 is a valid value.
+	LowerBound *int `json:"lower_bound,omitempty"`
 
 	// UpperBound is the upper bound of the autoscale policy step.
-	UpperBound int `json:"upper_bound,omitempty"`
+	UpperBound *int `json:"upper_bound,omitempty"`
 
 	// Adjustment is the adjustment of the autoscale policy step.
-	Adjustment int `json:"adjustment,omitempty"`
+	Adjustment *int `json:"adjustment,omitempty"`
 }
 
 type AutoscaleStepPolicy struct {
