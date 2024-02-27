@@ -67,7 +67,7 @@ type CreateInstanceRequest struct {
 	MemoryMB int64 `json:"memory_mb,omitempty"`
 
 	// Service group to assign the instance to.
-	ServiceGroup CreateInstanceServiceGroupRequest `json:"service_group,omitempty"`
+	ServiceGroup *CreateInstanceServiceGroupRequest `json:"service_group,omitempty"`
 
 	// Description of volumes
 	Volumes []CreateInstanceVolumeRequest `json:"volumes,omitempty"`
