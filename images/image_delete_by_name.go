@@ -56,14 +56,19 @@ func (c *imagesClient) DeleteByName(ctx context.Context, name string) error {
 	split[0] = strings.TrimPrefix(split[0], "robot$")
 	split[0] = strings.TrimSuffix(split[0], ".users.kraftcloud")
 
+	// If it has the user, add the domain
 	if strings.HasPrefix(name, split[0]) {
 		name = "index.unikraft.io/" + name
 	}
+
+	// If it has the old `unikraft.io` domain, add the `index.` prefix
 	if strings.HasPrefix(name, "unikraft.io") {
 		name = "index." + name
 	}
-	if !strings.HasPrefix(name, "index.unikraft.io") {
-		name = "index.unikraft.io/official/" + name
+
+	// If it has no domain and no user, add them both
+	if !strings.Contains(name, "/") {
+		name = "index.unikraft.io/" + split[0] + "/" + name
 	}
 
 	ref, err := names.ParseReference(name,
