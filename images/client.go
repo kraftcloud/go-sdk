@@ -15,7 +15,7 @@ import (
 
 // imagesClient wraps the v1 Image client of KraftCloud.
 //
-// See: https://docs.kraft.cloud/004-rest-api-v1-images.html
+// See: https://docs.kraft.cloud/api/v1/images/
 type imagesClient struct {
 	// constructors must ensure that request is non-nil
 	request *client.ServiceRequest

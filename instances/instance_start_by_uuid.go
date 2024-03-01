@@ -19,7 +19,7 @@ import (
 // StartByUUID starts a previously stopped instance based on its UUID. Does
 // nothing for an instance that is already running.
 //
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#start
+// See: https://docs.kraft.cloud/api/v1/instances/#start
 func (c *instancesClient) StartByUUID(ctx context.Context, uuid string, waitTimeoutMS int) (*Instance, error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")

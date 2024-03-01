@@ -21,7 +21,7 @@ import (
 // This operation cannot be undone.
 //
 // See:
-// https://docs.kraft.cloud/003-rest-api-v1-services.html#deleting-a-service-group
+// https://docs.kraft.cloud/api/v1/services/#deleting-a-service-group
 func (c *servicesClient) DeleteByUUID(ctx context.Context, uuid string) error {
 	if uuid == "" {
 		return errors.New("UUID cannot be empty")

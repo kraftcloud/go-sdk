@@ -21,7 +21,7 @@ import (
 // together with an instance, detaching the volume will make it persistent
 // (i.e., it survives the deletion of the instance).
 //
-// See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#detach
+// See: https://docs.kraft.cloud/api/v1/volumes/#detach
 func (c *volumesClient) DetachByName(ctx context.Context, name string) (*Volume, error) {
 	if name == "" {
 		return nil, errors.New("name cannot be empty")

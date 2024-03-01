@@ -16,7 +16,7 @@ import (
 // Lists quota usage and limits of your user account.  Limits are hard limits
 // that cannot be exceeded.
 //
-// See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#status
+// See: https://docs.kraft.cloud/api/v1/users/#list
 func (c *usersClient) Quotas(ctx context.Context) (*Quotas, error) {
 	var response client.ServiceResponse[Quotas]
 	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/quotas", nil, &response); err != nil {

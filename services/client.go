@@ -13,9 +13,9 @@ import (
 	"sdk.kraft.cloud/client/options"
 )
 
-// servicesClient wraps the v1 Image client of KraftCloud.
+// servicesClient wraps the v1 Services client of KraftCloud.
 //
-// See: https://docs.kraft.cloud/003-rest-api-v1-services.html
+// See: https://docs.kraft.cloud/api/v1/services/
 type servicesClient struct {
 	// constructors must ensure that request is non-nil
 	request *client.ServiceRequest

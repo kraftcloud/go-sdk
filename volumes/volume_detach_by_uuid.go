@@ -19,7 +19,7 @@ import (
 // together with an instance, detaching the volume will make it persistent
 // (i.e., it survives the deletion of the instance).
 //
-// See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#detach
+// See: https://docs.kraft.cloud/api/v1/volumes/#detach
 func (c *volumesClient) DetachByUUID(ctx context.Context, uuid string) (*Volume, error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")

@@ -20,7 +20,7 @@ import (
 // (e.g., RAM contents) is lost. Does nothing for an instance that is already
 // stopped. The instance can be started again with the start endpoint.
 //
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#stop
+// See: https://docs.kraft.cloud/api/v1/instances/#stop
 func (c *instancesClient) StopByName(ctx context.Context, name string, drainTimeoutMS int64) (*Instance, error) {
 	if name == "" {
 		return nil, errors.New("name cannot be empty")

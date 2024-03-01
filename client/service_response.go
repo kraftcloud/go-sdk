@@ -25,7 +25,7 @@ type ErrorResponse struct {
 // to the type of object that the request is operating on. For example, when
 // working with instances the response contains an instances array.
 //
-// See: https://docs.kraft.cloud/001-rest-api-v1-introduction.html
+// See: https://docs.kraft.cloud/api/v1/
 type ServiceResponse[T any] struct {
 	// Status contains the top-level information about a server response, and
 	// returns either `success`, `partial_success` or `error`.

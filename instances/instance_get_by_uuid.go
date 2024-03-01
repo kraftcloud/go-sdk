@@ -17,7 +17,7 @@ import (
 
 // Get returns the current state and the configuration of an instance.
 //
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#state
+// See: https://docs.kraft.cloud/api/v1/instances/#status
 func (c *instancesClient) GetByUUID(ctx context.Context, uuid string) (*Instance, error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")

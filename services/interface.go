@@ -25,17 +25,17 @@ type ServicesService interface {
 	// You can specify an array of service group descriptions to create multiple
 	// groups with different properties with the same call.
 	//
-	// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#creating-new-service-groups
+	// See: https://docs.kraft.cloud/api/v1/services/#creating-new-service-groups
 	Create(ctx context.Context, req ServiceCreateRequest) (*ServiceGroup, error)
 
 	// GetByUUID returns the current state and the configuration of a service group.
 	//
-	// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#getting-the-state-of-a-service-group
+	// See: https://docs.kraft.cloud/api/v1/services/#getting-the-state-of-a-service-group
 	GetByUUID(ctx context.Context, uuid string) (*ServiceGroup, error)
 
 	// GetByName returns the current state and the configuration of a service group.
 	//
-	// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#getting-the-state-of-a-service-group
+	// See: https://docs.kraft.cloud/api/v1/services/#getting-the-state-of-a-service-group
 	GetByName(ctx context.Context, name string) (*ServiceGroup, error)
 
 	// Lists all existing service groups. You can filter by persistence and DNS
@@ -47,7 +47,7 @@ type ServicesService interface {
 	// The array of groups in the response can be directly fed into the other
 	// endpoints, for example, to delete (empty) groups.
 	//
-	// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#list-existing-service-groups
+	// See: https://docs.kraft.cloud/api/v1/services/#list
 	List(ctx context.Context) ([]ServiceGroup, error)
 
 	// DeleteByUUID the specified service group based on its UUID.  Fails if there
@@ -57,7 +57,7 @@ type ServicesService interface {
 	// This operation cannot be undone.
 	//
 	// See:
-	// https://docs.kraft.cloud/003-rest-api-v1-services.html#deleting-a-service-group
+	// https://docs.kraft.cloud/api/v1/services/#deleting-a-service-group
 	DeleteByUUID(ctx context.Context, uuid string) error
 
 	// DeleteByName the specified service group based on its name.  Fails if there
@@ -67,6 +67,6 @@ type ServicesService interface {
 	// This operation cannot be undone.
 	//
 	// See:
-	// https://docs.kraft.cloud/003-rest-api-v1-services.html#deleting-a-service-group
+	// https://docs.kraft.cloud/api/v1/services/#deleting-a-service-group
 	DeleteByName(ctx context.Context, name string) error
 }

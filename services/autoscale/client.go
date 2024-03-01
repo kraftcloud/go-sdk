@@ -15,7 +15,7 @@ import (
 
 // autoscaleClient wraps the v1 Autoscale client of KraftCloud.
 //
-// See: https://docs.kraft.cloud/003-rest-api-v1-autoscale.html
+// See: https://docs.kraft.cloud/api/v1/autoscale/
 type autoscaleClient struct {
 	// constructors must ensure that request is non-nil
 	request *client.ServiceRequest

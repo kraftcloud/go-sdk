@@ -21,7 +21,7 @@ import (
 // available state and the instance must in stopped state. Currently, each
 // instance can have only one volume attached at most.
 //
-// See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#attach
+// See: https://docs.kraft.cloud/api/v1/volumes/#attach
 func (c *volumesClient) AttachByName(ctx context.Context, volName, instanceName, at string, readOnly bool) (*Volume, error) {
 	if volName == "" {
 		return nil, errors.New("volume name cannot be empty")

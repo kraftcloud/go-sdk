@@ -17,7 +17,7 @@ import (
 
 // Lists all existing instances.
 //
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#list
+// See: https://docs.kraft.cloud/api/v1/instances/#list
 func (c *instancesClient) List(ctx context.Context) ([]Instance, error) {
 	var response client.ServiceResponse[Instance]
 	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/list", nil, &response); err != nil {

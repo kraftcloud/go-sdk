@@ -19,7 +19,7 @@ import (
 // StartByName starts a previously stopped instance based on its name. Does
 // nothing for an instance that is already running.
 //
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#start
+// See: https://docs.kraft.cloud/api/v1/instances/#start
 func (c *instancesClient) StartByName(ctx context.Context, name string, waitTimeoutMS int) (*Instance, error) {
 	if name == "" {
 		return nil, errors.New("name cannot be empty")

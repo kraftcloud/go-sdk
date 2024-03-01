@@ -15,7 +15,7 @@ import (
 
 // List fetches all images from the Kraftcloud API.
 //
-// See: https://docs.kraft.cloud/004-rest-api-v1-images.html#list
+// See: https://docs.kraft.cloud/api/v1/images/#list
 func (c *imagesClient) List(ctx context.Context) ([]Image, error) {
 	var response client.ServiceResponse[Image]
 	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/list", nil, &response); err != nil {

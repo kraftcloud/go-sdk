@@ -20,7 +20,7 @@ import (
 // LogsByUUID returns the console output of the specified instance based on its
 // UUID.
 //
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#console
+// See: https://docs.kraft.cloud/api/v1/instances/#console
 func (c *instancesClient) LogsByUUID(ctx context.Context, uuid string, maxLines int, latest bool) (string, error) {
 	if len(uuid) == 0 {
 		return "", fmt.Errorf("UUID cannot be empty")

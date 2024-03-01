@@ -38,7 +38,7 @@ type ServiceCreateRequest struct {
 // You can specify an array of service group descriptions to create multiple
 // groups with different properties with the same call.
 //
-// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#creating-new-service-groups
+// See: https://docs.kraft.cloud/api/v1/services/#creating-a-new-service-group
 func (c *servicesClient) Create(ctx context.Context, req ServiceCreateRequest) (*ServiceGroup, error) {
 	body, err := json.Marshal(req)
 	if err != nil {

@@ -12,7 +12,7 @@ import (
 	"net/http"
 
 	"sdk.kraft.cloud/client"
-	services "sdk.kraft.cloud/services"
+	"sdk.kraft.cloud/services"
 )
 
 // GetConfigurationByUUID returns the current state and the configuration of a service group

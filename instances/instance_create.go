@@ -54,7 +54,7 @@ type CreateInstanceVolumeRequest struct {
 // CreateInstanceRequest holds all the data necessary to create an instance via
 // the API.
 //
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#create
+// See: https://docs.kraft.cloud/api/v1/instances/#create
 type CreateInstanceRequest struct {
 	// Name of the Unikraft image to instantiate. Private images will be available
 	// under your user's namespace.
@@ -95,7 +95,7 @@ type CreateInstanceRequest struct {
 // arguments and amount of memory. Note that, the instance properties can only
 // be defined during creation. They cannot be changed later.
 //
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#create
+// See: https://docs.kraft.cloud/api/v1/instances/#create
 func (c *instancesClient) Create(ctx context.Context, req CreateInstanceRequest) (*Instance, error) {
 	body, err := json.Marshal(req)
 	if err != nil {

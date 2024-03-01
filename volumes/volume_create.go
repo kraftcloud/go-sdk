@@ -22,7 +22,7 @@ import (
 // instance with the attach endpoint. Note that, the size of a volume cannot
 // be changed after creation.
 //
-// See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#create
+// See: https://docs.kraft.cloud/api/v1/volumes/#create
 func (c *volumesClient) Create(ctx context.Context, name string, sizeMB int) (*Volume, error) {
 	body, err := json.Marshal(map[string]interface{}{
 		"name":    name,

@@ -18,7 +18,7 @@ import (
 // still attached to an instance. After this call the UUID of the volumes is no
 // longer valid.
 //
-// See: https://docs.kraft.cloud/006-rest-api-v1-volumes.html#delete
+// See: https://docs.kraft.cloud/api/v1/volumes/#delete
 func (c *volumesClient) DeleteByUUID(ctx context.Context, uuidOrName string) error {
 	if uuidOrName == "" {
 		return errors.New("UUID cannot be empty")

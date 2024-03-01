@@ -13,9 +13,9 @@ import (
 	"sdk.kraft.cloud/client/options"
 )
 
-// volumesClient wraps the v1 Image client of KraftCloud.
+// volumesClient wraps the v1 Volumes client of KraftCloud.
 //
-// See: https://docs.kraft.cloud/003-rest-api-v1-services.html
+// See: https://docs.kraft.cloud/api/v1/volumes/
 type volumesClient struct {
 	// constructors must ensure that request is non-nil
 	request *client.ServiceRequest

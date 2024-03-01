@@ -23,7 +23,7 @@ import (
 // This operation cannot be undone.
 //
 // See:
-// https://docs.kraft.cloud/003-rest-api-v1-services.html#deleting-a-service-group
+// https://docs.kraft.cloud/api/v1/services/#deleting-a-service-group
 func (c *servicesClient) DeleteByName(ctx context.Context, name string) error {
 	if name == "" {
 		return errors.New("name cannot be empty")

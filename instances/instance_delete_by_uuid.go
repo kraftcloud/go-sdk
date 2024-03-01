@@ -18,7 +18,7 @@ import (
 // UUID of the instance is no longer valid. If the instance is currently running
 // it is force stopped.
 //
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#delete
+// See: https://docs.kraft.cloud/api/v1/instances/#delete
 func (c *instancesClient) DeleteByUUID(ctx context.Context, uuid string) error {
 	if uuid == "" {
 		return errors.New("UUID cannot be empty")

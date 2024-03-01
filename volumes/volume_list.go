@@ -24,7 +24,7 @@ import (
 // The array of groups in the response can be directly fed into the other
 // endpoints, for example, to delete (empty) groups.
 //
-// See: https://docs.kraft.cloud/003-rest-api-v1-services.html#list-existing-service-groups
+// See: https://docs.kraft.cloud/api/v1/volumes/#list
 func (c *volumesClient) List(ctx context.Context) ([]Volume, error) {
 	var response client.ServiceResponse[Volume]
 	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/list", nil, &response); err != nil {

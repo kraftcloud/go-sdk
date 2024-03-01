@@ -16,7 +16,7 @@ import (
 // instancesClient is a basic wrapper around the v1 instance client of
 // KraftCloud.
 //
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html
+// See: https://docs.kraft.cloud/api/v1/instances/
 type instancesClient struct {
 	// constructors must ensure that request is non-nil
 	request *client.ServiceRequest

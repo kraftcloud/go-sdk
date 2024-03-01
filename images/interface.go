@@ -19,7 +19,7 @@ type ImagesService interface {
 	// provided filter criteria. No particular value is assumed if a filter is not
 	// part of the request.
 	//
-	// See: https://docs.kraft.cloud/004-rest-api-v1-images.html#list-existing-images
+	// See: https://docs.kraft.cloud/api/v1/images/#list
 	List(ctx context.Context) ([]Image, error)
 
 	// Delete an image by its provided name.

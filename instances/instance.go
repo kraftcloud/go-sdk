@@ -54,7 +54,7 @@ type InstanceVolume struct {
 // Instance holds the description of the KraftCloud compute instance, as
 // understood by the API server.
 //
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#response_2
+// See: https://docs.kraft.cloud/api/v1/instances/
 type Instance struct {
 	// UUID of the instance.
 	UUID string `json:"uuid,omitempty"`

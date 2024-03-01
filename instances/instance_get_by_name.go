@@ -19,7 +19,7 @@ import (
 
 // Get returns the current state and the configuration of an instance.
 //
-// See: https://docs.kraft.cloud/002-rest-api-v1-instances.html#state
+// See: https://docs.kraft.cloud/api/v1/instances/#status
 func (c *instancesClient) GetByName(ctx context.Context, name string) (*Instance, error) {
 	if name == "" {
 		return nil, errors.New("name cannot be empty")
