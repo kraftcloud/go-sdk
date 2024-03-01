@@ -18,10 +18,6 @@ type Image struct {
 	// image.
 	Tags []string `json:"tags"`
 
-	// Indicates if this is a public image. If true every KraftCloud user can
-	// access it
-	Public bool `json:"public"`
-
 	// Indicates if the image comes with an init ramdisk.
 	Initrd bool `json:"initrd"`
 
