@@ -13,12 +13,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 )
 
-// GetByName returns the current state and the configuration of a service group
-// given its name.
-func (c *servicesClient) GetByName(ctx context.Context, name string) (*ServiceGroup, error) {
+// GetByName implements ServicesService.
+func (c *client) GetByName(ctx context.Context, name string) (*GetResponseItem, error) {
 	if name == "" {
 		return nil, errors.New("name cannot be empty")
 	}
@@ -28,15 +27,14 @@ func (c *servicesClient) GetByName(ctx context.Context, name string) (*ServiceGr
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
-	var response client.ServiceResponse[ServiceGroup]
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewBuffer(body), &response); err != nil {
+	var resp kcclient.ServiceResponse[GetResponseItem]
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewBuffer(body), &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	service, err := response.FirstOrErr()
-	if service != nil && service.Message != "" {
-		err = errors.Join(err, fmt.Errorf(service.Message))
+	item, err := resp.FirstOrErr()
+	if err != nil {
+		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
 	}
-
-	return service, err
+	return item, nil
 }

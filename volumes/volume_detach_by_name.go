@@ -13,16 +13,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 )
 
-// DetachByName detaches a volume from an instance by its name. The instance
-// from which to detach must in stopped state. If the volume has been created
-// together with an instance, detaching the volume will make it persistent
-// (i.e., it survives the deletion of the instance).
-//
-// See: https://docs.kraft.cloud/api/v1/volumes/#detach
-func (c *volumesClient) DetachByName(ctx context.Context, name string) (*Volume, error) {
+// DetachByName implements VolumesService.
+func (c *client) DetachByName(ctx context.Context, name string) (*DetachResponseItem, error) {
 	if name == "" {
 		return nil, errors.New("name cannot be empty")
 	}
@@ -32,15 +27,14 @@ func (c *volumesClient) DetachByName(ctx context.Context, name string) (*Volume,
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
-	var response client.ServiceResponse[Volume]
-	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/detach", bytes.NewBuffer(body), &response); err != nil {
+	var resp kcclient.ServiceResponse[DetachResponseItem]
+	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/detach", bytes.NewBuffer(body), &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	volume, err := response.FirstOrErr()
-	if volume != nil && volume.Message != "" {
-		err = errors.Join(err, fmt.Errorf(volume.Message))
+	item, err := resp.FirstOrErr()
+	if err != nil {
+		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
 	}
-
-	return volume, err
+	return item, nil
 }

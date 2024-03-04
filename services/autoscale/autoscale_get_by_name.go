@@ -3,7 +3,7 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package services
+package autoscale
 
 import (
 	"bytes"
@@ -13,12 +13,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 )
 
-// GetConfigurationByName returns the current state and the configuration of an autoscale configuration
-// given its name.
-func (c *autoscaleClient) GetConfigurationByName(ctx context.Context, name string) (*AutoscaleConfiguration, error) {
+// GetConfigurationByName implements AutoscaleService.
+func (c *client) GetConfigurationByName(ctx context.Context, name string) (*GetResponseItem, error) {
 	if name == "" {
 		return nil, errors.New("name cannot be empty")
 	}
@@ -28,15 +27,14 @@ func (c *autoscaleClient) GetConfigurationByName(ctx context.Context, name strin
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
-	var response client.ServiceResponse[AutoscaleConfiguration]
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewBuffer(body), &response); err != nil {
+	var resp kcclient.ServiceResponse[GetResponseItem]
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewBuffer(body), &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	autoscaleConf, err := response.FirstOrErr()
-	if autoscaleConf != nil && autoscaleConf.Message != "" {
-		err = errors.Join(err, fmt.Errorf(autoscaleConf.Message))
+	item, err := resp.FirstOrErr()
+	if err != nil {
+		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
 	}
-
-	return autoscaleConf, err
+	return item, nil
 }

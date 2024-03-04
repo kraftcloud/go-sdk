@@ -12,8 +12,8 @@ import (
 	"strings"
 
 	"github.com/google/go-containerregistry/pkg/authn"
-	names "github.com/google/go-containerregistry/pkg/name"
-	v1 "github.com/google/go-containerregistry/pkg/v1"
+	gcrname "github.com/google/go-containerregistry/pkg/name"
+	gcrv1 "github.com/google/go-containerregistry/pkg/v1"
 	"github.com/google/go-containerregistry/pkg/v1/remote"
 )
 
@@ -28,8 +28,8 @@ func (auth *simpleAuth) Authorization() (*authn.AuthConfig, error) {
 	return auth.Auth, nil
 }
 
-// Delete an image by its name.
-func (c *imagesClient) DeleteByName(ctx context.Context, name string) error {
+// Delete implements ImagesService.
+func (c *client) DeleteByName(ctx context.Context, name string) error {
 	data, err := base64.StdEncoding.DecodeString(c.request.GetToken())
 	if err != nil {
 		return fmt.Errorf("could not decode token: %w", err)
@@ -41,7 +41,7 @@ func (c *imagesClient) DeleteByName(ctx context.Context, name string) error {
 	}
 
 	ropts := []remote.Option{
-		remote.WithPlatform(v1.Platform{
+		remote.WithPlatform(gcrv1.Platform{
 			OS:           "kraftcloud",
 			Architecture: "x86_64",
 		}),
@@ -71,8 +71,8 @@ func (c *imagesClient) DeleteByName(ctx context.Context, name string) error {
 		name = "index.unikraft.io/" + split[0] + "/" + name
 	}
 
-	ref, err := names.ParseReference(name,
-		names.WithDefaultRegistry("index.unikraft.io"),
+	ref, err := gcrname.ParseReference(name,
+		gcrname.WithDefaultRegistry("index.unikraft.io"),
 	)
 	if err != nil {
 		return fmt.Errorf("could not parse name: %w", err)
@@ -86,9 +86,9 @@ func (c *imagesClient) DeleteByName(ctx context.Context, name string) error {
 	name = strings.SplitN(ref.Name(), ":", 2)[0]
 	name = strings.TrimSuffix(name, "@sha256")
 
-	fullref, err := names.ParseReference(
+	fullref, err := gcrname.ParseReference(
 		fmt.Sprintf("%s@%s", name, desc.Digest),
-		names.WithDefaultRegistry("index.unikraft.io"),
+		gcrname.WithDefaultRegistry("index.unikraft.io"),
 	)
 	if err != nil {
 		return fmt.Errorf("could not parse full reference: %w", err)

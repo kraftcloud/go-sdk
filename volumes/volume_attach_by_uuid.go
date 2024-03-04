@@ -13,16 +13,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 )
 
-// AttachByUUID a volume to an instance so that the volume is mounted when the
-// instance starts using the volume and instance name.  The volume needs to be in
-// available state and the instance must in stopped state. Currently, each
-// instance can have only one volume attached at most.
-//
-// See: https://docs.kraft.cloud/api/v1/volumes/#attach
-func (c *volumesClient) AttachByUUID(ctx context.Context, volUUID, instanceUUID, at string, readOnly bool) (*Volume, error) {
+// AttachByUUID implements VolumesService.
+func (c *client) AttachByUUID(ctx context.Context, volUUID, instanceUUID, at string, readOnly bool) (*AttachResponseItem, error) {
 	if volUUID == "" {
 		return nil, errors.New("volume name cannot be empty")
 	}
@@ -45,15 +40,14 @@ func (c *volumesClient) AttachByUUID(ctx context.Context, volUUID, instanceUUID,
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
 
-	var response client.ServiceResponse[Volume]
-	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/attach", bytes.NewBuffer(body), &response); err != nil {
+	var resp kcclient.ServiceResponse[AttachResponseItem]
+	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/attach", bytes.NewBuffer(body), &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	volume, err := response.FirstOrErr()
-	if volume != nil && volume.Message != "" {
-		err = errors.Join(err, fmt.Errorf(volume.Message))
+	item, err := resp.FirstOrErr()
+	if err != nil {
+		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
 	}
-
-	return volume, err
+	return item, nil
 }

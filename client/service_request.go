@@ -100,7 +100,6 @@ func (r *ServiceRequest) DoRequest(ctx context.Context, method, url string, body
 	if err != nil {
 		return fmt.Errorf("error performing the request: %w", err)
 	}
-
 	defer resp.Body.Close()
 
 	if err := checkResponse(resp); err != nil {

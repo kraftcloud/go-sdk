@@ -3,7 +3,7 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package services
+package autoscale
 
 import (
 	"context"
@@ -11,27 +11,26 @@ import (
 	"fmt"
 	"net/http"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/services"
 )
 
-// DeleteConfigurationByUUID deletes an autoscale configuration given its UUID.
-func (c *autoscaleClient) DeleteConfigurationByUUID(ctx context.Context, uuid string) error {
+// DeleteConfigurationByUUID implements AutoscaleService.
+func (c *client) DeleteConfigurationByUUID(ctx context.Context, uuid string) (*DeleteResponseItem, error) {
 	if uuid == "" {
-		return errors.New("UUID cannot be empty")
+		return nil, errors.New("UUID cannot be empty")
 	}
 
 	endpoint := services.Endpoint + "/" + uuid + AutoscaleEndpoint
 
-	var response client.ServiceResponse[AutoscaleConfiguration]
-	if err := c.request.DoRequest(ctx, http.MethodDelete, endpoint, nil, &response); err != nil {
-		return fmt.Errorf("performing the request: %w", err)
+	var resp kcclient.ServiceResponse[DeleteResponseItem]
+	if err := c.request.DoRequest(ctx, http.MethodDelete, endpoint, nil, &resp); err != nil {
+		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	service, err := response.FirstOrErr()
-	if service != nil && service.Message != "" {
-		err = errors.Join(err, fmt.Errorf(service.Message))
+	item, err := resp.FirstOrErr()
+	if err != nil {
+		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
 	}
-
-	return err
+	return item, nil
 }

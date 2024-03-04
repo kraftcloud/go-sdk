@@ -8,53 +8,53 @@ package images
 import (
 	"time"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/client/httpclient"
 	"sdk.kraft.cloud/client/options"
 )
 
-// imagesClient wraps the v1 Image client of KraftCloud.
+// client wraps the v1 Image client of KraftCloud.
 //
 // See: https://docs.kraft.cloud/api/v1/images/
-type imagesClient struct {
+type client struct {
 	// constructors must ensure that request is non-nil
-	request *client.ServiceRequest
+	request *kcclient.ServiceRequest
 }
 
-var _ ImagesService = (*imagesClient)(nil)
+var _ ImagesService = (*client)(nil)
 
 // NewImagesClientFromOptions instantiates a new image services client based on
 // the provided pre-existing options.
 func NewImagesClientFromOptions(opts *options.Options) ImagesService {
-	return &imagesClient{
-		request: client.NewServiceRequestFromDefaultOptions(opts),
+	return &client{
+		request: kcclient.NewServiceRequestFromDefaultOptions(opts),
 	}
 }
 
 // WithMetro sets the just-in-time metro to use when connecting to the
 // KraftCloud API.
-func (c *imagesClient) WithMetro(m string) ImagesService {
+func (c *client) WithMetro(m string) ImagesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithMetro(m)
 	return ccpy
 }
 
 // WithHTTPClient overwrites the base HTTP client.
-func (c *imagesClient) WithHTTPClient(hc httpclient.HTTPClient) ImagesService {
+func (c *client) WithHTTPClient(hc httpclient.HTTPClient) ImagesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithHTTPClient(hc)
 	return ccpy
 }
 
 // WithTimeout sets the timeout when making a request.
-func (c *imagesClient) WithTimeout(to time.Duration) ImagesService {
+func (c *client) WithTimeout(to time.Duration) ImagesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithTimeout(to)
 	return ccpy
 }
 
 // clone returns a shallow copy of c.
-func (c *imagesClient) clone() *imagesClient {
+func (c *client) clone() *client {
 	ccpy := *c
 	return &ccpy
 }

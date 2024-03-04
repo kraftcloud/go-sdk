@@ -5,8 +5,6 @@
 
 package instances
 
-const (
-	// DefaultAutoStart is the default autostart value - whether the instance will
-	// start immediately after creation
-	DefaultAutoStart = true
-)
+// DefaultAutoStart is the default autostart value - whether the instance will
+// start immediately after creation
+const DefaultAutoStart = true

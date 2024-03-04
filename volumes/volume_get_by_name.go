@@ -13,13 +13,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 )
 
-// GetByName returns the current state and the configuration of a volume.
-//
-// See: https://docs.kraft.cloud/api/v1/volumes/#getting-the-status-of-a-volume
-func (c *volumesClient) GetByName(ctx context.Context, name string) (*Volume, error) {
+// GetByName implements VolumesService.
+func (c *client) GetByName(ctx context.Context, name string) (*GetResponseItem, error) {
 	if name == "" {
 		return nil, errors.New("name cannot be empty")
 	}
@@ -29,15 +27,14 @@ func (c *volumesClient) GetByName(ctx context.Context, name string) (*Volume, er
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
-	var response client.ServiceResponse[Volume]
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewBuffer(body), &response); err != nil {
+	var resp kcclient.ServiceResponse[GetResponseItem]
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewBuffer(body), &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	volume, err := response.FirstOrErr()
-	if volume != nil && volume.Message != "" {
-		err = errors.Join(err, fmt.Errorf(volume.Message))
+	item, err := resp.FirstOrErr()
+	if err != nil {
+		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
 	}
-
-	return volume, err
+	return item, nil
 }

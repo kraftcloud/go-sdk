@@ -13,38 +13,30 @@ import (
 	"fmt"
 	"net/http"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 )
 
-// DeleteByName the specified service group given its name. Fails if there are
-// still instances attached to group. After this call the UUID of the group is
-// no longer valid.
-//
-// This operation cannot be undone.
-//
-// See:
-// https://docs.kraft.cloud/api/v1/services/#deleting-a-service-group
-func (c *servicesClient) DeleteByName(ctx context.Context, name string) error {
+// DeleteByName implements ServicesService.
+func (c *client) DeleteByName(ctx context.Context, name string) (*DeleteResponseItem, error) {
 	if name == "" {
-		return errors.New("name cannot be empty")
+		return nil, errors.New("name cannot be empty")
 	}
 
 	body, err := json.Marshal([]map[string]interface{}{{
 		"name": name,
 	}})
 	if err != nil {
-		return fmt.Errorf("marshalling request body: %w", err)
+		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
-	var response client.ServiceResponse[ServiceGroup]
-	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint, bytes.NewBuffer(body), &response); err != nil {
-		return fmt.Errorf("performing the request: %w", err)
+	var resp kcclient.ServiceResponse[DeleteResponseItem]
+	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint, bytes.NewBuffer(body), &resp); err != nil {
+		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	service, err := response.FirstOrErr()
-	if service != nil && service.Message != "" {
-		err = errors.Join(err, fmt.Errorf(service.Message))
+	item, err := resp.FirstOrErr()
+	if err != nil {
+		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
 	}
-
-	return err
+	return item, nil
 }
