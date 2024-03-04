@@ -16,8 +16,8 @@ import (
 func main() {
 	token := os.Getenv("KRAFTCLOUD_TOKEN")
 	if token == "" {
-		fmt.Println("Please set KRAFTCLOUD_TOKEN environment variable")
-		return
+		fmt.Println("Please set the KRAFTCLOUD_TOKEN environment variable")
+		os.Exit(1)
 	}
 
 	client := kraftcloud.NewImagesClient(
@@ -25,8 +25,8 @@ func main() {
 	)
 	images, err := client.List(context.Background())
 	if err != nil {
-		fmt.Printf("%s\n", err)
-		return
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
 	for _, i := range images {

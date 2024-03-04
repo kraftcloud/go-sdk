@@ -10,11 +10,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/fatih/color"
-
 	kraftcloud "sdk.kraft.cloud"
-	"sdk.kraft.cloud/instance"
-	kraftcloudinstance "sdk.kraft.cloud/instance"
+	"sdk.kraft.cloud/instances"
+	"sdk.kraft.cloud/services"
 )
 
 // Here, you'll learn how to create an instance and display its console output.
@@ -22,102 +20,87 @@ import (
 func main() {
 	token := os.Getenv("KRAFTCLOUD_TOKEN")
 	if token == "" {
-		fmt.Println("Please set KRAFTCLOUD_TOKEN environment variable")
-		return
+		fmt.Println("Please set the KRAFTCLOUD_TOKEN environment variable")
+		os.Exit(1)
 	}
 
-	apiClient := kraftcloud.NewInstancesClient(
+	client := kraftcloud.NewInstancesClient(
 		kraftcloud.WithToken(token),
 	)
+
 	ctx := context.Background()
-	instance, err := apiClient.Create(ctx, kraftcloudinstance.CreateInstanceRequest{
-		// You have to build the kraft.cloud.yaml target from https://github.com/unikraft/app-nginx
-		// and upload it with kraft pkg push to make this image available to your account.
-		Image:    "unikraft.io/jayc.unikraft.io/nginx:latest",
-		Args:     []string{"-c", "/nginx/conf/nginx.conf"},
-		MemoryMB: 16,
-		Services: []kraftcloudinstance.CreateInstanceServicesRequest{
-			{
-				Port:         443,
-				Handlers:     []string{kraftcloudinstance.DefaultHandler},
-				InternalPort: 80,
-			},
+
+	instance, err := client.Create(ctx, instances.CreateInstanceRequest{
+		Image:    "nginx:latest",
+		MemoryMB: 32,
+		ServiceGroup: &instances.CreateInstanceServiceGroupRequest{
+			Services: []services.Service{{
+				Port: 443,
+				Handlers: []services.Handler{
+					services.HandlerTLS,
+					services.HandlerHTTP,
+				},
+				DestinationPort: 80,
+			}},
 		},
-		Autostart: kraftcloudinstance.DefaultAutoStart,
+		Autostart: instances.DefaultAutoStart,
 	})
 	if err != nil {
-		fmt.Printf("could not create instance: %s\n", err)
-		return
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
-	result, err := apiClient.Status(ctx, instance.UUID)
-	if err != nil {
-		fmt.Printf("could not get instance status: %s\n", err)
-		return
+	if instance, err = client.GetByUUID(ctx, instance.UUID); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
+	fmt.Println("[+] instance", instance.UUID, "was created")
 
-	DisplayInstanceDetails(*result)
+	displayInstanceDetails(*instance)
 
 	time.Sleep(time.Second * 1)
 
-	// get and print the console output
-	output, err := apiClient.Logs(ctx, instance.UUID, -1, true)
+	// get and print the console logs
+	logs, err := client.LogsByUUID(ctx, instance.UUID, -1, true)
 	if err != nil {
-		fmt.Printf("could not get instance logs: %s\n", err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
-
-	fmt.Println(output)
+	fmt.Println("[+] instance logs:")
+	fmt.Println(logs)
 
 	// stop
-	instance, err = apiClient.Stop(ctx, instance.UUID, 0)
-	if err != nil {
-		fmt.Printf("could not stop instance: %s\n", err)
-		return
+	if instance, err = client.StopByUUID(ctx, instance.UUID, 0); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
-
-	// start
-	instance, err = apiClient.Start(ctx, instance.UUID, 0)
-	if err != nil {
-		fmt.Printf("could not start instance: %s\n", err)
-	}
-
-	// list
-	instances, err := apiClient.List(ctx)
-	if err != nil {
-		fmt.Printf("could not list all instances: %s\n", err)
-	}
-
-	// print the retrieved instances
-	for _, i := range instances {
-		fmt.Println(i.UUID)
-	}
+	fmt.Println("[+] instance", instance.UUID, "was stopped")
 
 	// delete
-	err = apiClient.Delete(ctx, instance.UUID)
+	err = client.DeleteByUUID(ctx, instance.UUID)
 	if err != nil {
-		fmt.Printf("could not delete instance: %s\n", err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
+	fmt.Println("[+] instance", instance.UUID, "was deleted")
 }
 
-// DisplayInstanceDetails pretty prints the result of an instance status call.
-func DisplayInstanceDetails(instance instance.Instance) {
-	headerColor := color.New(color.FgCyan, color.Bold)
-	dataColor := color.New(color.FgWhite)
+// displayInstanceDetails pretty prints the result of an instance status call.
+func displayInstanceDetails(instance instances.Instance) {
+	fmt.Println("=====================================")
+	fmt.Println("          Instance Details           ")
+	fmt.Println("=====================================")
 
-	headerColor.Println("=====================================")
-	headerColor.Println("          Instance Details           ")
-	headerColor.Println("=====================================")
+	fmt.Println("UUID         ", instance.UUID)
+	fmt.Println("State        ", instance.State)
+	fmt.Println("Created At   ", instance.CreatedAt)
+	fmt.Println("Image        ", instance.Image)
+	fmt.Println("Memory       ", instance.MemoryMB, "MB")
+	fmt.Println("FQDN         ", instance.FQDN)
+	fmt.Println("Private IP   ", instance.PrivateIP)
+	fmt.Println("Boot Time    ", bootTimeToString(instance.BootTimeUS))
 
-	dataColor.Printf("UUID:         %s\n", instance.UUID)
-	dataColor.Printf("Status:       %s\n", instance.Status)
-	dataColor.Printf("Created At:   %s\n", instance.CreatedAt)
-	dataColor.Printf("Image:        %s\n", instance.Image)
-	dataColor.Printf("Memory (MB):  %d\n", instance.MemoryMB)
-	dataColor.Printf("DNS:          %s\n", instance.DNS)
-	dataColor.Printf("Private IP:   %s\n", instance.PrivateIP)
-	dataColor.Printf("Boot Time:    %s\n", bootTimeToString(instance.BootTimeUS))
-
-	headerColor.Println("=====================================")
+	fmt.Println("=====================================")
 }
 
 func bootTimeToString(bootTimeUS int64) string {
