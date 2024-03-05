@@ -55,14 +55,14 @@ jobs:
 
       - name: gofumpt
         if: success() || failure()  # run this step even if the previous one failed
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v4
         with:
           version: latest
           args: --no-config --disable-all --enable=gofumpt --out-format=colored-line-number
           skip-cache: true
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v4
         with:
           version: latest
           args: --out-format=colored-line-number
