@@ -7,26 +7,23 @@ package users
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 )
 
-// Lists quota usage and limits of your user account.  Limits are hard limits
-// that cannot be exceeded.
-//
-// See: https://docs.kraft.cloud/api/v1/users/#list
-func (c *usersClient) Quotas(ctx context.Context) (*Quotas, error) {
-	var response client.ServiceResponse[Quotas]
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/quotas", nil, &response); err != nil {
+// Quotas implements UsersService.
+func (c *client) Quotas(ctx context.Context) (*QuotasResponseItem, error) {
+	var resp kcclient.ServiceResponse[QuotasResponseItem]
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/quotas", nil, &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	user, err := response.FirstOrErr()
-	if user != nil && user.Message != "" {
-		err = fmt.Errorf("%w: %s", err, user.Message)
+	item, err := resp.FirstOrErr()
+	if err != nil {
+		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
 	}
-
-	return user, err
+	return item, nil
 }

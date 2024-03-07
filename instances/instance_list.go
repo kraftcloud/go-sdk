@@ -6,48 +6,31 @@
 package instances
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 )
 
-// Lists all existing instances.
-//
-// See: https://docs.kraft.cloud/api/v1/instances/#list
-func (c *instancesClient) List(ctx context.Context) ([]Instance, error) {
-	var response client.ServiceResponse[Instance]
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/list", nil, &response); err != nil {
+// List implements InstancesService.
+func (c *client) List(ctx context.Context) ([]ListResponseItem, error) {
+	var resp kcclient.ServiceResponse[ListResponseItem]
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/list", nil, &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	instances, err := response.AllOrErr()
+	items, err := resp.AllOrErr()
 	if err != nil {
-		return nil, err
-	}
-
-	// TODO(nderjung): For now, the KraftCloud API does not support
-	// returning the full details of each instance.  Temporarily request a
-	// status for each instance.
-
-	req := make([]map[string]interface{}, len(instances))
-	for i, instance := range instances {
-		req[i] = map[string]interface{}{
-			"uuid": instance.UUID,
+		errs := make([]error, 0, len(items)+1)
+		errs = append(errs, err)
+		for _, item := range items {
+			if item.Error != nil {
+				errs = append(errs, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
+			}
 		}
+		return nil, errors.Join(errs...)
 	}
-
-	body, err := json.Marshal(req)
-	if err != nil {
-		return nil, fmt.Errorf("marshalling request body: %w", err)
-	}
-
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewBuffer(body), &response); err != nil {
-		return nil, fmt.Errorf("performing the request: %w", err)
-	}
-
-	return instances, nil
+	return items, nil
 }

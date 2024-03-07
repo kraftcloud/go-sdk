@@ -8,88 +8,88 @@ package instances
 import (
 	"context"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 )
 
 type InstancesService interface {
-	client.ServiceClient[InstancesService]
+	kcclient.ServiceClient[InstancesService]
 
 	// Creates one or more new instances of the specified Unikraft images. You can
 	// describe the properties of the new instances such as their startup
 	// arguments and amount of memory. Note that, the instance properties can only
 	// be defined during creation. They cannot be changed later.
 	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#create
-	Create(ctx context.Context, req CreateInstanceRequest) (*Instance, error)
+	// See: https://docs.kraft.cloud/api/v1/instances/#creating-a-new-instance
+	Create(ctx context.Context, req CreateRequest) (*CreateResponseItem, error)
 
-	// GetByUUID returns the current state and the configuration of an instance
-	// based on the provided UUID.
+	// GetByUUIDs returns the current state and the configuration of one or
+	// more instance(s) based on the provided UUID(s).
 	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#status
-	GetByUUID(ctx context.Context, uuid string) (*Instance, error)
+	// See: https://docs.kraft.cloud/api/v1/instances/#getting-the-status-of-an-instance
+	GetByUUIDs(ctx context.Context, uuids ...string) ([]GetResponseItem, error)
 
-	// GetByName returns the current state and the configuration of an instance
-	// based on the provided name.
+	// GetByNames returns the current state and the configuration of one or
+	// more instances based on the provided name(s).
 	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#status
-	GetByName(ctx context.Context, name string) (*Instance, error)
+	// See: https://docs.kraft.cloud/api/v1/instances/#getting-the-status-of-an-instance
+	GetByNames(ctx context.Context, names ...string) ([]GetResponseItem, error)
+
+	// DeleteByUUIDs deletes the specified instances based on their UUID.
+	// After this call the UUIDs of the instances are no longer valid. If the
+	// instances are currently running, they are force stopped.
+	//
+	// See: https://docs.kraft.cloud/api/v1/instances/#deleting-an-instance
+	DeleteByUUIDs(ctx context.Context, uuids ...string) ([]DeleteResponseItem, error)
+
+	// DeleteByNames deletes the specified instances based on their names.
+	// After this call the UUIDs of the instances are no longer valid. If the
+	// instances are currently running, they are force stopped.
+	//
+	// See: https://docs.kraft.cloud/api/v1/instances/#deleting-an-instance
+	DeleteByNames(ctx context.Context, names ...string) ([]DeleteResponseItem, error)
 
 	// Lists all existing instances.
 	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#list
-	List(ctx context.Context) ([]Instance, error)
+	// See: https://docs.kraft.cloud/api/v1/instances/#list-existing-instances
+	List(ctx context.Context) ([]ListResponseItem, error)
 
-	// StopByUUID the specified instance based on its UUID, but does not destroy
-	// it.  All volatile state (e.g., RAM contents) is lost. Does nothing for an
-	// instance that is already stopped. The instance can be started again with
-	// the start endpoint.
+	// Starts a previously stopped instance(s) based on their UUID(s).
+	// Does nothing for instances that are already running.
 	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#stop
-	StopByUUID(ctx context.Context, uuid string, drainTimeoutMS int64) (*Instance, error)
+	// See: https://docs.kraft.cloud/api/v1/instances/#starting-an-instance
+	StartByUUIDs(ctx context.Context, waitTimeoutMs int, uuids ...string) ([]StartResponseItem, error)
 
-	// Stops the specified instance based on its name, but does not destroy it.
-	// All volatile state (e.g., RAM contents) is lost. Does nothing for an
-	// instance that is already stopped. The instance can be started again with
-	// the start endpoint.
+	// Starts a previously stopped instance(s) based on their name(s).
+	// Does nothing for instances that are already running.
 	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#stop
-	StopByName(ctx context.Context, name string, drainTimeoutMS int64) (*Instance, error)
+	// See: https://docs.kraft.cloud/api/v1/instances/#starting-an-instance
+	StartByNames(ctx context.Context, waitTimeoutMs int, names ...string) ([]StartResponseItem, error)
 
-	// Starts a previously stopped instance based on its UUID. Does nothing for an
-	// instance that is already running.
+	// StopByUUIDs stops the specified instance(s) based on their UUID(s), but
+	// does not destroy them.  All volatile state (e.g., RAM contents) is lost.
+	// Does nothing for instances that are already stopped. Instances can be
+	// started again with the start endpoint.
 	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#start
-	StartByUUID(ctx context.Context, uuid string, waitTimeoutMS int) (*Instance, error)
+	// See: https://docs.kraft.cloud/api/v1/instances/#stopping-an-instance
+	StopByUUIDs(ctx context.Context, drainTimeoutMs int, uuid ...string) ([]StopResponseItem, error)
 
-	// Starts a previously stopped instance based on its name. Does nothing for an
-	// instance that is already running.
+	// StopByNames stops the specified instance(s) based on their name(s), but
+	// does not destroy them.  All volatile state (e.g., RAM contents) is lost.
+	// Does nothing for instances that are already stopped. Instances can be
+	// started again with the start endpoint.
 	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#start
-	StartByName(ctx context.Context, name string, waitTimeoutMS int) (*Instance, error)
+	// See: https://docs.kraft.cloud/api/v1/instances/#stopping-an-instance
+	StopByNames(ctx context.Context, drainTimeoutMs int, names ...string) ([]StopResponseItem, error)
 
-	// DeleteByUUID the specified instance based on its UUID. After this call the
-	// UUID of the instance is no longer valid. If the instance is currently
-	// running it is force stopped.
+	// ConsoleByName returns the console output of the specified instance based
+	// on its name.
 	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#delete
-	DeleteByUUID(ctx context.Context, uuid string) error
+	// See: https://docs.kraft.cloud/api/v1/instances/#retrieve-the-console-output
+	ConsoleByName(ctx context.Context, name string, maxLines int, latest bool) (*ConsoleResponseItem, error)
 
-	// DeleteByName deletes the specified instance based on its name. After this
-	// call the UUID of the instance is no longer valid. If the instance is
-	// currently running it is force stopped.
+	// ConsoleByUUID returns the console output of the specified instance based
+	// on its UUID.
 	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#delete
-	DeleteByName(ctx context.Context, name string) error
-
-	// LogsByName returns the console output of the specified instance based on
-	// its name.
-	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#console
-	LogsByName(ctx context.Context, name string, maxLines int, latest bool) (string, error)
-
-	// LogsByUUID returns the console output of the specified instance based on its
-	// UUID.
-	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#console
-	LogsByUUID(ctx context.Context, uuid string, maxLines int, latest bool) (string, error)
+	// See: https://docs.kraft.cloud/api/v1/instances/#retrieve-the-console-output
+	ConsoleByUUID(ctx context.Context, uuid string, maxLines int, latest bool) (*ConsoleResponseItem, error)
 }

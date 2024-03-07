@@ -7,10 +7,10 @@ package instances_test
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
-	"path"
 	"strings"
 	"sync"
 	"testing"
@@ -47,7 +47,7 @@ func TestClientThreadSafety(t *testing.T) {
 			go func(uuid string) {
 				defer wg.Done()
 				for i := 0; i < requests; i++ {
-					ins, err := cli.GetByUUID(ctx, uuid)
+					ins, err := cli.GetByUUIDs(ctx, uuid)
 					if err != nil {
 						select {
 						case <-ctx.Done():
@@ -57,12 +57,12 @@ func TestClientThreadSafety(t *testing.T) {
 						}
 						continue
 					}
-					if ins.UUID != uuid {
+					if ins[0].UUID != uuid {
 						select {
 						case <-ctx.Done():
 							return
 						default:
-							errCh <- fmt.Errorf("[%s] Got unexpected uuid %s", uuid, ins.UUID)
+							errCh <- fmt.Errorf("[%s] Got unexpected uuid %s", uuid, ins[0].UUID)
 						}
 					}
 				}
@@ -100,12 +100,28 @@ func (*mockStatusRoundTripper) RoundTrip(r *http.Request) (*http.Response, error
 }
 
 func instanceStatusRespBody(r *http.Request) io.ReadCloser {
+	b, err := io.ReadAll(r.Body)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+
+	reqData := make([]map[string]string, 0, 1)
+	if err := json.Unmarshal(b, &reqData); err != nil {
+		fmt.Printf("%v: %s\n", err, b)
+		return nil
+	}
+	if len(reqData) != 1 {
+		fmt.Printf("Expected 1 item in request data, got %d\n", len(reqData))
+		return nil
+	}
+
 	return io.NopCloser(strings.NewReader(`` +
 		`{` +
 		`  "data": {` +
 		`    "instances": [` +
 		`      {` +
-		`        "uuid":"` + path.Base(r.URL.Path) + `"` +
+		`        "uuid":"` + reqData[0]["uuid"] + `"` +
 		`      }` +
 		`    ]` +
 		`  }` +

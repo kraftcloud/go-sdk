@@ -11,31 +11,23 @@ import (
 	"fmt"
 	"net/http"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 )
 
-// DeleteByUUID the specified service group given its UUID. Fails if there are
-// still instances attached to group. After this call the UUID of the group is
-// no longer valid.
-//
-// This operation cannot be undone.
-//
-// See:
-// https://docs.kraft.cloud/api/v1/services/#deleting-a-service-group
-func (c *servicesClient) DeleteByUUID(ctx context.Context, uuid string) error {
+// DeleteByUUID implements ServicesService.
+func (c *client) DeleteByUUID(ctx context.Context, uuid string) (*DeleteResponseItem, error) {
 	if uuid == "" {
-		return errors.New("UUID cannot be empty")
+		return nil, errors.New("UUID cannot be empty")
 	}
 
-	var response client.ServiceResponse[ServiceGroup]
-	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint+"/"+uuid, nil, &response); err != nil {
-		return fmt.Errorf("performing the request: %w", err)
+	var resp kcclient.ServiceResponse[DeleteResponseItem]
+	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint+"/"+uuid, nil, &resp); err != nil {
+		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	service, err := response.FirstOrErr()
-	if service != nil && service.Message != "" {
-		err = errors.Join(err, fmt.Errorf(service.Message))
+	item, err := resp.FirstOrErr()
+	if err != nil {
+		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
 	}
-
-	return err
+	return item, nil
 }

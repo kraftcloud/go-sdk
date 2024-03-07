@@ -3,49 +3,43 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package services
+package autoscale
 
 import (
 	"context"
 
-	"sdk.kraft.cloud/client"
-	"sdk.kraft.cloud/services"
+	kcclient "sdk.kraft.cloud/client"
 )
 
 type AutoscaleService interface {
-	client.ServiceClient[AutoscaleService]
+	kcclient.ServiceClient[AutoscaleService]
 
-	// CreateConfigurationByUUID creates a new autoscale configuration with the
-	// UUID of a service group.
-	CreateConfigurationByUUID(ctx context.Context, uuid string, req AutoscaleConfiguration) (*services.ServiceGroup, error)
-
-	// CreateConfigurationByName creates a new autoscale configuration with the
-	// Name of a service group.
-	CreateConfigurationByName(ctx context.Context, name string, req AutoscaleConfiguration) (*services.ServiceGroup, error)
+	// CreateConfiguration creates a new autoscale configuration.
+	CreateConfiguration(ctx context.Context, req CreateRequest) (*CreateResponseItem, error)
 
 	// GetConfigurationByName returns the current state and the configuration of
 	// an autoscale configuration
-	GetConfigurationByName(ctx context.Context, name string) (*AutoscaleConfiguration, error)
+	GetConfigurationByName(ctx context.Context, name string) (*GetResponseItem, error)
 
 	// GetConfigurationByUUID returns the current state and the configuration of
 	// an autoscale configuration
-	GetConfigurationByUUID(ctx context.Context, uuid string) (*AutoscaleConfiguration, error)
+	GetConfigurationByUUID(ctx context.Context, uuid string) (*GetResponseItem, error)
 
 	// DeleteConfigurationByUUID deletes an autoscale configuration given its
 	// UUID.
-	DeleteConfigurationByUUID(ctx context.Context, uuid string) error
+	DeleteConfigurationByUUID(ctx context.Context, uuid string) (*DeleteResponseItem, error)
 
 	// DeleteConfigurationByName deletes an autoscale configuration given its
 	// name.
-	DeleteConfigurationByName(ctx context.Context, name string) error
+	DeleteConfigurationByName(ctx context.Context, name string) (*DeleteResponseItem, error)
 
-	// CreatePolicy creates a new autoscale policy for an autoscale configuration.
-	CreatePolicy(ctx context.Context, uuid string, typ AutoscalePolicyType, req interface{}) (*AutoscaleConfiguration, error)
+	// AddPolicy adds a new autoscale policy to an autoscale configuration.
+	AddPolicy(ctx context.Context, uuid string, req Policy) (*AddPolicyResponseItem, error)
+
+	// GetPolicyByName returns the current state and configuration of an
+	// autoscale policy.
+	GetPolicyByName(ctx context.Context, uuid, name string) (*GetPolicyResponseItem, error)
 
 	// DeletePolicyByName deletes an autoscale policy given its name.
-	DeletePolicyByName(ctx context.Context, uuid, name string) (*AutoscaleConfiguration, error)
-
-	// GetPolicyByName returns the current state and the configuration of an
-	// autoscale policy
-	GetPolicyByName(ctx context.Context, uuid, name string) (*map[string]interface{}, error)
+	DeletePolicyByName(ctx context.Context, uuid, name string) (*DeletePolicyResponseItem, error)
 }

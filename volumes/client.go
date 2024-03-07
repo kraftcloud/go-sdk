@@ -8,53 +8,53 @@ package volumes
 import (
 	"time"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/client/httpclient"
 	"sdk.kraft.cloud/client/options"
 )
 
-// volumesClient wraps the v1 Volumes client of KraftCloud.
+// client wraps the v1 Volumes client of KraftCloud.
 //
 // See: https://docs.kraft.cloud/api/v1/volumes/
-type volumesClient struct {
+type client struct {
 	// constructors must ensure that request is non-nil
-	request *client.ServiceRequest
+	request *kcclient.ServiceRequest
 }
 
-var _ VolumesService = (*volumesClient)(nil)
+var _ VolumesService = (*client)(nil)
 
 // NewVolumesClientFromOptions instantiates a new users services client based on
 // the provided pre-existing options.
 func NewVolumesClientFromOptions(opts *options.Options) VolumesService {
-	return &volumesClient{
-		request: client.NewServiceRequestFromDefaultOptions(opts),
+	return &client{
+		request: kcclient.NewServiceRequestFromDefaultOptions(opts),
 	}
 }
 
 // WithMetro sets the just-in-time metro to use when connecting to the
 // KraftCloud API.
-func (c *volumesClient) WithMetro(m string) VolumesService {
+func (c *client) WithMetro(m string) VolumesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithMetro(m)
 	return ccpy
 }
 
 // WithHTTPClient overwrites the base HTTP client.
-func (c *volumesClient) WithHTTPClient(hc httpclient.HTTPClient) VolumesService {
+func (c *client) WithHTTPClient(hc httpclient.HTTPClient) VolumesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithHTTPClient(hc)
 	return ccpy
 }
 
 // WithTimeout sets the timeout when making a request.
-func (c *volumesClient) WithTimeout(to time.Duration) VolumesService {
+func (c *client) WithTimeout(to time.Duration) VolumesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithTimeout(to)
 	return ccpy
 }
 
 // clone returns a shallow copy of c.
-func (c *volumesClient) clone() *volumesClient {
+func (c *client) clone() *client {
 	ccpy := *c
 	return &ccpy
 }

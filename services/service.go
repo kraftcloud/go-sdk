@@ -5,10 +5,8 @@
 
 package services
 
-const (
-	// Endpoint is the public path for the services service.
-	Endpoint = "/services"
-)
+// Endpoint is the public path for the services service.
+const Endpoint = "/services"
 
 // Connection Handlers. KraftCloud uses connection handlers to decide how to
 // forward connections from the Internet to your application. You configure the
@@ -26,16 +24,16 @@ const (
 	// Terminate the TLS connection at the KraftCloud gateway using our wildcard
 	// certificate issued for the kraft.cloud domain. The gateway forwards the
 	// unencrypted traffic to your application.
-	HandlerTLS = Handler("tls")
+	HandlerTLS Handler = "tls"
 
 	// Enable HTTP mode on the load balancer to load balance on the level of
 	// individual HTTP requests. In this mode, only HTTP connections are accepted.
 	// If this option is not set the load balancer works in TCP mode and
 	// distributes TCP connections.
-	HandlerHTTP = Handler("http")
+	HandlerHTTP Handler = "http"
 
 	// Redirect traffic from the source port to the destination port.
-	HandlerRedirect = Handler("redirect")
+	HandlerRedirect Handler = "redirect"
 )
 
 // Handlers returns all possible service handlers.
@@ -45,61 +43,4 @@ func Handlers() []Handler {
 		HandlerHTTP,
 		HandlerRedirect,
 	}
-}
-
-// A service helps describe the the load balancing and autoscale groups.
-type Service struct {
-	// Public-facing port.
-	Port int `json:"port"`
-
-	// Application port to which inbound traffic is redirected.
-	DestinationPort int `json:"destination_port,omitempty"`
-
-	// List of handlers.
-	Handlers []Handler `json:"handlers,omitempty"`
-}
-
-// A service group has a public DNS name such as
-// young-monkey-uq6dxq0u.fra0.kraft.cloud. When you assign an instance to a
-// service group, the instance becomes accessible from the Internet using this
-// DNS name. KraftCloud generates a random DNS name of that form for every
-// service group.
-//
-// Except for unencrypted HTTP traffic on port 80, KraftCloud accepts only TLS
-// connections from the Internet. It uses Server Name Indication (SNI) to
-// forward inbound traffic to your application.
-//
-// By default, a service group does not publish any services. To allow traffic
-// to pass to the instances in the service group, you specify the network ports
-// to publish. For example, if you run a web server you would publish port 80
-// (HTTP) and/or port 443 (HTTPS).
-type ServiceGroup struct {
-	// The status of the service group.
-	Status string `json:"status,omitempty"`
-
-	// Name of the service group.
-	Name string `json:"name,omitempty"`
-
-	// UUID of the group.
-	UUID string `json:"uuid,omitempty"`
-
-	// The Fully Qualified Domain Name which the service is accessible from.
-	FQDN string `json:"fqdn,omitempty"`
-
-	// Instances contains a list of UUID representing instances attached to this
-	// group.
-	Instances []string `json:"instances,omitempty"`
-
-	// Services contains the descriptions of exposed network services.
-	Services []Service `json:"services,omitempty"`
-
-	// Message contains the error message either on `partial_success` or `error`.
-	Message string `json:"message,omitempty"`
-
-	// Persistent indicates if the group will stay alive even after the last
-	// instance detached.
-	Persistent bool `json:"persistent,omitempty"`
-
-	// Date and time of creation in ISO8601.
-	CreatedAt string `json:"created_at,omitempty"`
 }

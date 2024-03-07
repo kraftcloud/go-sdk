@@ -88,7 +88,7 @@ func (r *ServiceResponse[T]) FirstOrErr() (*T, error) {
 	return nil, err
 }
 
-// FirstOrErr returns the all data entrypoints or an error if it is not
+// AllOrErr returns the all data entrypoints or an error if it is not
 // available.
 func (r *ServiceResponse[T]) AllOrErr() ([]T, error) {
 	if r == nil {
@@ -104,4 +104,12 @@ func (r *ServiceResponse[T]) AllOrErr() ([]T, error) {
 	}
 
 	return r.Data.Entries, nil
+}
+
+// APIResponseCommon contains attributes common to all API responses.
+// https://docs.kraft.cloud/api/v1/#api-responses
+type APIResponseCommon struct {
+	Status  string `json:"status"`
+	Message string `json:"message"`
+	Error   *int   `json:"error"`
 }

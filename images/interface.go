@@ -8,19 +8,19 @@ package images
 import (
 	"context"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 )
 
 type ImagesService interface {
-	client.ServiceClient[ImagesService]
+	kcclient.ServiceClient[ImagesService]
 
 	// Lists all existing images. You can filter by digest, tag and based on
 	// whether the image is public or not. The returned groups fulfill all
 	// provided filter criteria. No particular value is assumed if a filter is not
 	// part of the request.
 	//
-	// See: https://docs.kraft.cloud/api/v1/images/#list
-	List(ctx context.Context) ([]Image, error)
+	// See: https://docs.kraft.cloud/api/v1/images/#list-existing-images
+	List(ctx context.Context) ([]ListResponseItem, error)
 
 	// Delete an image by its provided name.
 	DeleteByName(ctx context.Context, name string) error

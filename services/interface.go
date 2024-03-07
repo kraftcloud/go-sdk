@@ -8,11 +8,11 @@ package services
 import (
 	"context"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 )
 
 type ServicesService interface {
-	client.ServiceClient[ServicesService]
+	kcclient.ServiceClient[ServicesService]
 
 	// Creates one or more service groups with the given configuration. Note that,
 	// the service group properties like published ports can only be defined
@@ -26,17 +26,35 @@ type ServicesService interface {
 	// groups with different properties with the same call.
 	//
 	// See: https://docs.kraft.cloud/api/v1/services/#creating-new-service-groups
-	Create(ctx context.Context, req ServiceCreateRequest) (*ServiceGroup, error)
+	Create(ctx context.Context, req CreateRequest) (*CreateResponseItem, error)
 
 	// GetByUUID returns the current state and the configuration of a service group.
 	//
 	// See: https://docs.kraft.cloud/api/v1/services/#getting-the-state-of-a-service-group
-	GetByUUID(ctx context.Context, uuid string) (*ServiceGroup, error)
+	GetByUUID(ctx context.Context, uuid string) (*GetResponseItem, error)
 
 	// GetByName returns the current state and the configuration of a service group.
 	//
 	// See: https://docs.kraft.cloud/api/v1/services/#getting-the-state-of-a-service-group
-	GetByName(ctx context.Context, name string) (*ServiceGroup, error)
+	GetByName(ctx context.Context, name string) (*GetResponseItem, error)
+
+	// DeleteByUUID the specified service group based on its UUID.  Fails if there
+	// are still instances attached to group. After this call the UUID of the
+	// group is no longer valid.
+	//
+	// This operation cannot be undone.
+	//
+	// See: https://docs.kraft.cloud/api/v1/services/#deleting-a-service-group
+	DeleteByUUID(ctx context.Context, uuid string) (*DeleteResponseItem, error)
+
+	// DeleteByName the specified service group based on its name.  Fails if there
+	// are still instances attached to group. After this call the UUID of the
+	// group is no longer valid.
+	//
+	// This operation cannot be undone.
+	//
+	// See: https://docs.kraft.cloud/api/v1/services/#deleting-a-service-group
+	DeleteByName(ctx context.Context, name string) (*DeleteResponseItem, error)
 
 	// Lists all existing service groups. You can filter by persistence and DNS
 	// name. The latter can be used to lookup the UUID of the service group that
@@ -47,26 +65,6 @@ type ServicesService interface {
 	// The array of groups in the response can be directly fed into the other
 	// endpoints, for example, to delete (empty) groups.
 	//
-	// See: https://docs.kraft.cloud/api/v1/services/#list
-	List(ctx context.Context) ([]ServiceGroup, error)
-
-	// DeleteByUUID the specified service group based on its UUID.  Fails if there
-	// are still instances attached to group. After this call the UUID of the
-	// group is no longer valid.
-	//
-	// This operation cannot be undone.
-	//
-	// See:
-	// https://docs.kraft.cloud/api/v1/services/#deleting-a-service-group
-	DeleteByUUID(ctx context.Context, uuid string) error
-
-	// DeleteByName the specified service group based on its name.  Fails if there
-	// are still instances attached to group. After this call the UUID of the
-	// group is no longer valid.
-	//
-	// This operation cannot be undone.
-	//
-	// See:
-	// https://docs.kraft.cloud/api/v1/services/#deleting-a-service-group
-	DeleteByName(ctx context.Context, name string) error
+	// See: https://docs.kraft.cloud/api/v1/services/#list-existing-service-groups
+	List(ctx context.Context) ([]ListResponseItem, error)
 }

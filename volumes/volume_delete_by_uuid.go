@@ -11,28 +11,23 @@ import (
 	"fmt"
 	"net/http"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 )
 
-// DeleteByUUID the specified volume given its UUID. Fails if the volume is
-// still attached to an instance. After this call the UUID of the volumes is no
-// longer valid.
-//
-// See: https://docs.kraft.cloud/api/v1/volumes/#delete
-func (c *volumesClient) DeleteByUUID(ctx context.Context, uuidOrName string) error {
+// DeleteByUUID implements VolumesService.
+func (c *client) DeleteByUUID(ctx context.Context, uuidOrName string) (*DeleteResponseItem, error) {
 	if uuidOrName == "" {
-		return errors.New("UUID cannot be empty")
+		return nil, errors.New("UUID cannot be empty")
 	}
 
-	var response client.ServiceResponse[Volume]
-	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint+"/"+uuidOrName, nil, &response); err != nil {
-		return fmt.Errorf("performing the request: %w", err)
+	var resp kcclient.ServiceResponse[DeleteResponseItem]
+	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint+"/"+uuidOrName, nil, &resp); err != nil {
+		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	volume, err := response.FirstOrErr()
-	if volume != nil && volume.Message != "" {
-		err = errors.Join(err, fmt.Errorf(volume.Message))
+	item, err := resp.FirstOrErr()
+	if err != nil {
+		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
 	}
-
-	return err
+	return item, nil
 }

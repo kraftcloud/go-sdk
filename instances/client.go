@@ -8,54 +8,53 @@ package instances
 import (
 	"time"
 
-	"sdk.kraft.cloud/client"
+	kcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/client/httpclient"
 	"sdk.kraft.cloud/client/options"
 )
 
-// instancesClient is a basic wrapper around the v1 instance client of
-// KraftCloud.
+// client is a basic wrapper around the v1 Instance client of KraftCloud.
 //
 // See: https://docs.kraft.cloud/api/v1/instances/
-type instancesClient struct {
+type client struct {
 	// constructors must ensure that request is non-nil
-	request *client.ServiceRequest
+	request *kcclient.ServiceRequest
 }
 
-var _ InstancesService = (*instancesClient)(nil)
+var _ InstancesService = (*client)(nil)
 
 // NewInstancesClientFromOptions instantiates a new instances services client
 // based on the provided pre-existing options.
 func NewInstancesClientFromOptions(opts *options.Options) InstancesService {
-	return &instancesClient{
-		request: client.NewServiceRequestFromDefaultOptions(opts),
+	return &client{
+		request: kcclient.NewServiceRequestFromDefaultOptions(opts),
 	}
 }
 
 // WithMetro sets the just-in-time metro to use when connecting to the
 // KraftCloud API.
-func (c *instancesClient) WithMetro(m string) InstancesService {
+func (c *client) WithMetro(m string) InstancesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithMetro(m)
 	return ccpy
 }
 
 // WithHTTPClient overwrites the base HTTP client.
-func (c *instancesClient) WithHTTPClient(hc httpclient.HTTPClient) InstancesService {
+func (c *client) WithHTTPClient(hc httpclient.HTTPClient) InstancesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithHTTPClient(hc)
 	return ccpy
 }
 
 // WithTimeout sets the timeout when making a request.
-func (c *instancesClient) WithTimeout(to time.Duration) InstancesService {
+func (c *client) WithTimeout(to time.Duration) InstancesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithTimeout(to)
 	return ccpy
 }
 
 // clone returns a shallow copy of c.
-func (c *instancesClient) clone() *instancesClient {
+func (c *client) clone() *client {
 	ccpy := *c
 	return &ccpy
 }
