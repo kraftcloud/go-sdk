@@ -39,7 +39,7 @@ func (c *client) StopByUUIDs(ctx context.Context, drainTimeoutMs int, uuids ...s
 	}
 
 	var resp kcclient.ServiceResponse[StopResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/stop", bytes.NewBuffer(body), &resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/stop", bytes.NewReader(body), &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

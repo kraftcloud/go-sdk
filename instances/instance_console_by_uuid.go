@@ -30,7 +30,7 @@ func (c *client) ConsoleByUUID(ctx context.Context, uuid string, maxLines int, l
 	}
 
 	var resp kcclient.ServiceResponse[ConsoleResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/"+uuid+"/console", bytes.NewBuffer(body), &resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/"+uuid+"/console", bytes.NewReader(body), &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

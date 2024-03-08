@@ -28,7 +28,7 @@ func (c *client) GetByName(ctx context.Context, name string) (*GetResponseItem, 
 	}
 
 	var resp kcclient.ServiceResponse[GetResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewBuffer(body), &resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewReader(body), &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

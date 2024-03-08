@@ -41,7 +41,7 @@ func (c *client) AttachByUUID(ctx context.Context, volUUID, instanceUUID, at str
 	}
 
 	var resp kcclient.ServiceResponse[AttachResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/attach", bytes.NewBuffer(body), &resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/attach", bytes.NewReader(body), &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

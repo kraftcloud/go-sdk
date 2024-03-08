@@ -30,7 +30,7 @@ func (c *client) DeleteByName(ctx context.Context, name string) (*DeleteResponse
 	}
 
 	var resp kcclient.ServiceResponse[DeleteResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint, bytes.NewBuffer(body), &resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint, bytes.NewReader(body), &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

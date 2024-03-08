@@ -29,7 +29,7 @@ func (c *client) AddPolicy(ctx context.Context, uuid string, req Policy) (*AddPo
 	}
 
 	var resp kcclient.ServiceResponse[AddPolicyResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodPost, services.Endpoint+"/"+uuid+"/autoscale/policies", bytes.NewBuffer(body), &resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodPost, services.Endpoint+"/"+uuid+"/autoscale/policies", bytes.NewReader(body), &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

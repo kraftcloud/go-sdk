@@ -39,7 +39,7 @@ func (c *client) StartByNames(ctx context.Context, waitTimeoutMs int, names ...s
 	}
 
 	var resp kcclient.ServiceResponse[StartResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/start", bytes.NewBuffer(body), &resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/start", bytes.NewReader(body), &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

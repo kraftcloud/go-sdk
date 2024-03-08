@@ -24,7 +24,7 @@ func (c *client) CreateConfiguration(ctx context.Context, req CreateRequest) (*C
 	}
 
 	var resp kcclient.ServiceResponse[CreateResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodPost, Endpoint, bytes.NewBuffer(body), &resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodPost, Endpoint, bytes.NewReader(body), &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

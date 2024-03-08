@@ -28,7 +28,7 @@ func (c *client) DetachByName(ctx context.Context, name string) (*DetachResponse
 	}
 
 	var resp kcclient.ServiceResponse[DetachResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/detach", bytes.NewBuffer(body), &resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/detach", bytes.NewReader(body), &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
