@@ -6,6 +6,7 @@
 package kraftcloud
 
 import (
+	"sdk.kraft.cloud/certificates"
 	"sdk.kraft.cloud/client/options"
 	"sdk.kraft.cloud/images"
 	"sdk.kraft.cloud/instances"
@@ -17,17 +18,19 @@ import (
 
 // Client provides access to the KraftCloud API.
 type Client struct {
-	autoscale scale.AutoscaleService
-	instances instances.InstancesService
-	images    images.ImagesService
-	services  services.ServicesService
-	volumes   volumes.VolumesService
-	users     users.UsersService
+	autoscale    scale.AutoscaleService
+	certificates certificates.CertificatesService
+	instances    instances.InstancesService
+	images       images.ImagesService
+	services     services.ServicesService
+	volumes      volumes.VolumesService
+	users        users.UsersService
 }
 
 // KraftCloud are the public endpoint categories for the KraftCloud API.
 type KraftCloud interface {
 	Autoscale() scale.AutoscaleService
+	Certificates() certificates.CertificatesService
 	Instances() instances.InstancesService
 	Images() images.ImagesService
 	Services() services.ServicesService
@@ -48,21 +51,28 @@ func NewClientFromOptions(opts *options.Options) KraftCloud {
 	// user-requested services. For now, instantiate all services.
 
 	client := Client{
-		autoscale: scale.NewAutoscaleClientFromOptions(opts),
-		instances: instances.NewInstancesClientFromOptions(opts),
-		images:    images.NewImagesClientFromOptions(opts),
-		services:  services.NewServicesClientFromOptions(opts),
-		users:     users.NewUsersClientFromOptions(opts),
-		volumes:   volumes.NewVolumesClientFromOptions(opts),
+		autoscale:    scale.NewAutoscaleClientFromOptions(opts),
+		certificates: certificates.NewCertificatesClientFromOptions(opts),
+		instances:    instances.NewInstancesClientFromOptions(opts),
+		images:       images.NewImagesClientFromOptions(opts),
+		services:     services.NewServicesClientFromOptions(opts),
+		users:        users.NewUsersClientFromOptions(opts),
+		volumes:      volumes.NewVolumesClientFromOptions(opts),
 	}
 
 	return &client
 }
 
-// NewAutoscaleCLient instantiates a client which interfaces with KraftCloud's
+// NewAutoscaleClient instantiates a client which interfaces with KraftCloud's
 // autoscale API.
 func NewAutoscaleClient(opts ...Option) scale.AutoscaleService {
 	return scale.NewAutoscaleClientFromOptions(NewDefaultOptions(opts...))
+}
+
+// NewCertificatesClient instantiates a client which interfaces with
+// KraftCloud's certificates API.
+func NewCertificatesClient(opts ...Option) certificates.CertificatesService {
+	return certificates.NewCertificatesClientFromOptions(NewDefaultOptions(opts...))
 }
 
 // NewImagesClient instantiates a new image services client based on the
@@ -98,6 +108,11 @@ func NewVolumesClient(opts ...Option) volumes.VolumesService {
 // Autoscale returns AutoscaleService.
 func (client *Client) Autoscale() scale.AutoscaleService {
 	return client.autoscale
+}
+
+// Certificates returns CertificatesService.
+func (client *Client) Certificates() certificates.CertificatesService {
+	return client.certificates
 }
 
 // Instances returns InstancesService.
