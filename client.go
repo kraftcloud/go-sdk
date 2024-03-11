@@ -10,6 +10,7 @@ import (
 	"sdk.kraft.cloud/client/options"
 	"sdk.kraft.cloud/images"
 	"sdk.kraft.cloud/instances"
+	"sdk.kraft.cloud/metros"
 	"sdk.kraft.cloud/services"
 	scale "sdk.kraft.cloud/services/autoscale"
 	"sdk.kraft.cloud/users"
@@ -22,6 +23,7 @@ type Client struct {
 	certificates certificates.CertificatesService
 	instances    instances.InstancesService
 	images       images.ImagesService
+	metros       metros.MetrosService
 	services     services.ServicesService
 	volumes      volumes.VolumesService
 	users        users.UsersService
@@ -33,6 +35,7 @@ type KraftCloud interface {
 	Certificates() certificates.CertificatesService
 	Instances() instances.InstancesService
 	Images() images.ImagesService
+	Metros() metros.MetrosService
 	Services() services.ServicesService
 	Users() users.UsersService
 	Volumes() volumes.VolumesService
@@ -55,6 +58,7 @@ func NewClientFromOptions(opts *options.Options) KraftCloud {
 		certificates: certificates.NewCertificatesClientFromOptions(opts),
 		instances:    instances.NewInstancesClientFromOptions(opts),
 		images:       images.NewImagesClientFromOptions(opts),
+		metros:       metros.NewMetrosClientFromOptions(opts),
 		services:     services.NewServicesClientFromOptions(opts),
 		users:        users.NewUsersClientFromOptions(opts),
 		volumes:      volumes.NewVolumesClientFromOptions(opts),
@@ -85,6 +89,12 @@ func NewImagesClient(opts ...Option) images.ImagesService {
 // instances API.
 func NewInstancesClient(opts ...Option) instances.InstancesService {
 	return instances.NewInstancesClientFromOptions(NewDefaultOptions(opts...))
+}
+
+// NewMetrosClient instantiates a client which interfaces with KraftCloud's
+// metros API.
+func NewMetrosClient(opts ...Option) metros.MetrosService {
+	return metros.NewMetrosClientFromOptions(NewDefaultOptions(opts...))
 }
 
 // NewServicesClient instantiates a client which interfaces with KraftCloud's
@@ -123,6 +133,11 @@ func (client *Client) Instances() instances.InstancesService {
 // Images returns ImagesService.
 func (client *Client) Images() images.ImagesService {
 	return client.images
+}
+
+// Metros returns MetrosService.
+func (client *Client) Metros() metros.MetrosService {
+	return client.metros
 }
 
 // Services returns ServicesService.
