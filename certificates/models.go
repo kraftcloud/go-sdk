@@ -16,6 +16,7 @@ type GetResponseItem struct {
 	CreatedAt     string                    `json:"created_at"`
 	CommonName    string                    `json:"common_name"`
 	State         string                    `json:"state"`
+	Validation    *GetResponseValidation    `json:"validation"`
 	Subject       string                    `json:"subject"`
 	Issuer        string                    `json:"issuer"`
 	SerialNumber  string                    `json:"serial_number"`
@@ -24,6 +25,11 @@ type GetResponseItem struct {
 	ServiceGroups []GetResponseServiceGroup `json:"service_groups"`
 
 	kcclient.APIResponseCommon
+}
+
+type GetResponseValidation struct {
+	Attempt int    `json:"attempt"`
+	Next    string `json:"next"`
 }
 
 type GetResponseServiceGroup struct {
