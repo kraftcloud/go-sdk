@@ -11,6 +11,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/goharbor/go-client/pkg/harbor"
+	"github.com/goharbor/go-client/pkg/sdk/v2.0/client/repository"
 	"github.com/google/go-containerregistry/pkg/authn"
 	gcrname "github.com/google/go-containerregistry/pkg/name"
 	gcrv1 "github.com/google/go-containerregistry/pkg/v1"
@@ -40,6 +42,8 @@ func (c *client) DeleteByName(ctx context.Context, name string) error {
 		return fmt.Errorf("invalid token format")
 	}
 
+	user := split[0]
+	pass := split[1]
 	ropts := []remote.Option{
 		remote.WithPlatform(gcrv1.Platform{
 			OS:           "kraftcloud",
@@ -47,8 +51,8 @@ func (c *client) DeleteByName(ctx context.Context, name string) error {
 		}),
 		remote.WithAuth(&simpleAuth{
 			Auth: &authn.AuthConfig{
-				Username: split[0],
-				Password: split[1],
+				Username: user,
+				Password: pass,
 			},
 		}),
 	}
@@ -71,31 +75,57 @@ func (c *client) DeleteByName(ctx context.Context, name string) error {
 		name = "index.unikraft.io/" + split[0] + "/" + name
 	}
 
-	ref, err := gcrname.ParseReference(name,
-		gcrname.WithDefaultRegistry("index.unikraft.io"),
-	)
-	if err != nil {
-		return fmt.Errorf("could not parse name: %w", err)
-	}
+	// If the user specified a tag, remove only the artifact
+	if strings.Contains(name, ":") {
+		ref, err := gcrname.ParseReference(name,
+			gcrname.WithDefaultRegistry("index.unikraft.io"),
+		)
+		if err != nil {
+			return fmt.Errorf("could not parse name: %w", err)
+		}
 
-	desc, err := remote.Get(ref, ropts...)
-	if err != nil {
-		return fmt.Errorf("could not get image: %w", err)
-	}
+		desc, err := remote.Get(ref, ropts...)
+		if err != nil {
+			return fmt.Errorf("could not get image: %w", err)
+		}
 
-	name = strings.SplitN(ref.Name(), ":", 2)[0]
-	name = strings.TrimSuffix(name, "@sha256")
+		name = strings.SplitN(ref.Name(), ":", 2)[0]
+		name = strings.TrimSuffix(name, "@sha256")
 
-	fullref, err := gcrname.ParseReference(
-		fmt.Sprintf("%s@%s", name, desc.Digest),
-		gcrname.WithDefaultRegistry("index.unikraft.io"),
-	)
-	if err != nil {
-		return fmt.Errorf("could not parse full reference: %w", err)
-	}
+		fullref, err := gcrname.ParseReference(
+			fmt.Sprintf("%s@%s", name, desc.Digest),
+			gcrname.WithDefaultRegistry("index.unikraft.io"),
+		)
+		if err != nil {
+			return fmt.Errorf("could not parse full reference: %w", err)
+		}
 
-	if err := remote.Delete(fullref, ropts...); err != nil {
-		return fmt.Errorf("could not delete image: %w", err)
+		if err := remote.Delete(fullref, ropts...); err != nil {
+			return fmt.Errorf("could not delete image: %w", err)
+		}
+	} else {
+		harborApi, err := harbor.NewClientSet(&harbor.ClientSetConfig{
+			URL:      "https://harbor.unikraft.io",
+			Insecure: false,
+			Username: user,
+			Password: pass,
+		})
+		if err != nil {
+			return fmt.Errorf("could not create harbor client: %s", err)
+		}
+
+		// Fetch the repository name as the last part of the image name
+		repoSplit := strings.Split(name, "/")
+		project := repoSplit[len(repoSplit)-2]
+		repo := repoSplit[len(repoSplit)-1]
+
+		params := repository.NewDeleteRepositoryParams()
+		params.SetProjectName(project)
+		params.SetRepositoryName(repo)
+		ok, err := harborApi.V2().Repository.DeleteRepository(ctx, params)
+		if err != nil {
+			return fmt.Errorf("could not delete repository: %s, %s", ok, err)
+		}
 	}
 
 	return nil
