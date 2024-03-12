@@ -17,7 +17,7 @@ import (
 )
 
 // StopByNames implements InstancesService.
-func (c *client) StopByNames(ctx context.Context, drainTimeoutMs int, names ...string) ([]StopResponseItem, error) {
+func (c *client) StopByNames(ctx context.Context, drainTimeoutMs int, force bool, names ...string) ([]StopResponseItem, error) {
 	if len(names) == 0 {
 		return nil, errors.New("requires at least one name")
 	}
@@ -25,7 +25,8 @@ func (c *client) StopByNames(ctx context.Context, drainTimeoutMs int, names ...s
 	reqItems := make([]map[string]any, 0, len(names))
 	for _, name := range names {
 		reqItem := map[string]any{
-			"name": name,
+			"name":  name,
+			"force": force,
 		}
 		if drainTimeoutMs > 0 {
 			reqItem["drain_timeout_ms"] = drainTimeoutMs

@@ -71,7 +71,7 @@ type InstancesService interface {
 	// started again with the start endpoint.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#stopping-an-instance
-	StopByUUIDs(ctx context.Context, drainTimeoutMs int, uuid ...string) ([]StopResponseItem, error)
+	StopByUUIDs(ctx context.Context, drainTimeoutMs int, force bool, uuid ...string) ([]StopResponseItem, error)
 
 	// StopByNames stops the specified instance(s) based on their name(s), but
 	// does not destroy them.  All volatile state (e.g., RAM contents) is lost.
@@ -79,7 +79,7 @@ type InstancesService interface {
 	// started again with the start endpoint.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#stopping-an-instance
-	StopByNames(ctx context.Context, drainTimeoutMs int, names ...string) ([]StopResponseItem, error)
+	StopByNames(ctx context.Context, drainTimeoutMs int, force bool, names ...string) ([]StopResponseItem, error)
 
 	// ConsoleByName returns the console output of the specified instance based
 	// on its name.

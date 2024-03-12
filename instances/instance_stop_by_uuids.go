@@ -17,7 +17,7 @@ import (
 )
 
 // StopByUUIDs implements InstancesService.
-func (c *client) StopByUUIDs(ctx context.Context, drainTimeoutMs int, uuids ...string) ([]StopResponseItem, error) {
+func (c *client) StopByUUIDs(ctx context.Context, drainTimeoutMs int, force bool, uuids ...string) ([]StopResponseItem, error) {
 	if len(uuids) == 0 {
 		return nil, errors.New("requires at least one uuid")
 	}
@@ -25,7 +25,8 @@ func (c *client) StopByUUIDs(ctx context.Context, drainTimeoutMs int, uuids ...s
 	reqItems := make([]map[string]any, 0, len(uuids))
 	for _, uuid := range uuids {
 		reqItem := map[string]any{
-			"uuid": uuid,
+			"uuid":  uuid,
+			"force": force,
 		}
 		if drainTimeoutMs > 0 {
 			reqItem["drain_timeout_ms"] = drainTimeoutMs
