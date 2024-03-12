@@ -104,7 +104,7 @@ func (c *client) DeleteByName(ctx context.Context, name string) error {
 			return fmt.Errorf("could not delete image: %w", err)
 		}
 	} else {
-		harborApi, err := harbor.NewClientSet(&harbor.ClientSetConfig{
+		harborAPI, err := harbor.NewClientSet(&harbor.ClientSetConfig{
 			URL:      "https://harbor.unikraft.io",
 			Insecure: false,
 			Username: user,
@@ -122,7 +122,7 @@ func (c *client) DeleteByName(ctx context.Context, name string) error {
 		params := repository.NewDeleteRepositoryParams()
 		params.SetProjectName(project)
 		params.SetRepositoryName(repo)
-		ok, err := harborApi.V2().Repository.DeleteRepository(ctx, params)
+		ok, err := harborAPI.V2().Repository.DeleteRepository(ctx, params)
 		if err != nil {
 			return fmt.Errorf("could not delete repository: %s, %s", ok, err)
 		}
