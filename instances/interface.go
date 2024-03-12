@@ -92,4 +92,14 @@ type InstancesService interface {
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#retrieve-the-console-output
 	ConsoleByUUID(ctx context.Context, uuid string, maxLines int, latest bool) (*ConsoleResponseItem, error)
+
+	// WaitByUUIDs waits for the specified instance(s) based on their UUID(s) to
+	// reach the desired state.
+	// See: https://docs.kraft.cloud/api/v1/instances/#waiting-for-an-instance-to-reach-a-desired-state
+	WaitByUUIDs(ctx context.Context, state State, timeoutMs int, uuids ...string) ([]WaitResponseItem, error)
+
+	// WaitByNames waits for the specified instance(s) based on their name(s) to
+	// reach the desired state.
+	// See: https://docs.kraft.cloud/api/v1/instances/#waiting-for-an-instance-to-reach-a-desired-state
+	WaitByNames(ctx context.Context, state State, timeoutMs int, names ...string) ([]WaitResponseItem, error)
 }

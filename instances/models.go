@@ -151,3 +151,14 @@ type ConsoleResponseItem struct {
 
 	kcclient.APIResponseCommon
 }
+
+// WaitResponseItem is a data item from a response to a GET /instances/wait request.
+// https://docs.kraft.cloud/api/v1/instances/#waiting-for-an-instance-to-reach-a-desired-state
+type WaitResponseItem struct {
+	Status string `json:"status"`
+	UUID   string `json:"uuid"`
+	Name   string `json:"name"`
+	State  string `json:"state"`
+
+	kcclient.APIResponseCommon
+}
