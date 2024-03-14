@@ -81,17 +81,17 @@ type InstancesService interface {
 	// See: https://docs.kraft.cloud/api/v1/instances/#stopping-an-instance
 	StopByNames(ctx context.Context, drainTimeoutMs int, force bool, names ...string) ([]StopResponseItem, error)
 
-	// ConsoleByName returns the console output of the specified instance based
+	// LogByName returns the console output of the specified instance based
 	// on its name.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#retrieve-the-console-output
-	ConsoleByName(ctx context.Context, name string, maxLines int, latest bool) (*ConsoleResponseItem, error)
+	LogByName(ctx context.Context, name string, offset int, limit int) (*LogResponseItem, error)
 
-	// ConsoleByUUID returns the console output of the specified instance based
+	// LogByUUID returns the console output of the specified instance based
 	// on its UUID.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#retrieve-the-console-output
-	ConsoleByUUID(ctx context.Context, uuid string, maxLines int, latest bool) (*ConsoleResponseItem, error)
+	LogByUUID(ctx context.Context, uuid string, offset int, limit int) (*LogResponseItem, error)
 
 	// WaitByUUIDs waits for the specified instance(s) based on their UUID(s) to
 	// reach the desired state.
