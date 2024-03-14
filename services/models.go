@@ -35,15 +35,15 @@ type CreateResponseItem struct {
 // GetResponseItem is a data item from a response to a GET /services request.
 // https://docs.kraft.cloud/api/v1/services/#getting-the-status-of-a-service-group
 type GetResponseItem struct {
-	Status     string               `json:"status"`
-	UUID       string               `json:"uuid"`
-	Name       string               `json:"name"`
-	CreatedAt  string               `json:"created_at"`
-	FQDN       string               `json:"fqdn"`
-	Instances  []string             `json:"instances"`
-	Services   []GetResponseService `json:"services"`
-	Persistent bool                 `json:"persistent"`
-	Autoscale  bool                 `json:"autoscale"`
+	Status     string                `json:"status"`
+	UUID       string                `json:"uuid"`
+	Name       string                `json:"name"`
+	CreatedAt  string                `json:"created_at"`
+	FQDN       string                `json:"fqdn"`
+	Instances  []GetResponseInstance `json:"instances"`
+	Services   []GetResponseService  `json:"services"`
+	Persistent bool                  `json:"persistent"`
+	Autoscale  bool                  `json:"autoscale"`
 
 	kcclient.APIResponseCommon
 }
@@ -52,6 +52,11 @@ type GetResponseService struct {
 	Port            int       `json:"port"`
 	DestinationPort int       `json:"destination_port"`
 	Handlers        []Handler `json:"handlers"`
+}
+
+type GetResponseInstance struct {
+	UUID string `json:"uuid"`
+	Name string `json:"name"`
 }
 
 // DeleteResponseItem is a data item from a response to a DELETE /services request.
