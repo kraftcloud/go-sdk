@@ -16,22 +16,22 @@ import (
 	kcclient "sdk.kraft.cloud/client"
 )
 
-// ConsoleByName implements InstancesService.
-func (c *client) ConsoleByName(ctx context.Context, name string, maxLines int, latest bool) (*ConsoleResponseItem, error) {
-	if len(name) == 0 {
-		return nil, fmt.Errorf("name cannot be empty")
+// LogByUUID implements InstancesService.
+func (c *client) LogByUUID(ctx context.Context, uuid string, offset int, limit int) (*LogResponseItem, error) {
+	if len(uuid) == 0 {
+		return nil, fmt.Errorf("UUID cannot be empty")
 	}
 
 	body, err := json.Marshal([]map[string]interface{}{{
-		"name":      name,
-		"max_lines": maxLines,
+		"offset": offset,
+		"limit":  limit,
 	}})
 	if err != nil {
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
-	var resp kcclient.ServiceResponse[ConsoleResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/console", bytes.NewReader(body), &resp); err != nil {
+	var resp kcclient.ServiceResponse[LogResponseItem]
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/"+uuid+"/log", bytes.NewReader(body), &resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

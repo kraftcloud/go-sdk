@@ -141,15 +141,27 @@ type StopResponseItem struct {
 	kcclient.APIResponseCommon
 }
 
-// ConsoleResponseItem is a data item from a response to a GET /instances/console request.
+// LogResponseItem is a data item from a response to a GET /instances/log request.
 // https://docs.kraft.cloud/api/v1/instances/#retrieve-the-console-output
-type ConsoleResponseItem struct {
-	Status string `json:"status"`
-	UUID   string `json:"uuid"`
-	Name   string `json:"name"`
-	Output string `json:"output"`
+type LogResponseItem struct {
+	Status    string               `json:"status"`
+	UUID      string               `json:"uuid"`
+	Name      string               `json:"name"`
+	Output    string               `json:"output"`
+	Range     LogResponseRange     `json:"range"`
+	Available LogResponseAvailable `json:"available"`
 
 	kcclient.APIResponseCommon
+}
+
+type LogResponseRange struct {
+	Start int `json:"start"`
+	End   int `json:"end"`
+}
+
+type LogResponseAvailable struct {
+	Start int `json:"start"`
+	End   int `json:"end"`
 }
 
 // WaitResponseItem is a data item from a response to a GET /instances/wait request.
