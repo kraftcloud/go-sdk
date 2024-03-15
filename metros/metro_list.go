@@ -64,25 +64,21 @@ func (c *client) List(ctx context.Context, status bool) ([]ListResponseItem, err
 			Code:     "fra0",
 			Location: "Frankfurt, DE",
 			Proxy:    "fra0.kraft.host",
-			Online:   true,
 		},
 		{
 			Code:     "dal0",
 			Location: "Dallas, TX",
 			Proxy:    "dal0.kraft.host",
-			Online:   true,
 		},
 		{
 			Code:     "sin0",
 			Location: "Singapore",
 			Proxy:    "sin0.kraft.host",
-			Online:   true,
 		},
 		{
 			Code:     "was1",
 			Location: "Washington, DC",
 			Proxy:    "was1.kraft.host",
-			Online:   true,
 		},
 	}
 
@@ -91,15 +87,11 @@ func (c *client) List(ctx context.Context, status bool) ([]ListResponseItem, err
 		wg.Add(1)
 		go func(i int) {
 			items[i].Ipv4 = fillMetroIP(items[i].Code)
-			if items[i].Ipv4 == "" {
-				items[i].Online = false
-			}
+			items[i].Online = items[i].Ipv4 != ""
 
 			if items[i].Online && status {
 				items[i].Delay = testMetroAlive(items[i].Code, items[i].Ipv4)
-				if items[i].Delay == 0 {
-					items[i].Online = false
-				}
+				items[i].Online = items[i].Delay != 0
 			}
 			wg.Done()
 		}(i)
