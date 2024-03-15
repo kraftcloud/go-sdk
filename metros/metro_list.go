@@ -45,6 +45,18 @@ func testMetroAlive(metro, ip string) time.Duration {
 	}
 }
 
+// fillMetroIP looks up the IP address of the metro using the DNS name.
+func fillMetroIP(metro string) string {
+	url := "api." + metro + ".kraft.cloud"
+
+	ips, err := net.LookupIP(url)
+	if err != nil {
+		return ""
+	}
+
+	return ips[0].String()
+}
+
 // List implements MetrosService.
 func (c *client) List(ctx context.Context, status bool) ([]ListResponseItem, error) {
 	items := []ListResponseItem{
@@ -52,46 +64,47 @@ func (c *client) List(ctx context.Context, status bool) ([]ListResponseItem, err
 			Code:     "fra0",
 			Location: "Frankfurt, DE",
 			Proxy:    "fra0.kraft.host",
-			Ipv4:     "145.40.93.137",
 			Online:   true,
 		},
 		{
 			Code:     "dal0",
 			Location: "Dallas, TX",
 			Proxy:    "dal0.kraft.host",
-			Ipv4:     "147.28.196.53",
 			Online:   true,
 		},
 		{
 			Code:     "sin0",
 			Location: "Singapore",
 			Proxy:    "sin0.kraft.host",
-			Ipv4:     "145.40.71.141",
 			Online:   true,
 		},
 		{
 			Code:     "was1",
 			Location: "Washington, DC",
 			Proxy:    "was1.kraft.host",
-			Ipv4:     "3.211.205.241",
 			Online:   true,
 		},
 	}
 
-	if status {
-		var wg sync.WaitGroup
-		for i := range items {
-			wg.Add(1)
-			go func(i int) {
+	var wg sync.WaitGroup
+	for i := range items {
+		wg.Add(1)
+		go func(i int) {
+			items[i].Ipv4 = fillMetroIP(items[i].Code)
+			if items[i].Ipv4 == "" {
+				items[i].Online = false
+			}
+
+			if items[i].Online && status {
 				items[i].Delay = testMetroAlive(items[i].Code, items[i].Ipv4)
 				if items[i].Delay == 0 {
 					items[i].Online = false
 				}
-				wg.Done()
-			}(i)
-		}
-		wg.Wait()
+			}
+			wg.Done()
+		}(i)
 	}
+	wg.Wait()
 
 	return items, nil
 }
