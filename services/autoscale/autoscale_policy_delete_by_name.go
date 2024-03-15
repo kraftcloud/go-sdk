@@ -16,21 +16,17 @@ import (
 )
 
 // DeletePolicyByName implements AutoscaleService.
-func (c *client) DeletePolicyByName(ctx context.Context, autoscaleUUID, policyName string) (*DeletePolicyResponseItem, error) {
+func (c *client) DeletePolicyByName(ctx context.Context, autoscaleUUID, policyName string) (*kcclient.ServiceResponse[DeletePolicyResponseItem], error) {
 	if autoscaleUUID == "" || policyName == "" {
 		return nil, errors.New("policyName and autoscaleUUID cannot be empty")
 	}
 
 	endpoint := services.Endpoint + "/" + autoscaleUUID + AutoscaleEndpoint + AutoscalePolicyEndpoint + "/" + policyName
 
-	var resp kcclient.ServiceResponse[DeletePolicyResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodDelete, endpoint, nil, &resp); err != nil {
+	resp := &kcclient.ServiceResponse[DeletePolicyResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodDelete, endpoint, nil, resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	item, err := resp.FirstOrErr()
-	if err != nil {
-		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
-	}
-	return item, nil
+	return resp, nil
 }

@@ -15,31 +15,31 @@ type AutoscaleService interface {
 	kcclient.ServiceClient[AutoscaleService]
 
 	// CreateConfiguration creates a new autoscale configuration.
-	CreateConfiguration(ctx context.Context, req CreateRequest) (*CreateResponseItem, error)
+	CreateConfiguration(ctx context.Context, req CreateRequest) (*kcclient.ServiceResponse[CreateResponseItem], error)
 
 	// GetConfigurationByName returns the current state and the configuration of
 	// an autoscale configuration
-	GetConfigurationByName(ctx context.Context, name string) (*GetResponseItem, error)
+	GetConfigurationByName(ctx context.Context, name string) (*kcclient.ServiceResponse[GetResponseItem], error)
 
 	// GetConfigurationByUUID returns the current state and the configuration of
 	// an autoscale configuration
-	GetConfigurationByUUID(ctx context.Context, uuid string) (*GetResponseItem, error)
+	GetConfigurationByUUID(ctx context.Context, uuid string) (*kcclient.ServiceResponse[GetResponseItem], error)
 
 	// DeleteConfigurationByUUID deletes an autoscale configuration given its
 	// UUID.
-	DeleteConfigurationByUUID(ctx context.Context, uuid string) (*DeleteResponseItem, error)
+	DeleteConfigurationByUUID(ctx context.Context, uuid string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
 
 	// DeleteConfigurationByName deletes an autoscale configuration given its
 	// name.
-	DeleteConfigurationByName(ctx context.Context, name string) (*DeleteResponseItem, error)
+	DeleteConfigurationByName(ctx context.Context, name string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
 
 	// AddPolicy adds a new autoscale policy to an autoscale configuration.
-	AddPolicy(ctx context.Context, uuid string, req Policy) (*AddPolicyResponseItem, error)
+	AddPolicy(ctx context.Context, uuid string, req Policy) (*kcclient.ServiceResponse[AddPolicyResponseItem], error)
 
 	// GetPolicyByName returns the current state and configuration of an
 	// autoscale policy.
-	GetPolicyByName(ctx context.Context, uuid, name string) (*GetPolicyResponseItem, error)
+	GetPolicyByName(ctx context.Context, uuid, name string) (*kcclient.ServiceResponse[GetPolicyResponseItem], error)
 
 	// DeletePolicyByName deletes an autoscale policy given its name.
-	DeletePolicyByName(ctx context.Context, uuid, name string) (*DeletePolicyResponseItem, error)
+	DeletePolicyByName(ctx context.Context, uuid, name string) (*kcclient.ServiceResponse[DeletePolicyResponseItem], error)
 }

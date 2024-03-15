@@ -7,7 +7,6 @@ package users
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -15,15 +14,11 @@ import (
 )
 
 // Quotas implements UsersService.
-func (c *client) Quotas(ctx context.Context) (*QuotasResponseItem, error) {
-	var resp kcclient.ServiceResponse[QuotasResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/quotas", nil, &resp); err != nil {
+func (c *client) Quotas(ctx context.Context) (*kcclient.ServiceResponse[QuotasResponseItem], error) {
+	resp := &kcclient.ServiceResponse[QuotasResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/quotas", nil, resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	item, err := resp.FirstOrErr()
-	if err != nil {
-		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
-	}
-	return item, nil
+	return resp, nil
 }

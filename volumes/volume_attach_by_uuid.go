@@ -17,7 +17,7 @@ import (
 )
 
 // AttachByUUID implements VolumesService.
-func (c *client) AttachByUUID(ctx context.Context, volUUID, instanceUUID, at string, readOnly bool) (*AttachResponseItem, error) {
+func (c *client) AttachByUUID(ctx context.Context, volUUID, instanceUUID, at string, readOnly bool) (*kcclient.ServiceResponse[AttachResponseItem], error) {
 	if volUUID == "" {
 		return nil, errors.New("volume name cannot be empty")
 	}
@@ -40,14 +40,10 @@ func (c *client) AttachByUUID(ctx context.Context, volUUID, instanceUUID, at str
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
 
-	var resp kcclient.ServiceResponse[AttachResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/attach", bytes.NewReader(body), &resp); err != nil {
+	resp := &kcclient.ServiceResponse[AttachResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/attach", bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	item, err := resp.FirstOrErr()
-	if err != nil {
-		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
-	}
-	return item, nil
+	return resp, nil
 }

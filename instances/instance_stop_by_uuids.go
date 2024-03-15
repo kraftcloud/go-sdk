@@ -17,7 +17,7 @@ import (
 )
 
 // StopByUUIDs implements InstancesService.
-func (c *client) StopByUUIDs(ctx context.Context, drainTimeoutMs int, force bool, uuids ...string) ([]StopResponseItem, error) {
+func (c *client) StopByUUIDs(ctx context.Context, drainTimeoutMs int, force bool, uuids ...string) (*kcclient.ServiceResponse[StopResponseItem], error) {
 	if len(uuids) == 0 {
 		return nil, errors.New("requires at least one uuid")
 	}
@@ -39,21 +39,10 @@ func (c *client) StopByUUIDs(ctx context.Context, drainTimeoutMs int, force bool
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
-	var resp kcclient.ServiceResponse[StopResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/stop", bytes.NewReader(body), &resp); err != nil {
+	resp := &kcclient.ServiceResponse[StopResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/stop", bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	items, err := resp.AllOrErr()
-	if err != nil {
-		errs := make([]error, 0, len(items)+1)
-		errs = append(errs, err)
-		for _, item := range items {
-			if item.Error != nil {
-				errs = append(errs, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
-			}
-		}
-		return nil, errors.Join(errs...)
-	}
-	return items, nil
+	return resp, nil
 }

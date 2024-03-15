@@ -6,9 +6,11 @@
 package client
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 )
 
 // ErrorResponse is the list of errors that have occurred during the invocation
@@ -40,6 +42,9 @@ type ServiceResponse[T any] struct {
 	// On a successful response, the data element is returned with relevant
 	// information.
 	Data ServiceResponseData[T] `json:"data,omitempty"`
+
+	// Buffer holding the raw API response body.
+	body bytes.Buffer
 }
 
 // ServiceResponseData is the embedded list of structures defined by T.  The
@@ -104,6 +109,23 @@ func (r *ServiceResponse[T]) AllOrErr() ([]T, error) {
 	}
 
 	return r.Data.Entries, nil
+}
+
+// RawBody returns the raw API response body.
+func (r *ServiceResponse[T]) RawBody() []byte {
+	b := make([]byte, r.body.Len())
+	_, _ = r.body.Read(b) // cannot fail on a bytes.Buffer
+	return b
+}
+
+// rawBodyHolder is implemented by types that can hold raw API response bodies.
+type rawBodyHolder interface {
+	storeBody(io.Reader) (n int64, err error)
+}
+
+// storeBody implements rawBodyHolder.
+func (r *ServiceResponse[T]) storeBody(br io.Reader) (int64, error) {
+	return io.Copy(&r.body, br)
 }
 
 // APIResponseCommon contains attributes common to all API responses.

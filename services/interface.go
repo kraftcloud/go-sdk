@@ -26,17 +26,17 @@ type ServicesService interface {
 	// groups with different properties with the same call.
 	//
 	// See: https://docs.kraft.cloud/api/v1/services/#creating-new-service-groups
-	Create(ctx context.Context, req CreateRequest) (*CreateResponseItem, error)
+	Create(ctx context.Context, req CreateRequest) (*kcclient.ServiceResponse[CreateResponseItem], error)
 
 	// GetByUUID returns the current state and the configuration of a service group.
 	//
 	// See: https://docs.kraft.cloud/api/v1/services/#getting-the-state-of-a-service-group
-	GetByUUID(ctx context.Context, uuid string) (*GetResponseItem, error)
+	GetByUUID(ctx context.Context, uuid string) (*kcclient.ServiceResponse[GetResponseItem], error)
 
 	// GetByName returns the current state and the configuration of a service group.
 	//
 	// See: https://docs.kraft.cloud/api/v1/services/#getting-the-state-of-a-service-group
-	GetByName(ctx context.Context, name string) (*GetResponseItem, error)
+	GetByName(ctx context.Context, name string) (*kcclient.ServiceResponse[GetResponseItem], error)
 
 	// DeleteByUUID the specified service group based on its UUID.  Fails if there
 	// are still instances attached to group. After this call the UUID of the
@@ -45,7 +45,7 @@ type ServicesService interface {
 	// This operation cannot be undone.
 	//
 	// See: https://docs.kraft.cloud/api/v1/services/#deleting-a-service-group
-	DeleteByUUID(ctx context.Context, uuid string) (*DeleteResponseItem, error)
+	DeleteByUUID(ctx context.Context, uuid string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
 
 	// DeleteByName the specified service group based on its name.  Fails if there
 	// are still instances attached to group. After this call the UUID of the
@@ -54,7 +54,7 @@ type ServicesService interface {
 	// This operation cannot be undone.
 	//
 	// See: https://docs.kraft.cloud/api/v1/services/#deleting-a-service-group
-	DeleteByName(ctx context.Context, name string) (*DeleteResponseItem, error)
+	DeleteByName(ctx context.Context, name string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
 
 	// Lists all existing service groups. You can filter by persistence and DNS
 	// name. The latter can be used to lookup the UUID of the service group that
@@ -66,5 +66,5 @@ type ServicesService interface {
 	// endpoints, for example, to delete (empty) groups.
 	//
 	// See: https://docs.kraft.cloud/api/v1/services/#list-existing-service-groups
-	List(ctx context.Context) ([]ListResponseItem, error)
+	List(ctx context.Context) (*kcclient.ServiceResponse[ListResponseItem], error)
 }

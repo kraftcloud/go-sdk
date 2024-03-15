@@ -17,7 +17,7 @@ import (
 )
 
 // GetByName implements VolumesService.
-func (c *client) GetByName(ctx context.Context, name string) (*GetResponseItem, error) {
+func (c *client) GetByName(ctx context.Context, name string) (*kcclient.ServiceResponse[GetResponseItem], error) {
 	if name == "" {
 		return nil, errors.New("name cannot be empty")
 	}
@@ -27,14 +27,10 @@ func (c *client) GetByName(ctx context.Context, name string) (*GetResponseItem, 
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
-	var resp kcclient.ServiceResponse[GetResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewReader(body), &resp); err != nil {
+	resp := &kcclient.ServiceResponse[GetResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	item, err := resp.FirstOrErr()
-	if err != nil {
-		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
-	}
-	return item, nil
+	return resp, nil
 }

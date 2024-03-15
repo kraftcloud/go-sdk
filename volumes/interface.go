@@ -21,17 +21,17 @@ type VolumesService interface {
 	// be changed after creation.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#creating-volumes
-	Create(ctx context.Context, name string, sizeMB int) (*CreateResponseItem, error)
+	Create(ctx context.Context, name string, sizeMB int) (*kcclient.ServiceResponse[CreateResponseItem], error)
 
 	// GetByUUID returns the current state and the configuration of a volume.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#getting-the-status-of-a-volume
-	GetByUUID(ctx context.Context, uuid string) (*GetResponseItem, error)
+	GetByUUID(ctx context.Context, uuid string) (*kcclient.ServiceResponse[GetResponseItem], error)
 
 	// GetByName returns the current state and the configuration of a volume.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#getting-the-status-of-a-volume
-	GetByName(ctx context.Context, name string) (*GetResponseItem, error)
+	GetByName(ctx context.Context, name string) (*kcclient.ServiceResponse[GetResponseItem], error)
 
 	// AttachByUUID a volume to an instance so that the volume is mounted when the
 	// instance starts using the volume and instance name.  The volume needs to be
@@ -39,7 +39,7 @@ type VolumesService interface {
 	// instance can have only one volume attached at most.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#attaching-a-volume-to-an-instance
-	AttachByUUID(ctx context.Context, volUUID, instanceUUID, at string, readOnly bool) (*AttachResponseItem, error)
+	AttachByUUID(ctx context.Context, volUUID, instanceUUID, at string, readOnly bool) (*kcclient.ServiceResponse[AttachResponseItem], error)
 
 	// AttachByName a volume to an instance so that the volume is mounted when the
 	// instance starts using the volume and instance name.  The volume needs to be
@@ -47,7 +47,7 @@ type VolumesService interface {
 	// instance can have only one volume attached at most.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#attaching-a-volume-to-an-instance
-	AttachByName(ctx context.Context, volName, instanceName, at string, readOnly bool) (*AttachResponseItem, error)
+	AttachByName(ctx context.Context, volName, instanceName, at string, readOnly bool) (*kcclient.ServiceResponse[AttachResponseItem], error)
 
 	// DetachByUUID a volume from an instance based on the volume's UUID.  The
 	// instance from which to detach must in stopped state. If the volume has been
@@ -55,7 +55,7 @@ type VolumesService interface {
 	// persistent (i.e., it survives the deletion of the instance).
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#detaching-a-volume-from-an-instance
-	DetachByUUID(ctx context.Context, uuid string) (*DetachResponseItem, error)
+	DetachByUUID(ctx context.Context, uuid string) (*kcclient.ServiceResponse[DetachResponseItem], error)
 
 	// DetachByNam a volume from an instance based on the volume's name.  The
 	// instance from which to detach must in stopped state. If the volume has been
@@ -63,26 +63,26 @@ type VolumesService interface {
 	// persistent (i.e., it survives the deletion of the instance).
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#detaching-a-volume-from-an-instance
-	DetachByName(ctx context.Context, name string) (*DetachResponseItem, error)
+	DetachByName(ctx context.Context, name string) (*kcclient.ServiceResponse[DetachResponseItem], error)
 
 	// DeletebyUUID the specified volume based on its UUID.  Fails if the volume is
 	// still attached to an instance. After this call the UUID of the volumes is
 	// no longer valid.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#deleting-a-volume
-	DeleteByUUID(ctx context.Context, uuid string) (*DeleteResponseItem, error)
+	DeleteByUUID(ctx context.Context, uuid string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
 
 	// DeleteByName the specified volume based on its name.  Fails if the volume
 	// is still attached to an instance. After this call the UUID of the volumes
 	// is no longer valid.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#deleting-a-volume
-	DeleteByName(ctx context.Context, name string) (*DeleteResponseItem, error)
+	DeleteByName(ctx context.Context, name string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
 
 	// Lists all existing volumes. You can filter by persistence and volume
 	// state. The returned volumes fulfill all provided filter criteria. No
 	// particular value is assumed if a filter is not part of the request.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#list-existing-volumes
-	List(ctx context.Context) ([]ListResponseItem, error)
+	List(ctx context.Context) (*kcclient.ServiceResponse[ListResponseItem], error)
 }

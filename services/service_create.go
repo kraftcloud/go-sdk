@@ -9,7 +9,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -17,20 +16,16 @@ import (
 )
 
 // Creates implements ServicesService.
-func (c *client) Create(ctx context.Context, req CreateRequest) (*CreateResponseItem, error) {
+func (c *client) Create(ctx context.Context, req CreateRequest) (*kcclient.ServiceResponse[CreateResponseItem], error) {
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
 
-	var resp kcclient.ServiceResponse[CreateResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodPost, Endpoint, bytes.NewReader(body), &resp); err != nil {
+	resp := &kcclient.ServiceResponse[CreateResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodPost, Endpoint, bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	item, err := resp.FirstOrErr()
-	if err != nil {
-		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
-	}
-	return item, nil
+	return resp, nil
 }

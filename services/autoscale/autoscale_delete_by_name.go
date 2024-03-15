@@ -17,7 +17,7 @@ import (
 )
 
 // DeleteConfigurationByName implements AutoscaleService.
-func (c *client) DeleteConfigurationByName(ctx context.Context, name string) (*DeleteResponseItem, error) {
+func (c *client) DeleteConfigurationByName(ctx context.Context, name string) (*kcclient.ServiceResponse[DeleteResponseItem], error) {
 	if name == "" {
 		return nil, errors.New("name cannot be empty")
 	}
@@ -29,14 +29,10 @@ func (c *client) DeleteConfigurationByName(ctx context.Context, name string) (*D
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
-	var resp kcclient.ServiceResponse[DeleteResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint, bytes.NewReader(body), &resp); err != nil {
+	resp := &kcclient.ServiceResponse[DeleteResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint, bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	item, err := resp.FirstOrErr()
-	if err != nil {
-		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
-	}
-	return item, nil
+	return resp, nil
 }

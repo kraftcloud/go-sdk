@@ -17,7 +17,7 @@ import (
 )
 
 // DeleteByNames implements CertificatesService.
-func (c *client) DeleteByNames(ctx context.Context, names ...string) ([]DeleteResponseItem, error) {
+func (c *client) DeleteByNames(ctx context.Context, names ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error) {
 	if len(names) == 0 {
 		return nil, errors.New("requires at least one name")
 	}
@@ -32,21 +32,10 @@ func (c *client) DeleteByNames(ctx context.Context, names ...string) ([]DeleteRe
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
-	var resp kcclient.ServiceResponse[DeleteResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint, bytes.NewReader(body), &resp); err != nil {
+	resp := &kcclient.ServiceResponse[DeleteResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint, bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	items, err := resp.AllOrErr()
-	if err != nil {
-		errs := make([]error, 0, len(items)+1)
-		errs = append(errs, err)
-		for _, item := range items {
-			if item.Error != nil {
-				errs = append(errs, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
-			}
-		}
-		return nil, errors.Join(errs...)
-	}
-	return items, nil
+	return resp, nil
 }

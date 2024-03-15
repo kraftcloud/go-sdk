@@ -20,7 +20,7 @@ type ImagesService interface {
 	// part of the request.
 	//
 	// See: https://docs.kraft.cloud/api/v1/images/#list-existing-images
-	List(ctx context.Context) ([]ListResponseItem, error)
+	List(ctx context.Context) (*kcclient.ServiceResponse[ListResponseItem], error)
 
 	// Delete an image by its provided name.
 	DeleteByName(ctx context.Context, name string) error

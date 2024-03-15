@@ -6,6 +6,7 @@
 package client
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -90,7 +91,7 @@ func (r *ServiceRequest) Metrolink(path string) string {
 }
 
 // DoRequest performs the request and hydrates a target type with response body.
-func (r *ServiceRequest) DoRequest(ctx context.Context, method, url string, body io.Reader, target interface{}) error {
+func (r *ServiceRequest) DoRequest(ctx context.Context, method, url string, body io.Reader, target any) error {
 	req, err := http.NewRequestWithContext(ctx, method, r.Metrolink(url), body)
 	if err != nil {
 		return fmt.Errorf("error creating the request: %w", err)
@@ -106,7 +107,12 @@ func (r *ServiceRequest) DoRequest(ctx context.Context, method, url string, body
 		return fmt.Errorf("received an error in the response: %w", err)
 	}
 
-	if err := json.NewDecoder(resp.Body).Decode(target); err != nil {
+	bodyReader, err := maybeStoreRawBody(target, resp.Body)
+	if err != nil {
+		return err
+	}
+
+	if err := json.NewDecoder(bodyReader).Decode(target); err != nil {
 		return fmt.Errorf("error parsing response: %w", err)
 	}
 
@@ -154,4 +160,24 @@ func checkResponse(resp *http.Response) error {
 		return fmt.Errorf("reading response body: %w", err)
 	}
 	return &errors.Error{StatusCode: resp.StatusCode, Message: string(bodyBytes)}
+}
+
+// maybeStoreRawBody stores the response body from b into target if target
+// supports it, and returns an io.Reader that can be used for future reads of
+// the given response body.
+// After passing b to this function, b should no longer be read from.
+func maybeStoreRawBody(target any, b io.Reader) (io.Reader, error) {
+	bh, ok := target.(rawBodyHolder)
+	if !ok {
+		return b, nil
+	}
+
+	body, err := io.ReadAll(b)
+	if err != nil {
+		return nil, fmt.Errorf("reading response body: %w", err)
+	}
+	if _, err = bh.storeBody(bytes.NewReader(body)); err != nil {
+		return nil, fmt.Errorf("storing response body: %w", err)
+	}
+	return bytes.NewReader(body), nil
 }

@@ -47,7 +47,7 @@ func TestClientThreadSafety(t *testing.T) {
 			go func(uuid string) {
 				defer wg.Done()
 				for i := 0; i < requests; i++ {
-					ins, err := cli.GetByUUIDs(ctx, uuid)
+					resp, err := cli.GetByUUIDs(ctx, uuid)
 					if err != nil {
 						select {
 						case <-ctx.Done():
@@ -57,12 +57,24 @@ func TestClientThreadSafety(t *testing.T) {
 						}
 						continue
 					}
-					if ins[0].UUID != uuid {
+
+					ins, err := resp.FirstOrErr()
+					if err != nil {
 						select {
 						case <-ctx.Done():
 							return
 						default:
-							errCh <- fmt.Errorf("[%s] Got unexpected uuid %s", uuid, ins[0].UUID)
+							errCh <- fmt.Errorf("[%s] Status: %v", uuid, err)
+						}
+						continue
+					}
+
+					if ins.UUID != uuid {
+						select {
+						case <-ctx.Done():
+							return
+						default:
+							errCh <- fmt.Errorf("[%s] Got unexpected uuid %s", uuid, ins.UUID)
 						}
 					}
 				}

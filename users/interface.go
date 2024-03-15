@@ -17,5 +17,5 @@ type UsersService interface {
 	// Lists quota usage and limits of your user account. Limits are hard limits
 	// that cannot be exceeded.
 	// https://docs.kraft.cloud/api/v1/users/#list-quota-usage-and-limits
-	Quotas(ctx context.Context) (*QuotasResponseItem, error)
+	Quotas(ctx context.Context) (*kcclient.ServiceResponse[QuotasResponseItem], error)
 }

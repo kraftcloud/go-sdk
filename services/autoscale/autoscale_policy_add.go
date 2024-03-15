@@ -18,7 +18,7 @@ import (
 )
 
 // AddPolicy implements AutoscaleService.
-func (c *client) AddPolicy(ctx context.Context, uuid string, req Policy) (*AddPolicyResponseItem, error) {
+func (c *client) AddPolicy(ctx context.Context, uuid string, req Policy) (*kcclient.ServiceResponse[AddPolicyResponseItem], error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
@@ -28,14 +28,10 @@ func (c *client) AddPolicy(ctx context.Context, uuid string, req Policy) (*AddPo
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
 
-	var resp kcclient.ServiceResponse[AddPolicyResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodPost, services.Endpoint+"/"+uuid+"/autoscale/policies", bytes.NewReader(body), &resp); err != nil {
+	resp := &kcclient.ServiceResponse[AddPolicyResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodPost, services.Endpoint+"/"+uuid+"/autoscale/policies", bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	item, err := resp.FirstOrErr()
-	if err != nil {
-		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
-	}
-	return item, nil
+	return resp, nil
 }

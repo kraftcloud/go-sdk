@@ -9,7 +9,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -17,7 +16,7 @@ import (
 )
 
 // LogByName implements InstancesService.
-func (c *client) LogByName(ctx context.Context, name string, offset int, limit int) (*LogResponseItem, error) {
+func (c *client) LogByName(ctx context.Context, name string, offset int, limit int) (*kcclient.ServiceResponse[LogResponseItem], error) {
 	if len(name) == 0 {
 		return nil, fmt.Errorf("name cannot be empty")
 	}
@@ -31,14 +30,10 @@ func (c *client) LogByName(ctx context.Context, name string, offset int, limit i
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
-	var resp kcclient.ServiceResponse[LogResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/log", bytes.NewReader(body), &resp); err != nil {
+	resp := &kcclient.ServiceResponse[LogResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/log", bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	item, err := resp.FirstOrErr()
-	if err != nil {
-		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
-	}
-	return item, nil
+	return resp, nil
 }

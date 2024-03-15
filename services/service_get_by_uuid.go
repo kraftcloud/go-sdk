@@ -15,21 +15,17 @@ import (
 )
 
 // GetByUUID implements ServicesService.
-func (c *client) GetByUUID(ctx context.Context, uuid string) (*GetResponseItem, error) {
+func (c *client) GetByUUID(ctx context.Context, uuid string) (*kcclient.ServiceResponse[GetResponseItem], error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
 
 	endpoint := Endpoint + "/" + uuid
 
-	var resp kcclient.ServiceResponse[GetResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, &resp); err != nil {
+	resp := &kcclient.ServiceResponse[GetResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	item, err := resp.FirstOrErr()
-	if err != nil {
-		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
-	}
-	return item, nil
+	return resp, nil
 }

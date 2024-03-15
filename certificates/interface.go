@@ -18,26 +18,26 @@ type CertificatesService interface {
 	// certificate(s) by their UUID(s).
 	//
 	// See: https://docs.kraft.cloud/api/v1/certificates/#getting-the-status-of-a-certificate
-	GetByUUIDs(ctx context.Context, uuids ...string) ([]GetResponseItem, error)
+	GetByUUIDs(ctx context.Context, uuids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
 
 	// GetByNames returns the current status and the properties of one or more
 	// certificate(s) by their names(s).
 	//
 	// See: https://docs.kraft.cloud/api/v1/certificates/#getting-the-status-of-a-certificate
-	GetByNames(ctx context.Context, names ...string) ([]GetResponseItem, error)
+	GetByNames(ctx context.Context, names ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
 
 	// DeleteByUUIDs deletes one or more certificate(s) by their UUID(s).
 	//
 	// See: https://docs.kraft.cloud/api/v1/certificates/#deleting-a-certificate
-	DeleteByUUIDs(ctx context.Context, uuids ...string) ([]DeleteResponseItem, error)
+	DeleteByUUIDs(ctx context.Context, uuids ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
 
 	// DeleteByNames deletes one or more certificate(s) by their UUID(s).
 	//
 	// See: https://docs.kraft.cloud/api/v1/certificates/#deleting-a-certificate
-	DeleteByNames(ctx context.Context, names ...string) ([]DeleteResponseItem, error)
+	DeleteByNames(ctx context.Context, names ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
 
 	// List all existing certificates.
 	//
 	// See: https://docs.kraft.cloud/api/v1/certificates/#list-existing-certificates
-	List(ctx context.Context) ([]ListResponseItem, error)
+	List(ctx context.Context) (*kcclient.ServiceResponse[ListResponseItem], error)
 }

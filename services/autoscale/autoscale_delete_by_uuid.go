@@ -16,21 +16,17 @@ import (
 )
 
 // DeleteConfigurationByUUID implements AutoscaleService.
-func (c *client) DeleteConfigurationByUUID(ctx context.Context, uuid string) (*DeleteResponseItem, error) {
+func (c *client) DeleteConfigurationByUUID(ctx context.Context, uuid string) (*kcclient.ServiceResponse[DeleteResponseItem], error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
 
 	endpoint := services.Endpoint + "/" + uuid + AutoscaleEndpoint
 
-	var resp kcclient.ServiceResponse[DeleteResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodDelete, endpoint, nil, &resp); err != nil {
+	resp := &kcclient.ServiceResponse[DeleteResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodDelete, endpoint, nil, resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	item, err := resp.FirstOrErr()
-	if err != nil {
-		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
-	}
-	return item, nil
+	return resp, nil
 }

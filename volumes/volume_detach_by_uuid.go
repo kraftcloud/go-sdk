@@ -15,19 +15,15 @@ import (
 )
 
 // DetachByUUID implements VolumesService.
-func (c *client) DetachByUUID(ctx context.Context, uuid string) (*DetachResponseItem, error) {
+func (c *client) DetachByUUID(ctx context.Context, uuid string) (*kcclient.ServiceResponse[DetachResponseItem], error) {
 	if uuid == "" {
 		return nil, errors.New("UUID cannot be empty")
 	}
 
-	var resp kcclient.ServiceResponse[DetachResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/"+uuid+"/detach", nil, &resp); err != nil {
+	resp := &kcclient.ServiceResponse[DetachResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/"+uuid+"/detach", nil, resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	item, err := resp.FirstOrErr()
-	if err != nil {
-		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
-	}
-	return item, nil
+	return resp, nil
 }

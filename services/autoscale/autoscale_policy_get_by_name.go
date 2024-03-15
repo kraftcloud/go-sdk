@@ -16,19 +16,15 @@ import (
 )
 
 // GetPolicyByName implements AutoscaleService.
-func (c *client) GetPolicyByName(ctx context.Context, uuid, name string) (*GetPolicyResponseItem, error) {
+func (c *client) GetPolicyByName(ctx context.Context, uuid, name string) (*kcclient.ServiceResponse[GetPolicyResponseItem], error) {
 	if name == "" {
 		return nil, errors.New("name cannot be empty")
 	}
 
-	var resp kcclient.ServiceResponse[GetPolicyResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodGet, services.Endpoint+"/"+uuid+"/autoscale/policies/"+name, nil, &resp); err != nil {
+	resp := &kcclient.ServiceResponse[GetPolicyResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodGet, services.Endpoint+"/"+uuid+"/autoscale/policies/"+name, nil, resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	item, err := resp.FirstOrErr()
-	if err != nil {
-		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
-	}
-	return item, nil
+	return resp, nil
 }

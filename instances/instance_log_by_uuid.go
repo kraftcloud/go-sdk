@@ -9,7 +9,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -17,7 +16,7 @@ import (
 )
 
 // LogByUUID implements InstancesService.
-func (c *client) LogByUUID(ctx context.Context, uuid string, offset int, limit int) (*LogResponseItem, error) {
+func (c *client) LogByUUID(ctx context.Context, uuid string, offset int, limit int) (*kcclient.ServiceResponse[LogResponseItem], error) {
 	if len(uuid) == 0 {
 		return nil, fmt.Errorf("UUID cannot be empty")
 	}
@@ -30,14 +29,10 @@ func (c *client) LogByUUID(ctx context.Context, uuid string, offset int, limit i
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
-	var resp kcclient.ServiceResponse[LogResponseItem]
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/"+uuid+"/log", bytes.NewReader(body), &resp); err != nil {
+	resp := &kcclient.ServiceResponse[LogResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/"+uuid+"/log", bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
-	item, err := resp.FirstOrErr()
-	if err != nil {
-		return nil, errors.Join(err, fmt.Errorf("%s (code=%d)", item.Message, *item.Error))
-	}
-	return item, nil
+	return resp, nil
 }
