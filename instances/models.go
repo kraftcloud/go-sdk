@@ -34,11 +34,11 @@ type CreateRequestServiceGroup struct {
 }
 
 type CreateRequestVolume struct {
-	UUID     string `json:"uuid"`
-	Name     string `json:"name"`
-	SizeMB   int    `json:"size_mb"`
-	At       string `json:"at"`
-	ReadOnly *bool  `json:"readonly"`
+	UUID     *string `json:"uuid"`
+	Name     *string `json:"name"`
+	SizeMB   *int    `json:"size_mb"`
+	At       *string `json:"at"`
+	ReadOnly *bool   `json:"readonly"`
 }
 
 // CreateResponseItem is a data item from a response to a POST /instances request.
