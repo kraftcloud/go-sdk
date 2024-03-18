@@ -30,7 +30,7 @@ type CreateRequestServiceGroup struct {
 	UUID     *string                         `json:"uuid"`
 	Name     *string                         `json:"name"`
 	Services []services.CreateRequestService `json:"services"`
-	DNSName  *string                         `json:"dns_name"`
+	Domains  []services.CreateRequestDomain  `json:"domains"`
 }
 
 type CreateRequestVolume struct {
@@ -44,14 +44,14 @@ type CreateRequestVolume struct {
 // CreateResponseItem is a data item from a response to a POST /instances request.
 // https://docs.kraft.cloud/api/v1/instances/#creating-a-new-instance
 type CreateResponseItem struct {
-	Status      string `json:"status"`
-	State       string `json:"state"`
-	UUID        string `json:"uuid"`
-	Name        string `json:"name"`
-	FQDN        string `json:"fqdn"`
-	PrivateFQDN string `json:"private_fqdn"`
-	PrivateIP   string `json:"private_ip"`
-	BootTimeUs  *int   `json:"boot_time_us"` // only if wait_timeout_ms was set in the request
+	Status       string                         `json:"status"`
+	State        string                         `json:"state"`
+	UUID         string                         `json:"uuid"`
+	Name         string                         `json:"name"`
+	PrivateFQDN  string                         `json:"private_fqdn"`
+	PrivateIP    string                         `json:"private_ip"`
+	ServiceGroup *GetCreateResponseServiceGroup `json:"service_group"` // only if service_group was set in the request
+	BootTimeUs   *int                           `json:"boot_time_us"`  // only if wait_timeout_ms was set in the request
 
 	kcclient.APIResponseCommon
 }
@@ -59,29 +59,29 @@ type CreateResponseItem struct {
 // GetResponseItem is a data item from a response to a GET /instances request.
 // https://docs.kraft.cloud/api/v1/instances/#getting-the-status-of-an-instance
 type GetResponseItem struct {
-	Status            string                        `json:"status"`
-	UUID              string                        `json:"uuid"`
-	Name              string                        `json:"name"`
-	CreatedAt         string                        `json:"created_at"`
-	State             string                        `json:"state"`
-	Image             string                        `json:"image"`
-	MemoryMB          int                           `json:"memory_mb"`
-	Args              []string                      `json:"args"`
-	Env               map[string]string             `json:"env"`
-	FQDN              string                        `json:"fqdn"`
-	PrivateFQDN       string                        `json:"private_fqdn"`
-	PrivateIP         string                        `json:"private_ip"`
-	ServiceGroup      *GetResponseServiceGroup      `json:"service_group"`
-	Volumes           []GetResponseVolume           `json:"volumes"`
-	NetworkInterfaces []GetResponseNetworkInterface `json:"network_interfaces"`
-	BootTimeUs        int                           `json:"boot_time_us"` // always returned, even if never started
+	Status            string                         `json:"status"`
+	UUID              string                         `json:"uuid"`
+	Name              string                         `json:"name"`
+	CreatedAt         string                         `json:"created_at"`
+	State             string                         `json:"state"`
+	Image             string                         `json:"image"`
+	MemoryMB          int                            `json:"memory_mb"`
+	Args              []string                       `json:"args"`
+	Env               map[string]string              `json:"env"`
+	PrivateFQDN       string                         `json:"private_fqdn"`
+	PrivateIP         string                         `json:"private_ip"`
+	ServiceGroup      *GetCreateResponseServiceGroup `json:"service_group"`
+	Volumes           []GetResponseVolume            `json:"volumes"`
+	NetworkInterfaces []GetResponseNetworkInterface  `json:"network_interfaces"`
+	BootTimeUs        int                            `json:"boot_time_us"` // always returned, even if never started
 
 	kcclient.APIResponseCommon
 }
 
-type GetResponseServiceGroup struct {
-	UUID string `json:"uuid"`
-	Name string `json:"name"`
+type GetCreateResponseServiceGroup struct {
+	UUID    string                             `json:"uuid"`
+	Name    string                             `json:"name"`
+	Domains []services.GetCreateResponseDomain `json:"domains"`
 }
 
 type GetResponseVolume struct {

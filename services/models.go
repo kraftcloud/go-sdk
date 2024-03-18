@@ -11,8 +11,18 @@ import kcclient "sdk.kraft.cloud/client"
 // https://docs.kraft.cloud/api/v1/services/#creating-a-new-service-group
 type CreateRequest struct {
 	Name     *string                `json:"name"`
-	DNSName  *string                `json:"dns_name"`
+	Domains  []CreateRequestDomain  `json:"domains"`
 	Services []CreateRequestService `json:"services"`
+}
+
+type CreateRequestDomain struct {
+	Name        string                          `json:"name"`
+	Certificate *CreateRequestDomainCertificate `json:"certificate"`
+}
+
+type CreateRequestDomainCertificate struct {
+	UUID string `json:"uuid"`
+	Name string `json:"name"`
 }
 
 type CreateRequestService struct {
@@ -24,10 +34,10 @@ type CreateRequestService struct {
 // CreateResponseItem is a data item from a response to a POST /services request.
 // https://docs.kraft.cloud/api/v1/services/#creating-a-new-service-group
 type CreateResponseItem struct {
-	Status string `json:"status"`
-	UUID   string `json:"uuid"`
-	Name   string `json:"name"`
-	FQDN   string `json:"fqdn"`
+	Status  string                    `json:"status"`
+	UUID    string                    `json:"uuid"`
+	Name    string                    `json:"name"`
+	Domains []GetCreateResponseDomain `json:"domains"`
 
 	kcclient.APIResponseCommon
 }
@@ -35,17 +45,28 @@ type CreateResponseItem struct {
 // GetResponseItem is a data item from a response to a GET /services request.
 // https://docs.kraft.cloud/api/v1/services/#getting-the-status-of-a-service-group
 type GetResponseItem struct {
-	Status     string                `json:"status"`
-	UUID       string                `json:"uuid"`
-	Name       string                `json:"name"`
-	CreatedAt  string                `json:"created_at"`
-	FQDN       string                `json:"fqdn"`
-	Instances  []GetResponseInstance `json:"instances"`
-	Services   []GetResponseService  `json:"services"`
-	Persistent bool                  `json:"persistent"`
-	Autoscale  bool                  `json:"autoscale"`
+	Status     string                    `json:"status"`
+	UUID       string                    `json:"uuid"`
+	Name       string                    `json:"name"`
+	CreatedAt  string                    `json:"created_at"`
+	Persistent bool                      `json:"persistent"`
+	Autoscale  bool                      `json:"autoscale"`
+	Services   []GetResponseService      `json:"services"`
+	Domains    []GetCreateResponseDomain `json:"domains"`
+	Instances  []GetResponseInstance     `json:"instances"`
 
 	kcclient.APIResponseCommon
+}
+
+type GetCreateResponseDomain struct {
+	FQDN        string                              `json:"fqdn"`
+	Certificate *GetCreateResponseDomainCertificate `json:"certificate"`
+}
+
+type GetCreateResponseDomainCertificate struct {
+	UUID  string `json:"uuid"`
+	Name  string `json:"name"`
+	State string `json:"state"`
 }
 
 type GetResponseService struct {
