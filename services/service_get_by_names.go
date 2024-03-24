@@ -3,7 +3,7 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package volumes
+package services
 
 import (
 	"bytes"
@@ -16,15 +16,17 @@ import (
 	kcclient "sdk.kraft.cloud/client"
 )
 
-// DeleteByNames implements VolumesService.
-func (c *client) DeleteByNames(ctx context.Context, names ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error) {
+// GetByNames implements ServicesService.
+func (c *client) GetByNames(ctx context.Context, names ...string) (*kcclient.ServiceResponse[GetResponseItem], error) {
 	if len(names) == 0 {
 		return nil, errors.New("requires at least one name")
 	}
 
-	reqItems := make([]map[string]string, 0, len(names))
+	reqItems := make([]map[string]any, 0, len(names))
 	for _, name := range names {
-		reqItems = append(reqItems, map[string]string{"name": name})
+		reqItems = append(reqItems, map[string]any{
+			"name": name,
+		})
 	}
 
 	body, err := json.Marshal(reqItems)
@@ -32,8 +34,8 @@ func (c *client) DeleteByNames(ctx context.Context, names ...string) (*kcclient.
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
-	resp := &kcclient.ServiceResponse[DeleteResponseItem]{}
-	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint, bytes.NewReader(body), resp); err != nil {
+	resp := &kcclient.ServiceResponse[GetResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

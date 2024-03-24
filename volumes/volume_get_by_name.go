@@ -16,13 +16,18 @@ import (
 	kcclient "sdk.kraft.cloud/client"
 )
 
-// GetByName implements VolumesService.
-func (c *client) GetByName(ctx context.Context, name string) (*kcclient.ServiceResponse[GetResponseItem], error) {
-	if name == "" {
-		return nil, errors.New("name cannot be empty")
+// GetByNames implements VolumesService.
+func (c *client) GetByNames(ctx context.Context, names ...string) (*kcclient.ServiceResponse[GetResponseItem], error) {
+	if len(names) == 0 {
+		return nil, errors.New("requires at least one name")
 	}
 
-	body, err := json.Marshal([]map[string]interface{}{{"name": name}})
+	reqItems := make([]map[string]string, 0, len(names))
+	for _, name := range names {
+		reqItems = append(reqItems, map[string]string{"name": name})
+	}
+
+	body, err := json.Marshal(reqItems)
 	if err != nil {
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}

@@ -16,13 +16,20 @@ import (
 	kcclient "sdk.kraft.cloud/client"
 )
 
-// GetByName implements ServicesService.
-func (c *client) GetByName(ctx context.Context, name string) (*kcclient.ServiceResponse[GetResponseItem], error) {
-	if name == "" {
-		return nil, errors.New("name cannot be empty")
+// GetByUUIDs implements ServicesService.
+func (c *client) GetByUUIDs(ctx context.Context, uuids ...string) (*kcclient.ServiceResponse[GetResponseItem], error) {
+	if len(uuids) == 0 {
+		return nil, errors.New("requires at least one uuid")
 	}
 
-	body, err := json.Marshal([]map[string]interface{}{{"name": name}})
+	reqItems := make([]map[string]any, 0, len(uuids))
+	for _, uuid := range uuids {
+		reqItems = append(reqItems, map[string]any{
+			"uuid": uuid,
+		})
+	}
+
+	body, err := json.Marshal(reqItems)
 	if err != nil {
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
