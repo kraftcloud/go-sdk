@@ -28,7 +28,7 @@ type ErrorResponse struct {
 // working with instances the response contains an instances array.
 //
 // See: https://docs.kraft.cloud/api/v1/
-type ServiceResponse[T any] struct {
+type ServiceResponse[T APIResponseDataEntry] struct {
 	// Status contains the top-level information about a server response, and
 	// returns either `success`, `partial_success` or `error`.
 	Status string `json:"status,omitempty"`
@@ -50,7 +50,7 @@ type ServiceResponse[T any] struct {
 // ServiceResponseData is the embedded list of structures defined by T.  The
 // results are always available at the attribute `Entries` and uses a custom
 // JSON unmarshaler to determine the JSON tag associated with these entries.
-type ServiceResponseData[T any] struct {
+type ServiceResponseData[T APIResponseDataEntry] struct {
 	Entries []T
 }
 
@@ -100,15 +100,10 @@ func (r *ServiceResponse[T]) AllOrErr() ([]T, error) {
 		return nil, errors.New("response is nil")
 	}
 
-	if r.Status == "error" {
-		return r.Data.Entries, fmt.Errorf(r.Message)
-	}
-
 	if r.Data.Entries == nil {
 		return nil, errors.New("data entries are nil")
 	}
-
-	return r.Data.Entries, nil
+	return r.Data.Entries, r.aggregateErrors()
 }
 
 // RawBody returns the raw API response body.
@@ -128,10 +123,37 @@ func (r *ServiceResponse[T]) storeBody(br io.Reader) (int64, error) {
 	return io.Copy(&r.body, br)
 }
 
-// APIResponseCommon contains attributes common to all API responses.
+// aggregateErrors returns an aggregate of all errors returned in an API response.
+func (r *ServiceResponse[T]) aggregateErrors() error {
+	if !(r.Status == "error" || r.Status == "partial_success") {
+		return nil
+	}
+	errs := make([]error, 0, len(r.Data.Entries)+1)
+	errs = append(errs, errors.New(r.Message))
+	for _, entry := range r.Data.Entries {
+		if entry := entry.ErrorAttributes(); entry.Error != nil {
+			errs = append(errs, fmt.Errorf("%s (code=%d)", entry.Message, *entry.Error))
+		}
+	}
+	return errors.Join(errs...)
+}
+
+// APIResponseCommon contains attributes common to all API responses, namely
+// the attributes which are returned either on error or partial success.
 // https://docs.kraft.cloud/api/v1/#api-responses
 type APIResponseCommon struct {
 	Status  string `json:"status"`
 	Message string `json:"message"`
 	Error   *int   `json:"error"`
+}
+
+// ErrorAttributes implements APIResponseDataEntry.
+func (c APIResponseCommon) ErrorAttributes() APIResponseCommon {
+	return c
+}
+
+// APIResponseDataEntry provides access to data common to all data entries
+// returned in API responses.
+type APIResponseDataEntry interface {
+	ErrorAttributes() APIResponseCommon
 }
