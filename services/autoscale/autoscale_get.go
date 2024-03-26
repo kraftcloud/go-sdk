@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2023, Unikraft GmbH.
+// Copyright (c) 2024, Unikraft GmbH.
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package services
+package autoscale
 
 import (
 	"bytes"
@@ -16,20 +16,13 @@ import (
 	kcclient "sdk.kraft.cloud/client"
 )
 
-// GetByUUIDs implements ServicesService.
-func (c *client) GetByUUIDs(ctx context.Context, uuids ...string) (*kcclient.ServiceResponse[GetResponseItem], error) {
-	if len(uuids) == 0 {
-		return nil, errors.New("requires at least one uuid")
+// GetConfiguration implements AutoscaleService.
+func (c *client) GetConfiguration(ctx context.Context, name string) (*kcclient.ServiceResponse[GetResponseItem], error) {
+	if name == "" {
+		return nil, errors.New("name cannot be empty")
 	}
 
-	reqItems := make([]map[string]any, 0, len(uuids))
-	for _, uuid := range uuids {
-		reqItems = append(reqItems, map[string]any{
-			"uuid": uuid,
-		})
-	}
-
-	body, err := json.Marshal(reqItems)
+	body, err := json.Marshal([]map[string]string{{"name": name}})
 	if err != nil {
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}

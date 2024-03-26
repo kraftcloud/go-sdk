@@ -14,20 +14,24 @@ import (
 	"net/http"
 
 	kcclient "sdk.kraft.cloud/client"
+	"sdk.kraft.cloud/uuid"
 )
 
-// StopByUUIDs implements InstancesService.
-func (c *client) StopByUUIDs(ctx context.Context, drainTimeoutMs int, force bool, uuids ...string) (*kcclient.ServiceResponse[StopResponseItem], error) {
-	if len(uuids) == 0 {
-		return nil, errors.New("requires at least one uuid")
+// Stop implements InstancesService.
+func (c *client) Stop(ctx context.Context, drainTimeoutMs int, force bool, ids ...string) (*kcclient.ServiceResponse[StopResponseItem], error) {
+	if len(ids) == 0 {
+		return nil, errors.New("requires at least one identifier")
 	}
 
-	reqItems := make([]map[string]any, 0, len(uuids))
-	for _, uuid := range uuids {
-		reqItem := map[string]any{
-			"uuid":  uuid,
-			"force": force,
+	reqItems := make([]map[string]any, 0, len(ids))
+	for _, id := range ids {
+		reqItem := make(map[string]any, 3)
+		if uuid.IsValid(id) {
+			reqItem["uuid"] = id
+		} else {
+			reqItem["name"] = id
 		}
+		reqItem["force"] = force
 		if drainTimeoutMs > 0 {
 			reqItem["drain_timeout_ms"] = drainTimeoutMs
 		}

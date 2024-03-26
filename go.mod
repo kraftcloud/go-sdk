@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/goharbor/go-client v0.28.2
 	github.com/google/go-containerregistry v0.19.0
+	github.com/google/uuid v1.6.0
 )
 
 require (

@@ -14,18 +14,22 @@ import (
 	"net/http"
 
 	kcclient "sdk.kraft.cloud/client"
+	"sdk.kraft.cloud/uuid"
 )
 
-// StartByUUIDs implements InstancesService.
-func (c *client) StartByUUIDs(ctx context.Context, waitTimeoutMs int, uuids ...string) (*kcclient.ServiceResponse[StartResponseItem], error) {
-	if len(uuids) == 0 {
-		return nil, errors.New("requires at least one uuid")
+// Start implements InstancesService.
+func (c *client) Start(ctx context.Context, waitTimeoutMs int, ids ...string) (*kcclient.ServiceResponse[StartResponseItem], error) {
+	if len(ids) == 0 {
+		return nil, errors.New("requires at least one identifier")
 	}
 
-	reqItems := make([]map[string]any, 0, len(uuids))
-	for _, uuid := range uuids {
-		reqItem := map[string]any{
-			"uuid": uuid,
+	reqItems := make([]map[string]any, 0, len(ids))
+	for _, id := range ids {
+		reqItem := make(map[string]any, 2)
+		if uuid.IsValid(id) {
+			reqItem["uuid"] = id
+		} else {
+			reqItem["name"] = id
 		}
 		if waitTimeoutMs > 0 {
 			reqItem["wait_timeout_ms"] = waitTimeoutMs

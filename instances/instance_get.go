@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2024, Unikraft GmbH.
+// Copyright (c) 2023, Unikraft GmbH.
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package certificates
+package instances
 
 import (
 	"bytes"
@@ -14,17 +14,22 @@ import (
 	"net/http"
 
 	kcclient "sdk.kraft.cloud/client"
+	"sdk.kraft.cloud/uuid"
 )
 
-// GetByNames implements CertificatesService.
-func (c *client) GetByNames(ctx context.Context, names ...string) (*kcclient.ServiceResponse[GetResponseItem], error) {
-	if len(names) == 0 {
-		return nil, errors.New("requires at least one name")
+// Get implements InstancesService.
+func (c *client) Get(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error) {
+	if len(ids) == 0 {
+		return nil, errors.New("requires at least one identifier")
 	}
 
-	reqItems := make([]map[string]string, 0, len(names))
-	for _, name := range names {
-		reqItems = append(reqItems, map[string]string{"name": name})
+	reqItems := make([]map[string]string, 0, len(ids))
+	for _, id := range ids {
+		if uuid.IsValid(id) {
+			reqItems = append(reqItems, map[string]string{"uuid": id})
+		} else {
+			reqItems = append(reqItems, map[string]string{"name": id})
+		}
 	}
 
 	body, err := json.Marshal(reqItems)

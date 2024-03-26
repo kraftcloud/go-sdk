@@ -14,17 +14,22 @@ import (
 	"net/http"
 
 	kcclient "sdk.kraft.cloud/client"
+	"sdk.kraft.cloud/uuid"
 )
 
-// GetByNames implements VolumesService.
-func (c *client) GetByNames(ctx context.Context, names ...string) (*kcclient.ServiceResponse[GetResponseItem], error) {
-	if len(names) == 0 {
-		return nil, errors.New("requires at least one name")
+// Get implements VolumesService.
+func (c *client) Get(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error) {
+	if len(ids) == 0 {
+		return nil, errors.New("requires at least one identifier")
 	}
 
-	reqItems := make([]map[string]string, 0, len(names))
-	for _, name := range names {
-		reqItems = append(reqItems, map[string]string{"name": name})
+	reqItems := make([]map[string]string, 0, len(ids))
+	for _, id := range ids {
+		if uuid.IsValid(id) {
+			reqItems = append(reqItems, map[string]string{"uuid": id})
+		} else {
+			reqItems = append(reqItems, map[string]string{"name": id})
+		}
 	}
 
 	body, err := json.Marshal(reqItems)

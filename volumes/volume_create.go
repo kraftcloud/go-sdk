@@ -17,7 +17,7 @@ import (
 
 // Create implements VolumesService.
 func (c *client) Create(ctx context.Context, name string, sizeMB int) (*kcclient.ServiceResponse[CreateResponseItem], error) {
-	body, err := json.Marshal(map[string]interface{}{
+	body, err := json.Marshal(map[string]any{
 		"name":    name,
 		"size_mb": sizeMB,
 	})

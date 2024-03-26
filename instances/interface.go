@@ -22,84 +22,44 @@ type InstancesService interface {
 	// See: https://docs.kraft.cloud/api/v1/instances/#creating-a-new-instance
 	Create(ctx context.Context, req CreateRequest) (*kcclient.ServiceResponse[CreateResponseItem], error)
 
-	// GetByUUIDs returns the current state and the configuration of one or
-	// more instance(s) based on the provided UUID(s).
+	// Get returns the current state and the configuration of one or more instance(s).
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#getting-the-status-of-an-instance
-	GetByUUIDs(ctx context.Context, uuids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
+	Get(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
 
-	// GetByNames returns the current state and the configuration of one or
-	// more instances based on the provided name(s).
-	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#getting-the-status-of-an-instance
-	GetByNames(ctx context.Context, names ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
-
-	// DeleteByUUIDs deletes the specified instances based on their UUID.
+	// Delete deletes the specified instance(s).
 	// After this call the UUIDs of the instances are no longer valid. If the
 	// instances are currently running, they are force stopped.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#deleting-an-instance
-	DeleteByUUIDs(ctx context.Context, uuids ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
-
-	// DeleteByNames deletes the specified instances based on their names.
-	// After this call the UUIDs of the instances are no longer valid. If the
-	// instances are currently running, they are force stopped.
-	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#deleting-an-instance
-	DeleteByNames(ctx context.Context, names ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
+	Delete(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
 
 	// Lists all existing instances.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#list-existing-instances
 	List(ctx context.Context) (*kcclient.ServiceResponse[ListResponseItem], error)
 
-	// Starts a previously stopped instance(s) based on their UUID(s).
+	// Start starts previously stopped instance(s).
 	// Does nothing for instances that are already running.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#starting-an-instance
-	StartByUUIDs(ctx context.Context, waitTimeoutMs int, uuids ...string) (*kcclient.ServiceResponse[StartResponseItem], error)
+	Start(ctx context.Context, waitTimeoutMs int, ids ...string) (*kcclient.ServiceResponse[StartResponseItem], error)
 
-	// Starts a previously stopped instance(s) based on their name(s).
-	// Does nothing for instances that are already running.
-	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#starting-an-instance
-	StartByNames(ctx context.Context, waitTimeoutMs int, names ...string) (*kcclient.ServiceResponse[StartResponseItem], error)
-
-	// StopByUUIDs stops the specified instance(s) based on their UUID(s), but
-	// does not destroy them.  All volatile state (e.g., RAM contents) is lost.
-	// Does nothing for instances that are already stopped. Instances can be
-	// started again with the start endpoint.
+	// Stop stops the specified instance(s), but does not destroy them.
+	// All volatile state (e.g., RAM contents) is lost. Does nothing for
+	// instances that are already stopped. Instances can be started again with
+	// the start endpoint.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#stopping-an-instance
-	StopByUUIDs(ctx context.Context, drainTimeoutMs int, force bool, uuid ...string) (*kcclient.ServiceResponse[StopResponseItem], error)
+	Stop(ctx context.Context, drainTimeoutMs int, force bool, ids ...string) (*kcclient.ServiceResponse[StopResponseItem], error)
 
-	// StopByNames stops the specified instance(s) based on their name(s), but
-	// does not destroy them.  All volatile state (e.g., RAM contents) is lost.
-	// Does nothing for instances that are already stopped. Instances can be
-	// started again with the start endpoint.
-	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#stopping-an-instance
-	StopByNames(ctx context.Context, drainTimeoutMs int, force bool, names ...string) (*kcclient.ServiceResponse[StopResponseItem], error)
-
-	// LogByName returns the console output of the specified instance based
-	// on its name.
+	// Log returns the console output of the specified instance.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#retrieve-the-console-output
-	LogByName(ctx context.Context, name string, offset int, limit int) (*kcclient.ServiceResponse[LogResponseItem], error)
+	Log(ctx context.Context, id string, offset int, limit int) (*kcclient.ServiceResponse[LogResponseItem], error)
 
-	// LogByUUID returns the console output of the specified instance based
-	// on its UUID.
+	// Wait waits for the specified instance(s) to reach the desired state.
 	//
-	// See: https://docs.kraft.cloud/api/v1/instances/#retrieve-the-console-output
-	LogByUUID(ctx context.Context, uuid string, offset int, limit int) (*kcclient.ServiceResponse[LogResponseItem], error)
-
-	// WaitByUUIDs waits for the specified instance(s) based on their UUID(s) to
-	// reach the desired state.
 	// See: https://docs.kraft.cloud/api/v1/instances/#waiting-for-an-instance-to-reach-a-desired-state
-	WaitByUUIDs(ctx context.Context, state State, timeoutMs int, uuids ...string) (*kcclient.ServiceResponse[WaitResponseItem], error)
-
-	// WaitByNames waits for the specified instance(s) based on their name(s) to
-	// reach the desired state.
-	// See: https://docs.kraft.cloud/api/v1/instances/#waiting-for-an-instance-to-reach-a-desired-state
-	WaitByNames(ctx context.Context, state State, timeoutMs int, names ...string) (*kcclient.ServiceResponse[WaitResponseItem], error)
+	Wait(ctx context.Context, state State, timeoutMs int, ids ...string) (*kcclient.ServiceResponse[WaitResponseItem], error)
 }

@@ -14,21 +14,26 @@ import (
 	"net/http"
 
 	kcclient "sdk.kraft.cloud/client"
+	"sdk.kraft.cloud/uuid"
 )
 
-// WaitByUUIDs implements InstancesService.
-func (c *client) WaitByUUIDs(ctx context.Context, state State, timeoutMs int, uuids ...string) (*kcclient.ServiceResponse[WaitResponseItem], error) {
-	if len(uuids) == 0 {
-		return nil, errors.New("requires at least one name")
+// Wait implements InstancesService.
+func (c *client) Wait(ctx context.Context, state State, timeoutMs int, ids ...string) (*kcclient.ServiceResponse[WaitResponseItem], error) {
+	if len(ids) == 0 {
+		return nil, errors.New("requires at least one identifier")
 	}
 
-	reqItems := make([]map[string]any, 0, len(uuids))
-	for _, uuid := range uuids {
-		reqItems = append(reqItems, map[string]any{
-			"uuid":       uuid,
-			"state":      state,
-			"timeout_ms": timeoutMs,
-		})
+	reqItems := make([]map[string]any, 0, len(ids))
+	for _, id := range ids {
+		reqItem := make(map[string]any, 3)
+		if uuid.IsValid(id) {
+			reqItem["uuid"] = id
+		} else {
+			reqItem["name"] = id
+		}
+		reqItem["state"] = state
+		reqItem["timeout_ms"] = timeoutMs
+		reqItems = append(reqItems, reqItem)
 	}
 
 	body, err := json.Marshal(reqItems)

@@ -3,7 +3,7 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package instances
+package volumes
 
 import (
 	"bytes"
@@ -14,17 +14,22 @@ import (
 	"net/http"
 
 	kcclient "sdk.kraft.cloud/client"
+	"sdk.kraft.cloud/uuid"
 )
 
-// DeleteByUUIDs implements InstancesService.
-func (c *client) DeleteByUUIDs(ctx context.Context, uuids ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error) {
-	if len(uuids) == 0 {
-		return nil, errors.New("requires at least one uuid")
+// Delete implements VolumesService.
+func (c *client) Delete(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error) {
+	if len(ids) == 0 {
+		return nil, errors.New("requires at least one identifier")
 	}
 
-	reqItems := make([]map[string]string, 0, len(uuids))
-	for _, uuid := range uuids {
-		reqItems = append(reqItems, map[string]string{"uuid": uuid})
+	reqItems := make([]map[string]string, 0, len(ids))
+	for _, id := range ids {
+		if uuid.IsValid(id) {
+			reqItems = append(reqItems, map[string]string{"uuid": id})
+		} else {
+			reqItems = append(reqItems, map[string]string{"name": id})
+		}
 	}
 
 	body, err := json.Marshal(reqItems)

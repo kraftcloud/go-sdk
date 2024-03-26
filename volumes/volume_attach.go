@@ -14,28 +14,34 @@ import (
 	"net/http"
 
 	kcclient "sdk.kraft.cloud/client"
+	"sdk.kraft.cloud/uuid"
 )
 
-// AttachByUUID implements VolumesService.
-func (c *client) AttachByUUID(ctx context.Context, volUUID, instanceUUID, at string, readOnly bool) (*kcclient.ServiceResponse[AttachResponseItem], error) {
-	if volUUID == "" {
-		return nil, errors.New("volume name cannot be empty")
+// Attach implements VolumesService.
+func (c *client) Attach(ctx context.Context, volID, instanceUUID, at string, readOnly bool) (*kcclient.ServiceResponse[AttachResponseItem], error) {
+	if volID == "" {
+		return nil, errors.New("volume identifier cannot be empty")
 	}
 	if instanceUUID == "" {
-		return nil, errors.New("instance name cannot be empty")
+		return nil, errors.New("instance UUID cannot be empty")
 	}
 	if at == "" {
-		return nil, errors.New("destination at cannot be empty")
+		return nil, errors.New("at cannot be empty")
 	}
 
-	body, err := json.Marshal(map[string]interface{}{
-		"at":       at,
-		"uuid":     volUUID,
-		"readonly": readOnly,
-		"attach_to": map[string]interface{}{
-			"uuid": instanceUUID,
-		},
-	})
+	reqItem := make(map[string]any, 4)
+	if uuid.IsValid(volID) {
+		reqItem["uuid"] = volID
+	} else {
+		reqItem["name"] = volID
+	}
+	reqItem["at"] = at
+	reqItem["readonly"] = readOnly
+	reqItem["attach_to"] = map[string]any{
+		"uuid": instanceUUID,
+	}
+
+	body, err := json.Marshal([]map[string]any{reqItem})
 	if err != nil {
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}

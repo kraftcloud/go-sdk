@@ -13,19 +13,25 @@ import (
 	"net/http"
 
 	kcclient "sdk.kraft.cloud/client"
+	"sdk.kraft.cloud/uuid"
 )
 
-// LogByName implements InstancesService.
-func (c *client) LogByName(ctx context.Context, name string, offset int, limit int) (*kcclient.ServiceResponse[LogResponseItem], error) {
-	if len(name) == 0 {
-		return nil, fmt.Errorf("name cannot be empty")
+// Log implements InstancesService.
+func (c *client) Log(ctx context.Context, id string, offset int, limit int) (*kcclient.ServiceResponse[LogResponseItem], error) {
+	if len(id) == 0 {
+		return nil, fmt.Errorf("identifier cannot be empty")
 	}
 
-	body, err := json.Marshal([]map[string]interface{}{{
-		"name":   name,
-		"offset": offset,
-		"limit":  limit,
-	}})
+	reqItem := make(map[string]any, 3)
+	if uuid.IsValid(id) {
+		reqItem["uuid"] = id
+	} else {
+		reqItem["name"] = id
+	}
+	reqItem["offset"] = offset
+	reqItem["limit"] = limit
+
+	body, err := json.Marshal([]map[string]any{reqItem})
 	if err != nil {
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}

@@ -28,33 +28,19 @@ type ServicesService interface {
 	// See: https://docs.kraft.cloud/api/v1/services/#creating-new-service-groups
 	Create(ctx context.Context, req CreateRequest) (*kcclient.ServiceResponse[CreateResponseItem], error)
 
-	// GetByUUIDs returns the current state and the configuration of service groups.
+	// Get returns the current state and the configuration of service groups.
 	//
 	// See: https://docs.kraft.cloud/api/v1/services/#getting-the-state-of-a-service-group
-	GetByUUIDs(ctx context.Context, uuids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
+	Get(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
 
-	// GetByNames returns the current state and the configuration of service groups.
-	//
-	// See: https://docs.kraft.cloud/api/v1/services/#getting-the-state-of-a-service-group
-	GetByNames(ctx context.Context, names ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
-
-	// DeleteByUUIDs deletes the specified service groups based on their UUIDs.
+	// Delete deletes the specified service group(s).
 	// Fails if there are still instances attached to any of the specified
 	// groups. After this call the UUIDs of the groups are no longer valid.
 	//
 	// This operation cannot be undone.
 	//
 	// See: https://docs.kraft.cloud/api/v1/services/#deleting-a-service-group
-	DeleteByUUIDs(ctx context.Context, uuids ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
-
-	// DeleteByNames deletes the specified service groups based on their names.
-	// Fails if there are still instances attached to any of the specified
-	// groups. After this call the UUIDs of the groups are no longer valid.
-	//
-	// This operation cannot be undone.
-	//
-	// See: https://docs.kraft.cloud/api/v1/services/#deleting-a-service-group
-	DeleteByNames(ctx context.Context, names ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
+	Delete(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
 
 	// Lists all existing service groups. You can filter by persistence and DNS
 	// name. The latter can be used to lookup the UUID of the service group that

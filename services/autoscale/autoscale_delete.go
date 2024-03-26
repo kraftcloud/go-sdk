@@ -3,7 +3,7 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package certificates
+package autoscale
 
 import (
 	"bytes"
@@ -16,20 +16,15 @@ import (
 	kcclient "sdk.kraft.cloud/client"
 )
 
-// DeleteByNames implements CertificatesService.
-func (c *client) DeleteByNames(ctx context.Context, names ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error) {
-	if len(names) == 0 {
-		return nil, errors.New("requires at least one name")
+// DeleteConfiguration implements AutoscaleService.
+func (c *client) DeleteConfiguration(ctx context.Context, name string) (*kcclient.ServiceResponse[DeleteResponseItem], error) {
+	if name == "" {
+		return nil, errors.New("name cannot be empty")
 	}
 
-	reqItems := make([]map[string]string, 0, len(names))
-	for _, name := range names {
-		reqItems = append(reqItems, map[string]string{"name": name})
-	}
-
-	body, err := json.Marshal(reqItems)
+	body, err := json.Marshal([]map[string]string{{"name": name}})
 	if err != nil {
-		return nil, fmt.Errorf("encoding JSON object: %w", err)
+		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
 	resp := &kcclient.ServiceResponse[DeleteResponseItem]{}

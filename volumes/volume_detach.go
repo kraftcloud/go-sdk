@@ -14,15 +14,23 @@ import (
 	"net/http"
 
 	kcclient "sdk.kraft.cloud/client"
+	"sdk.kraft.cloud/uuid"
 )
 
-// DetachByName implements VolumesService.
-func (c *client) DetachByName(ctx context.Context, name string) (*kcclient.ServiceResponse[DetachResponseItem], error) {
-	if name == "" {
-		return nil, errors.New("name cannot be empty")
+// Detach implements VolumesService.
+func (c *client) Detach(ctx context.Context, id string) (*kcclient.ServiceResponse[DetachResponseItem], error) {
+	if id == "" {
+		return nil, errors.New("identifier cannot be empty")
 	}
 
-	body, err := json.Marshal([]map[string]interface{}{{"name": name}})
+	reqItem := make(map[string]any, 1)
+	if uuid.IsValid(id) {
+		reqItem["uuid"] = id
+	} else {
+		reqItem["name"] = id
+	}
+
+	body, err := json.Marshal([]map[string]any{reqItem})
 	if err != nil {
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}

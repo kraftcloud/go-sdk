@@ -15,14 +15,16 @@ import (
 	"sdk.kraft.cloud/services"
 )
 
-// GetPolicyByName implements AutoscaleService.
-func (c *client) GetPolicyByName(ctx context.Context, uuid, name string) (*kcclient.ServiceResponse[GetPolicyResponseItem], error) {
+// GetPolicy implements AutoscaleService.
+func (c *client) GetPolicy(ctx context.Context, autoscaleUUID, name string) (*kcclient.ServiceResponse[GetPolicyResponseItem], error) {
 	if name == "" {
 		return nil, errors.New("name cannot be empty")
 	}
 
+	endpoint := services.Endpoint + "/" + autoscaleUUID + AutoscaleEndpoint + AutoscalePolicyEndpoint + "/" + name
+
 	resp := &kcclient.ServiceResponse[GetPolicyResponseItem]{}
-	if err := c.request.DoRequest(ctx, http.MethodGet, services.Endpoint+"/"+uuid+"/autoscale/policies/"+name, nil, resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
