@@ -15,19 +15,19 @@ import (
 // CreateRequest is the payload for a POST /services/<uuid>/autoscale request.
 // https://docs.kraft.cloud/api/v1/autoscale/#creating-an-autoscale-configuration
 type CreateRequest struct {
-	UUID           *string             `json:"uuid"` // mutually exclusive with name
-	Name           *string             `json:"name"` // mutually exclusive with uuid
-	MinSize        *int                `json:"min_size"`
-	MaxSize        *int                `json:"max_size"`
-	WarmupTimeMs   *int                `json:"warmup_time_ms"`
-	CooldownTimeMs *int                `json:"cooldown_time_ms"`
+	UUID           *string             `json:"uuid,omitempty"` // mutually exclusive with name
+	Name           *string             `json:"name,omitempty"` // mutually exclusive with uuid
+	MinSize        *int                `json:"min_size,omitempty"`
+	MaxSize        *int                `json:"max_size,omitempty"`
+	WarmupTimeMs   *int                `json:"warmup_time_ms,omitempty"`
+	CooldownTimeMs *int                `json:"cooldown_time_ms,omitempty"`
 	Master         CreateRequestMaster `json:"master"`
-	Policies       []Policy            `json:"policies"`
+	Policies       []Policy            `json:"policies,omitempty"`
 }
 
 type CreateRequestMaster struct {
-	UUID *string `json:"uuid"` // mutually exclusive with name
-	Name *string `json:"name"` // mutually exclusive with uuid
+	UUID *string `json:"uuid,omitempty"` // mutually exclusive with name
+	Name *string `json:"name,omitempty"` // mutually exclusive with uuid
 }
 
 // CreateResponseItem is a data item from a response to a POST /services/<uuid>/autoscale request.

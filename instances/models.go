@@ -13,32 +13,32 @@ import (
 // CreateRequest is the payload for a POST /instances request.
 // https://docs.kraft.cloud/api/v1/instances/#creating-a-new-instance
 type CreateRequest struct {
-	Name          *string                    `json:"name"`
+	Name          *string                    `json:"name,omitempty"`
 	Image         string                     `json:"image"`
-	Args          []string                   `json:"args"`
-	Env           map[string]string          `json:"env"`
-	MemoryMB      *int                       `json:"memory_mb"`
-	ServiceGroup  *CreateRequestServiceGroup `json:"service_group"`
-	Volumes       []CreateRequestVolume      `json:"volumes"`
-	Autostart     *bool                      `json:"autostart"`
-	Replicas      *int                       `json:"replicas"`
-	WaitTimeoutMs *int                       `json:"wait_timeout_ms"`
-	Features      []Feature                  `json:"features"`
+	Args          []string                   `json:"args,omitempty"`
+	Env           map[string]string          `json:"env,omitempty"`
+	MemoryMB      *int                       `json:"memory_mb,omitempty"`
+	ServiceGroup  *CreateRequestServiceGroup `json:"service_group,omitempty"`
+	Volumes       []CreateRequestVolume      `json:"volumes,omitempty"`
+	Autostart     *bool                      `json:"autostart,omitempty"`
+	Replicas      *int                       `json:"replicas,omitempty"`
+	WaitTimeoutMs *int                       `json:"wait_timeout_ms,omitempty"`
+	Features      []Feature                  `json:"features,omitempty"`
 }
 
 type CreateRequestServiceGroup struct {
-	UUID     *string                         `json:"uuid"`
-	Name     *string                         `json:"name"`
-	Services []services.CreateRequestService `json:"services"`
-	Domains  []services.CreateRequestDomain  `json:"domains"`
+	UUID     *string                         `json:"uuid,omitempty"`
+	Name     *string                         `json:"name,omitempty"`
+	Services []services.CreateRequestService `json:"services,omitempty"`
+	Domains  []services.CreateRequestDomain  `json:"domains,omitempty"`
 }
 
 type CreateRequestVolume struct {
-	UUID     *string `json:"uuid"`
-	Name     *string `json:"name"`
-	SizeMB   *int    `json:"size_mb"`
-	At       *string `json:"at"`
-	ReadOnly *bool   `json:"readonly"`
+	UUID     *string `json:"uuid,omitempty"`
+	Name     *string `json:"name,omitempty"`
+	SizeMB   *int    `json:"size_mb,omitempty"`
+	At       *string `json:"at,omitempty"`
+	ReadOnly *bool   `json:"readonly,omitempty"`
 }
 
 // CreateResponseItem is a data item from a response to a POST /instances request.
