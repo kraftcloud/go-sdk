@@ -10,14 +10,14 @@ import kcclient "sdk.kraft.cloud/client"
 // CreateRequest is the payload for a POST /services request.
 // https://docs.kraft.cloud/api/v1/services/#creating-a-new-service-group
 type CreateRequest struct {
-	Name     *string                `json:"name"`
-	Domains  []CreateRequestDomain  `json:"domains"`
-	Services []CreateRequestService `json:"services"`
+	Name     *string                `json:"name,omitempty"`
+	Domains  []CreateRequestDomain  `json:"domains,omitempty"`
+	Services []CreateRequestService `json:"services,omitempty"`
 }
 
 type CreateRequestDomain struct {
 	Name        string                          `json:"name"`
-	Certificate *CreateRequestDomainCertificate `json:"certificate"`
+	Certificate *CreateRequestDomainCertificate `json:"certificate,omitempty"`
 }
 
 type CreateRequestDomainCertificate struct {
@@ -27,8 +27,8 @@ type CreateRequestDomainCertificate struct {
 
 type CreateRequestService struct {
 	Port            int       `json:"port"`
-	DestinationPort *int      `json:"destination_port"`
-	Handlers        []Handler `json:"handlers"`
+	DestinationPort *int      `json:"destination_port,omitempty"`
+	Handlers        []Handler `json:"handlers,omitempty"`
 }
 
 // CreateResponseItem is a data item from a response to a POST /services request.
