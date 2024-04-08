@@ -17,12 +17,12 @@ type AutoscaleService interface {
 	// CreateConfiguration creates a new autoscale configuration.
 	CreateConfiguration(ctx context.Context, req CreateRequest) (*kcclient.ServiceResponse[CreateResponseItem], error)
 
-	// GetConfiguration returns the current states and configurations of
+	// GetConfigurations returns the current states and configurations of
 	// autoscale configurations.
-	GetConfiguration(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
+	GetConfigurations(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
 
-	// DeleteConfiguration deletes an autoscale configuration.
-	DeleteConfiguration(ctx context.Context, name string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
+	// DeleteConfigurations deletes autoscale configurations.
+	DeleteConfigurations(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
 
 	// AddPolicy adds a new autoscale policy to an autoscale configuration.
 	AddPolicy(ctx context.Context, autoscaleUUID string, req Policy) (*kcclient.ServiceResponse[AddPolicyResponseItem], error)

@@ -17,8 +17,8 @@ import (
 	"sdk.kraft.cloud/uuid"
 )
 
-// GetConfiguration implements AutoscaleService.
-func (c *client) GetConfiguration(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error) {
+// GetConfigurations implements AutoscaleService.
+func (c *client) GetConfigurations(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error) {
 	if len(ids) == 0 {
 		return nil, errors.New("requires at least one identifier")
 	}
