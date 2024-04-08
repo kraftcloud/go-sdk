@@ -14,15 +14,25 @@ import (
 	"net/http"
 
 	kcclient "sdk.kraft.cloud/client"
+	"sdk.kraft.cloud/uuid"
 )
 
 // GetConfiguration implements AutoscaleService.
-func (c *client) GetConfiguration(ctx context.Context, name string) (*kcclient.ServiceResponse[GetResponseItem], error) {
-	if name == "" {
-		return nil, errors.New("name cannot be empty")
+func (c *client) GetConfiguration(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error) {
+	if len(ids) == 0 {
+		return nil, errors.New("requires at least one identifier")
 	}
 
-	body, err := json.Marshal([]map[string]string{{"name": name}})
+	reqItems := make([]map[string]string, 0, len(ids))
+	for _, id := range ids {
+		if uuid.IsValid(id) {
+			reqItems = append(reqItems, map[string]string{"uuid": id})
+		} else {
+			reqItems = append(reqItems, map[string]string{"name": id})
+		}
+	}
+
+	body, err := json.Marshal(reqItems)
 	if err != nil {
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
