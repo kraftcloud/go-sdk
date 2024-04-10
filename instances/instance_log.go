@@ -8,9 +8,11 @@ package instances
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	kcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/uuid"
@@ -42,4 +44,194 @@ func (c *client) Log(ctx context.Context, id string, offset int, limit int) (*kc
 	}
 
 	return resp, nil
+}
+
+// TailLogs implements InstancesService.
+func (c *client) TailLogs(ctx context.Context, id string, follow bool, tail int, delay time.Duration) (chan string, chan error, error) {
+	var (
+		logChan = make(chan string)
+		errChan = make(chan error)
+	)
+
+	// Start a goroutine to concurrently fetch logs and send them over the logs
+	// channel.
+	go func() {
+		var startOffset int
+
+		// If tail is set greater than zero, start by fetching the logs in reverse
+		// order, separating by newline and appending to a buffer. Once the buffer
+		// size reaches the length of tail, print the lines by reversing the buffer
+		// again.
+		if tail > 0 {
+			buf := make([]string, 0)
+			var reverseOffset int
+
+		poll:
+			for {
+				reverseOffset -= LogMaxPageSize
+
+				// Always request the largest page size when iterating backwards through
+				// the logs as we cannot determine the number of lines ahead of time and
+				// this ultimately reduces the number of requests.
+				resp, err := c.Log(ctx, id, reverseOffset, LogMaxPageSize)
+				if err != nil {
+					errChan <- err
+					continue
+				}
+
+				item, err := resp.FirstOrErr()
+				if err != nil {
+					errChan <- err
+					continue
+				}
+
+				output, err := base64.StdEncoding.DecodeString(item.Output)
+				if err != nil {
+					errChan <- err
+					continue
+				}
+
+				// Iterate through each character of the `output` in reverse order and
+				// take a note of the start ("limit"), `i`, and end ("offset"), `j`, of
+				// a line by reading the newline `\r\n`.  When the newline characters
+				// are read, it represents the end of the current line but also the
+				// start of the next.
+				//
+				// For example, if we have the log output set to:
+				//
+				// ```
+				// hello
+				// world
+				// ```
+				//
+				// The value of `output` would a byte array with `total` equal to 14
+				// and would take the form:
+				//
+				//   ◀───────────────────────────────────────────────────────────────────┤ time
+				//    0    1    2    3    4    5    6    7    8    9   10   11   12   13
+				// ┌────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┐
+				// │  h │  e │  l │  l │  o │ \r │ \n │  w │  o │  r │  l │  d │ \r │ \n │
+				// └────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┘
+				//    ▲                        ▲    ▲                                 ▲
+				//    │                        │    │                                 │  (step 1)
+				//    │                        └j-1 └j=6                         i=0 ─┘
+				//    │                             ▲
+				//    └ j=0                    i=6 ─┘ (i is now set to j-1)              (step 2)
+				//
+
+				total := len(output)
+
+				// Increase the `startOffset` by the total number of bytes read, which
+				// we can later use to fetch the latest page of logs.
+				startOffset += total
+
+				var i int
+				for j := total - 1; j >= 0; j-- {
+					// Check whether a newline sequence is detected.
+					if j > 0 && output[j-1] == '\r' && output[j] == '\n' {
+						// Only save the line to the buffer if it is not the last character
+						// of the `output`, since there would be nothing to add to the
+						// buffer.
+						if j+1 != total && i > 0 {
+							buf = append(buf, string(output[j+1:i]))
+						}
+
+						// Update i to the end of the current line.
+						i = j - 1 // -1 because two bytes are used to represent newlines.
+					}
+
+					// Break early if we have enough lines saved to the buffer.
+					if len(buf) == tail {
+						break poll
+					}
+				}
+
+				// Break if we have enough lines saved to the buffer or there is no more
+				// logs.
+				if len(buf) == tail || total < LogMaxPageSize {
+					break poll
+				}
+			}
+
+			// Print the buffer in reverse, since lines were saved in reverse order.
+			for i := len(buf) - 1; i >= 0; i-- {
+				logChan <- buf[i]
+			}
+		}
+
+		// If we've tailed, then we've reached the latest logs, and if following has
+		// not been set, we can safely return early.
+		// return early.
+		if !follow && tail > 0 {
+			close(logChan)
+			close(errChan)
+			return
+		}
+
+		// Set the page size to the maximum.  We are now moving forwards through the
+		// logs and we can reduce the number of remote calls by first making larger
+		// calls.
+		pageSize := LogMaxPageSize
+
+		// Now iterate through the logs, starting at the `startOffset`.
+		for {
+			resp, err := c.Log(ctx, id, startOffset, pageSize)
+			if err != nil {
+				errChan <- err
+				continue
+			}
+
+			item, err := resp.FirstOrErr()
+			if err != nil {
+				errChan <- err
+				continue
+			}
+
+			output, err := base64.StdEncoding.DecodeString(item.Output)
+			if err != nil {
+				errChan <- err
+				continue
+			}
+
+			// Reduce the page size now that we've hit the latest logs.
+			if len(output) < LogMaxPageSize {
+				pageSize = LogDefaultPageSize
+			}
+
+			// Iterate through each character and take a note of the start ("offset"),
+			// `i`, and end ("limit"), `j`, of a line by reading the newline `\n`
+			// character.  When the newline character is read, send this offset and
+			// limit via the logs channel.  Update the startOffset to the end of the
+			// last line.
+			if len(output) > 0 {
+				var j int
+
+				for i := 0; i < len(output); i++ {
+					if i > 0 && output[i-1] == '\r' && output[i] == '\n' {
+						logChan <- string(output[j : i-1])
+						j = i + 1
+					}
+
+					// Upon reaching the end of the output, update the startOffset so that
+					// the next page can be reached.
+					if i == len(output)-1 {
+						startOffset += j
+					}
+				}
+			}
+
+			// We've received the last payload of logs if the size of the logs is less
+			// than the page size.  If tailing has been disabled, we can close the
+			// channel now.
+			if !follow && startOffset == item.Range.End {
+				close(logChan)
+				close(errChan)
+				return
+			}
+
+			time.Sleep(delay)
+		}
+	}()
+
+	return logChan, errChan, nil
 }

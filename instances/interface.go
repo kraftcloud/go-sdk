@@ -7,6 +7,7 @@ package instances
 
 import (
 	"context"
+	"time"
 
 	kcclient "sdk.kraft.cloud/client"
 )
@@ -57,6 +58,10 @@ type InstancesService interface {
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#retrieve-the-console-output
 	Log(ctx context.Context, id string, offset int, limit int) (*kcclient.ServiceResponse[LogResponseItem], error)
+
+	// TailLogs is a utility method which returns a channel that streams the
+	// console output of the specified instance.
+	TailLogs(ctx context.Context, id string, follow bool, tail int, delay time.Duration) (chan string, chan error, error)
 
 	// Wait waits for the specified instance(s) to reach the desired state.
 	//

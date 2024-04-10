@@ -36,3 +36,9 @@ const (
 	// StateStandby indicates that the instance is in standby.
 	StateStandby State = "standby"
 )
+
+// LogDefaultPageSize is the default page size for log requests.
+const LogDefaultPageSize = 4096
+
+// LogMaxPageSize is the maximum page size for log requests.
+const LogMaxPageSize = LogDefaultPageSize*4 - 1
