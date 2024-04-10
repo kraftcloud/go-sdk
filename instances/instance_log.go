@@ -121,9 +121,10 @@ func (c *client) TailLogs(ctx context.Context, id string, follow bool, tail int,
 
 				total := len(output)
 
-				// Increase the `startOffset` by the total number of bytes read, which
-				// we can later use to fetch the latest page of logs.
-				startOffset += total
+				// Set the start offset to the end of total available logs. Continuously
+				// set this value over the loop, as the value may change by during
+				// iteration (as new logs have come in).
+				startOffset = item.Available.End
 
 				var i int
 				for j := total - 1; j >= 0; j-- {
