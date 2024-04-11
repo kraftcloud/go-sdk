@@ -5,6 +5,8 @@
 
 package instances
 
+import "fmt"
+
 // Endpoint is the public path for the instances service.
 const Endpoint = "/instances"
 
@@ -50,6 +52,21 @@ const (
 	// RestartPolicyOnFailure indicates that the instance should be restarted on failure.
 	RestartPolicyOnFailure RestartPolicy = "on-failure"
 )
+
+var _ fmt.Stringer = (*RestartPolicy)(nil)
+
+// String implements fmt.Stringer
+func (policy RestartPolicy) String() string {
+	return string(policy)
+}
+
+func RestartPolicies() []RestartPolicy {
+	return []RestartPolicy{
+		RestartPolicyNever,
+		RestartPolicyAlways,
+		RestartPolicyOnFailure,
+	}
+}
 
 // LogDefaultPageSize is the default page size for log requests.
 const LogDefaultPageSize = 4096
