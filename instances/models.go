@@ -22,6 +22,7 @@ type CreateRequest struct {
 	Volumes       []CreateRequestVolume      `json:"volumes,omitempty"`
 	Autostart     *bool                      `json:"autostart,omitempty"`
 	Replicas      *int                       `json:"replicas,omitempty"`
+	RestartPolicy *RestartPolicy             `json:"restart_policy,omitempty"`
 	WaitTimeoutMs *int                       `json:"wait_timeout_ms,omitempty"`
 	Features      []Feature                  `json:"features,omitempty"`
 }
@@ -63,6 +64,16 @@ type GetResponseItem struct {
 	UUID              string                         `json:"uuid"`
 	Name              string                         `json:"name"`
 	CreatedAt         string                         `json:"created_at"`
+	StartedAt         string                         `json:"started_at"`
+	StoppedAt         string                         `json:"stopped_at"`
+	UptimeMs          int                            `json:"uptime_ms"`
+	Restart           GetResponseRestart             `json:"restart"`
+	RestartPolicy     RestartPolicy                  `json:"restart_policy"`
+	StopCode          int                            `json:"stop_code"`
+	StopReason        int                            `json:"stop_reason"`
+	StartCount        int                            `json:"start_count"`
+	RestartCount      int                            `json:"restart_count"`
+	ExitCode          int                            `json:"exit_code"`
 	State             string                         `json:"state"`
 	Image             string                         `json:"image"`
 	MemoryMB          int                            `json:"memory_mb"`
@@ -76,6 +87,11 @@ type GetResponseItem struct {
 	BootTimeUs        int                            `json:"boot_time_us"` // always returned, even if never started
 
 	kcclient.APIResponseCommon
+}
+
+type GetResponseRestart struct {
+	Attempt int    `json:"attempt"`
+	NextAt  string `json:"next_at"`
 }
 
 type GetCreateResponseServiceGroup struct {

@@ -37,6 +37,20 @@ const (
 	StateStandby State = "standby"
 )
 
+// RestartPolicy is the restart policy of an instance.
+type RestartPolicy string
+
+const (
+	// RestartPolicyNever indicates that the instance should never be restarted.
+	RestartPolicyNever RestartPolicy = "never"
+
+	// RestartPolicyAlways indicates that the instance should always be restarted.
+	RestartPolicyAlways RestartPolicy = "always"
+
+	// RestartPolicyOnFailure indicates that the instance should be restarted on failure.
+	RestartPolicyOnFailure RestartPolicy = "on-failure"
+)
+
 // LogDefaultPageSize is the default page size for log requests.
 const LogDefaultPageSize = 4096
 
