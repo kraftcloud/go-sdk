@@ -142,9 +142,9 @@ func (r *ServiceResponse[T]) aggregateErrors() error {
 // the attributes which are returned either on error or partial success.
 // https://docs.kraft.cloud/api/v1/#api-responses
 type APIResponseCommon struct {
-	Status  string `json:"status"`
-	Message string `json:"message"`
-	Error   *int   `json:"error"`
+	Status  string        `json:"status"`
+	Message string        `json:"message"`
+	Error   *APIHTTPError `json:"error"`
 }
 
 // ErrorAttributes implements APIResponseDataEntry.
