@@ -7,7 +7,12 @@
 // underelying HTTP request performed by a client.
 package httpclient
 
-import "net/http"
+import (
+	"net/http"
+	"net/url"
+
+	"golang.org/x/net/http/httpproxy"
+)
 
 // HTTPClient interface abstracts a generic HTTP request issuing client.
 type HTTPClient interface {
@@ -20,6 +25,9 @@ func NewHTTPClient() *http.Client {
 	return &http.Client{
 		Transport: &http.Transport{
 			DisableKeepAlives: true,
+			Proxy: func(req *http.Request) (*url.URL, error) {
+				return httpproxy.FromEnvironment().ProxyFunc()(req.URL)
+			},
 		},
 	}
 }
