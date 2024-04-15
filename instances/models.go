@@ -67,13 +67,13 @@ type GetResponseItem struct {
 	StartedAt         string                         `json:"started_at"`
 	StoppedAt         string                         `json:"stopped_at"`
 	UptimeMs          int                            `json:"uptime_ms"`
-	Restart           GetResponseRestart             `json:"restart"`
+	Restart           *GetResponseRestart            `json:"restart,omitempty"`
 	RestartPolicy     RestartPolicy                  `json:"restart_policy"`
-	StopCode          int                            `json:"stop_code"`
-	StopReason        int                            `json:"stop_reason"`
+	StopCode          *int                           `json:"stop_code,omitempty"`
+	StopReason        *int                           `json:"stop_reason,omitempty"`
 	StartCount        int                            `json:"start_count"`
 	RestartCount      int                            `json:"restart_count"`
-	ExitCode          int                            `json:"exit_code"`
+	ExitCode          *int                           `json:"exit_code,omitempty"`
 	State             string                         `json:"state"`
 	Image             string                         `json:"image"`
 	MemoryMB          int                            `json:"memory_mb"`
