@@ -24,4 +24,7 @@ type ImagesService interface {
 
 	// Delete an image by its provided name.
 	DeleteByName(ctx context.Context, name string) error
+
+	// Quotas returns the storage quotas for the user.
+	Quotas(ctx context.Context) (*QuotasResponseItem, error)
 }

@@ -19,3 +19,10 @@ type ListResponseItem struct {
 
 	kcclient.APIResponseCommon
 }
+
+// QuotasResponseItem is a data item from a parsed response to a registry request at
+// /projects/{project_name_or_id}/summary
+type QuotasResponseItem struct {
+	Used int64 `json:"quota"`
+	Hard int64 `json:"hard"`
+}
