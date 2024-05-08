@@ -310,7 +310,7 @@ func (item *GetResponseItem) DescribeStopReason() string {
 	var ret strings.Builder
 
 	switch true {
-	case item.StopCodeShutdownTable() == 1 && (item.StopCodeInitLevel() == 0 || item.StopCodeInitLevel() == 1) && item.StopCodeReason() == StopCodeReasonOK:
+	case item.StopCodeReason() == StopCodeReasonOK:
 		ret.WriteString("shutdown")
 	case item.StopCodeReason() == StopCodeReasonEXP:
 		ret.WriteString("assertion error")
