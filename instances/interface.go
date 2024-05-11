@@ -59,6 +59,11 @@ type InstancesService interface {
 	// See: https://docs.kraft.cloud/api/v1/instances/#retrieve-the-console-output
 	Log(ctx context.Context, id string, offset int, limit int) (*kcclient.ServiceResponse[LogResponseItem], error)
 
+	// Metrics returns the metrics of the specified instance(s).
+	//
+	// See: https://docs.kraft.cloud/api/v1/instances/#metrics
+	Metrics(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[MetricsResponseItem], error)
+
 	// TailLogs is a utility method which returns a channel that streams the
 	// console output of the specified instance.
 	TailLogs(ctx context.Context, id string, follow bool, tail int, delay time.Duration) (chan string, chan error, error)
