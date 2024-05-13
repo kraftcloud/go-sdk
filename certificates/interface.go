@@ -27,5 +27,5 @@ type CertificatesService interface {
 	// List all existing certificates.
 	//
 	// See: https://docs.kraft.cloud/api/v1/certificates/#list-existing-certificates
-	List(ctx context.Context) (*kcclient.ServiceResponse[ListResponseItem], error)
+	List(ctx context.Context) (*kcclient.ServiceResponse[GetResponseItem], error)
 }

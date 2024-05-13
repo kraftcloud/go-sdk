@@ -38,7 +38,7 @@ type InstancesService interface {
 	// Lists all existing instances.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#list-existing-instances
-	List(ctx context.Context) (*kcclient.ServiceResponse[ListResponseItem], error)
+	List(ctx context.Context) (*kcclient.ServiceResponse[GetResponseItem], error)
 
 	// Start starts previously stopped instance(s).
 	// Does nothing for instances that are already running.

@@ -56,5 +56,5 @@ type VolumesService interface {
 	// particular value is assumed if a filter is not part of the request.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#list-existing-volumes
-	List(ctx context.Context) (*kcclient.ServiceResponse[ListResponseItem], error)
+	List(ctx context.Context) (*kcclient.ServiceResponse[GetResponseItem], error)
 }

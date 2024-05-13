@@ -52,5 +52,5 @@ type ServicesService interface {
 	// endpoints, for example, to delete (empty) groups.
 	//
 	// See: https://docs.kraft.cloud/api/v1/services/#list-existing-service-groups
-	List(ctx context.Context) (*kcclient.ServiceResponse[ListResponseItem], error)
+	List(ctx context.Context) (*kcclient.ServiceResponse[GetResponseItem], error)
 }
