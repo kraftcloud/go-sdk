@@ -14,9 +14,9 @@ import (
 )
 
 // List implements CertificatesService.
-func (c *client) List(ctx context.Context) (*kcclient.ServiceResponse[ListResponseItem], error) {
-	resp := &kcclient.ServiceResponse[ListResponseItem]{}
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/list", nil, resp); err != nil {
+func (c *client) List(ctx context.Context) (*kcclient.ServiceResponse[GetResponseItem], error) {
+	resp := &kcclient.ServiceResponse[GetResponseItem]{}
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, nil, resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
