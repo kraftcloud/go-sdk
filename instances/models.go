@@ -505,6 +505,35 @@ type LogResponseItem struct {
 	kcclient.APIResponseCommon
 }
 
+// MetricsResponseItem is a data item from a response to a GET /instances/metrics request.
+type MetricsResponseItem struct {
+	// UUID of the instance
+	UUID string `json:"uuid"`
+
+	// Name of the instance
+	Name string `json:"name"`
+
+	// Resident memory size of instance
+	RSS uint64 `json:"rss"`
+
+	// Active running time of instance in seconds
+	CPUTimeSeconds uint `json:"cpu"` // _time_seconds"`
+
+	// Amount of bytes received over network
+	RxBytes uint64 `json:"rx_bytes"`
+
+	// Amount of bytes transmitted over network
+	RxPackets uint64 `json:"rx_packets"`
+
+	// Count of packets received from network
+	TxBytes uint64 `json:"tx_bytes"`
+
+	// Count of packets transmitted over network
+	TxPackets uint64 `json:"tx_packets"`
+
+	kcclient.APIResponseCommon
+}
+
 type LogResponseRange struct {
 	Start int `json:"start"`
 	End   int `json:"end"`
