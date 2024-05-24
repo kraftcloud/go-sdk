@@ -14,6 +14,11 @@ import (
 type CertificatesService interface {
 	kcclient.ServiceClient[CertificatesService]
 
+	// Create creates a new certificate.
+	//
+	// See: https://docs.kraft.cloud/api/v1/certificates/#uploading-an-existing-certificate
+	Create(ctx context.Context, req *CreateRequest) (*kcclient.ServiceResponse[CreateResponseItem], error)
+
 	// Get returns the current status and the properties of one or more certificate(s).
 	//
 	// See: https://docs.kraft.cloud/api/v1/certificates/#getting-the-status-of-a-certificate

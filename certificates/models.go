@@ -7,6 +7,24 @@ package certificates
 
 import kcclient "sdk.kraft.cloud/client"
 
+// CreateRequest is a data structure for a request to a POST /certificates request.
+// https://docs.kraft.cloud/api/v1/certificates/#uploading-an-existing-certificate
+type CreateRequest struct {
+	Name  string `json:"name,omitempty"`
+	CN    string `json:"cn"`
+	Chain string `json:"chain"`
+	PKey  string `json:"pkey"`
+}
+
+// CreateResponseItem is a data item from a response to a POST /certificates request.
+// https://docs.kraft.cloud/api/v1/certificates/#uploading-an-existing-certificate
+type CreateResponseItem struct {
+	UUID string `json:"uuid"`
+	Name string `json:"name"`
+
+	kcclient.APIResponseCommon
+}
+
 // GetResponseItem is a data item from a response to a GET /certificates request.
 // https://docs.kraft.cloud/api/v1/certificates/#getting-the-status-of-a-certificate
 type GetResponseItem struct {
