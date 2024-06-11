@@ -47,7 +47,7 @@ func testMetroAlive(metro, ip string) time.Duration {
 
 // fillMetroIP looks up the IP address of the metro using the DNS name.
 func fillMetroIP(metro string) string {
-	url := "api." + metro + ".kraft.cloud"
+	url := metro + ".kraft.host"
 
 	ips, err := net.LookupIP(url)
 	if err != nil {
