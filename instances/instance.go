@@ -13,8 +13,13 @@ const Endpoint = "/instances"
 // Feature is a special feature of an instance.
 type Feature string
 
-// FeatureScaleToZero indicates that the instance can be scaled to zero.
-const FeatureScaleToZero Feature = "scale-to-zero"
+const (
+	// FeatureScaleToZero indicates that the instance can be scaled to zero.
+	FeatureScaleToZero Feature = "scale-to-zero"
+
+	// FeatureDeleteOnStop indicates that the instance should be deleted when stopped.
+	FeatureDeleteOnStop Feature = "delete-on-stop"
+)
 
 // State is the state of an instance.
 type State string
