@@ -18,12 +18,12 @@ import (
 )
 
 // Attach implements VolumesService.
-func (c *client) Attach(ctx context.Context, volID, instanceUUID, at string, readOnly bool) (*kcclient.ServiceResponse[AttachResponseItem], error) {
+func (c *client) Attach(ctx context.Context, volID, instance, at string, readOnly bool) (*kcclient.ServiceResponse[AttachResponseItem], error) {
 	if volID == "" {
 		return nil, errors.New("volume identifier cannot be empty")
 	}
-	if instanceUUID == "" {
-		return nil, errors.New("instance UUID cannot be empty")
+	if instance == "" {
+		return nil, errors.New("instance identifier cannot be empty")
 	}
 	if at == "" {
 		return nil, errors.New("at cannot be empty")
@@ -37,8 +37,15 @@ func (c *client) Attach(ctx context.Context, volID, instanceUUID, at string, rea
 	}
 	reqItem["at"] = at
 	reqItem["readonly"] = readOnly
-	reqItem["attach_to"] = map[string]any{
-		"uuid": instanceUUID,
+
+	if uuid.IsValid(instance) {
+		reqItem["attach_to"] = map[string]any{
+			"uuid": instance,
+		}
+	} else {
+		reqItem["attach_to"] = map[string]any{
+			"name": instance,
+		}
 	}
 
 	body, err := json.Marshal([]map[string]any{reqItem})

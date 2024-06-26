@@ -34,7 +34,7 @@ type VolumesService interface {
 	// Currently, each instance can have only one volume attached at most.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#attaching-a-volume-to-an-instance
-	Attach(ctx context.Context, volID, instanceUUID, at string, readOnly bool) (*kcclient.ServiceResponse[AttachResponseItem], error)
+	Attach(ctx context.Context, volID, instance, at string, readOnly bool) (*kcclient.ServiceResponse[AttachResponseItem], error)
 
 	// Detach detaches a volume from an instance.
 	// The instance from which to detach must in stopped state. If the volume
