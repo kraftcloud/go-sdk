@@ -7,9 +7,9 @@ package images
 
 import kcclient "sdk.kraft.cloud/client"
 
-// ListResponseItem is a data item from a response to a /images/list request.
+// GetResponseItem is a data item from a response to a /images/list request.
 // https://docs.kraft.cloud/api/v1/images/#list-existing-images
-type ListResponseItem struct {
+type GetResponseItem struct {
 	Digest      string   `json:"digest"`
 	Tags        []string `json:"tags"`
 	Initrd      bool     `json:"initrd"`
