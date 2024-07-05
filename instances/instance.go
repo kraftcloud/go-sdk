@@ -14,9 +14,6 @@ const Endpoint = "/instances"
 type Feature string
 
 const (
-	// FeatureScaleToZero indicates that the instance can be scaled to zero.
-	FeatureScaleToZero Feature = "scale-to-zero"
-
 	// FeatureDeleteOnStop indicates that the instance should be deleted when stopped.
 	FeatureDeleteOnStop Feature = "delete-on-stop"
 )
@@ -44,6 +41,37 @@ const (
 	StateStandby State = "standby"
 )
 
+// ScaleToZeroPolicy is the scale to zero policy of an instance.
+type ScaleToZeroPolicy string
+
+const (
+
+	// ScaleToZeroPolicyOn indicates that the instance has scale to zero enabled.
+	ScaleToZeroPolicyOn ScaleToZeroPolicy = "on"
+
+	// ScaleToZeroPolicyOff indicates that the instance has scale to zero disabled.
+	ScaleToZeroPolicyOff ScaleToZeroPolicy = "off"
+
+	// ScaleToZeroPolicyApp indicates that the instance has scale to zero control passed to the application.
+	ScaleToZeroPolicyApp ScaleToZeroPolicy = "app"
+)
+
+var _ fmt.Stringer = (*ScaleToZeroPolicy)(nil)
+
+// String implements fmt.Stringer
+func (policy ScaleToZeroPolicy) String() string {
+	return string(policy)
+}
+
+// ScaleToZeroPolicies returns all scale to zero policies.
+func ScaleToZeroPolicies() []ScaleToZeroPolicy {
+	return []ScaleToZeroPolicy{
+		ScaleToZeroPolicyOn,
+		ScaleToZeroPolicyOff,
+		ScaleToZeroPolicyApp,
+	}
+}
+
 // RestartPolicy is the restart policy of an instance.
 type RestartPolicy string
 
@@ -65,6 +93,7 @@ func (policy RestartPolicy) String() string {
 	return string(policy)
 }
 
+// RestartPolicies returns all restart policies.
 func RestartPolicies() []RestartPolicy {
 	return []RestartPolicy{
 		RestartPolicyNever,

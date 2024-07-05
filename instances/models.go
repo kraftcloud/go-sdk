@@ -29,6 +29,7 @@ type CreateRequest struct {
 	Autostart     *bool                      `json:"autostart,omitempty"`
 	Replicas      *int                       `json:"replicas,omitempty"`
 	RestartPolicy *RestartPolicy             `json:"restart_policy,omitempty"`
+	ScaleToZero   *ScaleToZero               `json:"scale_to_zero,omitempty"`
 	WaitTimeoutMs *int                       `json:"wait_timeout_ms,omitempty"`
 	Features      []Feature                  `json:"features,omitempty"`
 }
@@ -553,4 +554,10 @@ type WaitResponseItem struct {
 	State  string `json:"state"`
 
 	kcclient.APIResponseCommon
+}
+
+type ScaleToZero struct {
+	Policy         *ScaleToZeroPolicy `json:"policy,omitempty"`
+	Stateful       *bool              `json:"stateful,omitempty"`
+	CooldownTimeMs *int               `json:"cooldown_time_ms,omitempty"`
 }
