@@ -26,7 +26,19 @@ func NewDefaultOptions(opts ...Option) *options.Options {
 	}
 
 	if options.Token() == "" {
+		options.SetToken(os.Getenv("UNIKRAFTCLOUD_TOKEN"))
+	}
+
+	if options.Token() == "" {
 		options.SetToken(os.Getenv("KRAFTCLOUD_TOKEN"))
+	}
+
+	if options.Token() == "" {
+		options.SetToken(os.Getenv("KC_TOKEN"))
+	}
+
+	if options.Token() == "" {
+		options.SetToken(os.Getenv("UKC_TOKEN"))
 	}
 
 	if options.DefaultMetro() == "" {
