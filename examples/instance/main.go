@@ -18,9 +18,22 @@ import (
 // Here, you'll learn how to create an instance and display its console output.
 // Subsequent actions include stopping and starting the instance, listing all instances in the project, and, ultimately, deleting the created instance.
 func main() {
-	token := os.Getenv("KRAFTCLOUD_TOKEN")
+	token := os.Getenv("UNIKRAFTCLOUD_TOKEN")
+
 	if token == "" {
-		fmt.Println("Please set the KRAFTCLOUD_TOKEN environment variable")
+		token = os.Getenv("KRAFTCLOUD_TOKEN")
+	}
+
+	if token == "" {
+		token = os.Getenv("UKC_TOKEN")
+	}
+
+	if token == "" {
+		token = os.Getenv("KC_TOKEN")
+	}
+
+	if token == "" {
+		fmt.Println("Please set the UNIKRAFTCLOUD_TOKEN environment variable")
 		os.Exit(1)
 	}
 

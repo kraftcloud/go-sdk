@@ -14,9 +14,22 @@ import (
 
 // This demonstrates how to list images in your project.
 func main() {
-	token := os.Getenv("KRAFTCLOUD_TOKEN")
+	token := os.Getenv("UNIKRAFTCLOUD_TOKEN")
+
 	if token == "" {
-		fmt.Println("Please set the KRAFTCLOUD_TOKEN environment variable")
+		token = os.Getenv("KRAFTCLOUD_TOKEN")
+	}
+
+	if token == "" {
+		token = os.Getenv("UKC_TOKEN")
+	}
+
+	if token == "" {
+		token = os.Getenv("KC_TOKEN")
+	}
+
+	if token == "" {
+		fmt.Println("Please set the UNIKRAFTCLOUD_TOKEN environment variable")
 		os.Exit(1)
 	}
 
