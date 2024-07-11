@@ -52,8 +52,8 @@ const (
 	// ScaleToZeroPolicyOff indicates that the instance has scale to zero disabled.
 	ScaleToZeroPolicyOff ScaleToZeroPolicy = "off"
 
-	// ScaleToZeroPolicyApp indicates that the instance has scale to zero control passed to the application.
-	ScaleToZeroPolicyApp ScaleToZeroPolicy = "app"
+	// ScaleToZeroPolicyIdle indicates that the instance will scale down even with established but idle TCP connections.
+	ScaleToZeroPolicyIdle ScaleToZeroPolicy = "idle"
 )
 
 var _ fmt.Stringer = (*ScaleToZeroPolicy)(nil)
@@ -68,7 +68,7 @@ func ScaleToZeroPolicies() []ScaleToZeroPolicy {
 	return []ScaleToZeroPolicy{
 		ScaleToZeroPolicyOn,
 		ScaleToZeroPolicyOff,
-		ScaleToZeroPolicyApp,
+		ScaleToZeroPolicyIdle,
 	}
 }
 
