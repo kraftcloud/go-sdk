@@ -33,8 +33,8 @@ type GetResponseItem struct {
 }
 
 type InstanceAttachment struct {
-	UUID string `json:"uuid"`
-	Name string `json:"name"`
+	UUID string `json:"uuid,omitempty"`
+	Name string `json:"name,omitempty"`
 }
 
 // AttachResponseItem is a data item from a response to a PUT /volumes/attach request.
