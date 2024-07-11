@@ -93,7 +93,7 @@ func (c *client) TailLogs(ctx context.Context, id string, follow bool, tail int,
 
 				// Iterate through each character of the `output` in reverse order and
 				// take a note of the start ("limit"), `i`, and end ("offset"), `j`, of
-				// a line by reading the newline `\r\n`.  When the newline characters
+				// a line by reading the newline `\n`.  When the newline characters
 				// are read, it represents the end of the current line but also the
 				// start of the next.
 				//
@@ -104,19 +104,19 @@ func (c *client) TailLogs(ctx context.Context, id string, follow bool, tail int,
 				// world
 				// ```
 				//
-				// The value of `output` would a byte array with `total` equal to 14
+				// The value of `output` would a byte array with `total` equal to 12
 				// and would take the form:
 				//
-				//   ◀───────────────────────────────────────────────────────────────────┤ time
-				//    0    1    2    3    4    5    6    7    8    9   10   11   12   13
-				// ┌────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┐
-				// │  h │  e │  l │  l │  o │ \r │ \n │  w │  o │  r │  l │  d │ \r │ \n │
-				// └────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┘
-				//    ▲                        ▲    ▲                                 ▲
-				//    │                        │    │                                 │  (step 1)
-				//    │                        └j-1 └j=6                         i=0 ─┘
-				//    │                             ▲
-				//    └ j=0                    i=6 ─┘ (i is now set to j-1)              (step 2)
+				//   ◀─────────────────────────────────────────────────────────┤ time
+				//    0    1    2    3    4    5    6    7    8    9   10   11
+				// ┌────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┐
+				// │  h │  e │  l │  l │  o │ \n │  w │  o │  r │  l │  d │ \n │
+				// └────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┘
+				//    ▲                        ▲                            ▲
+				//    │                        │                            │  (step 1)
+				//    │                        └j=6                    i=0 ─┘
+				//    │                        ▲
+				//    └ j=0               i=6 ─┘ (i is now set to j)         (step 2)
 				//
 
 				total := len(output)
@@ -127,29 +127,38 @@ func (c *client) TailLogs(ctx context.Context, id string, follow bool, tail int,
 				startOffset = item.Available.End
 
 				var i int
+				var hasNewlineOnFirstLine bool
 				for j := total - 1; j >= 0; j-- {
 					// Check whether a newline sequence is detected.
-					if j > 0 && output[j-1] == '\r' && output[j] == '\n' {
+					if j > 0 && output[j] == '\n' {
 						// Only save the line to the buffer if it is not the last character
 						// of the `output`, since there would be nothing to add to the
 						// buffer.
-						if j+1 != total && i > 0 {
-							buf = append(buf, string(output[j+1:i]))
+						if j+1 != total {
+							if i > 0 {
+								buf = append(buf, string(output[j+1:i]))
+							}
+						} else {
+							hasNewlineOnFirstLine = true
 						}
 
 						// Update i to the end of the current line.
-						i = j - 1 // -1 because two bytes are used to represent newlines.
-					}
+						i = j
 
-					// Break early if we have enough lines saved to the buffer.
-					if len(buf) == tail {
-						break poll
+						// Break early if we have enough lines saved to the buffer.
+						if len(buf) == tail {
+							break poll
+						}
 					}
+				}
+
+				if hasNewlineOnFirstLine {
+					buf = append(buf, string(output[0:i]))
 				}
 
 				// Break if we have enough lines saved to the buffer or there is no more
 				// logs.
-				if len(buf) == tail || total < LogMaxPageSize {
+				if total < LogMaxPageSize {
 					break poll
 				}
 			}
@@ -208,8 +217,8 @@ func (c *client) TailLogs(ctx context.Context, id string, follow bool, tail int,
 				var j int
 
 				for i := 0; i < len(output); i++ {
-					if i > 0 && output[i-1] == '\r' && output[i] == '\n' {
-						logChan <- string(output[j : i-1])
+					if i > 0 && output[i] == '\n' {
+						logChan <- string(output[j:i])
 						j = i + 1
 					}
 
