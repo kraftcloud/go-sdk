@@ -112,11 +112,16 @@ type GetResponseItem struct {
 	PrivateFQDN       string                         `json:"private_fqdn"`
 	PrivateIP         string                         `json:"private_ip"`
 	ServiceGroup      *GetCreateResponseServiceGroup `json:"service_group"`
+	Snapshot          *SnapshotInfo                  `json:"snapshot,omitempty"`
 	Volumes           []GetResponseVolume            `json:"volumes"`
 	NetworkInterfaces []GetResponseNetworkInterface  `json:"network_interfaces"`
 	BootTimeUs        int                            `json:"boot_time_us"` // always returned, even if never started
 
 	kcclient.APIResponseCommon
+}
+
+type SnapshotInfo struct {
+	UUID string `json:"uuid"`
 }
 
 // Stop code of the kernel.  This value encodes multiple details about the stop

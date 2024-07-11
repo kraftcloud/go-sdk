@@ -26,6 +26,7 @@ type GetResponseItem struct {
 	Name       string               `json:"name"`
 	SizeMB     int                  `json:"size_mb"`
 	AttachedTo []InstanceAttachment `json:"attached_to"`
+	MountedBy  []InstanceMounting   `json:"mounted_by"`
 	Persistent bool                 `json:"persistent"`
 	CreatedAt  string               `json:"created_at"`
 
@@ -33,8 +34,14 @@ type GetResponseItem struct {
 }
 
 type InstanceAttachment struct {
-	UUID string `json:"uuid"`
-	Name string `json:"name"`
+	UUID string `json:"uuid,omitempty"`
+	Name string `json:"name,omitempty"`
+}
+
+type InstanceMounting struct {
+	UUID     string `json:"uuid"`
+	Name     string `json:"name"`
+	ReadOnly bool   `json:"readonly"`
 }
 
 // AttachResponseItem is a data item from a response to a PUT /volumes/attach request.

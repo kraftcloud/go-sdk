@@ -42,7 +42,7 @@ type VolumesService interface {
 	// make it persistent (i.e., it survives the deletion of the instance).
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#detaching-a-volume-from-an-instance
-	Detach(ctx context.Context, id string) (*kcclient.ServiceResponse[DetachResponseItem], error)
+	Detach(ctx context.Context, id string, from string) (*kcclient.ServiceResponse[DetachResponseItem], error)
 
 	// Delete deletes the specified volume(s).
 	// Fails if any of the specified volumes is still attached to an instance.

@@ -18,7 +18,7 @@ import (
 )
 
 // Detach implements VolumesService.
-func (c *client) Detach(ctx context.Context, id string) (*kcclient.ServiceResponse[DetachResponseItem], error) {
+func (c *client) Detach(ctx context.Context, id string, from string) (*kcclient.ServiceResponse[DetachResponseItem], error) {
 	if id == "" {
 		return nil, errors.New("identifier cannot be empty")
 	}
@@ -28,6 +28,14 @@ func (c *client) Detach(ctx context.Context, id string) (*kcclient.ServiceRespon
 		reqItem["uuid"] = id
 	} else {
 		reqItem["name"] = id
+	}
+
+	if from != "" {
+		if uuid.IsValid(from) {
+			reqItem["from"] = InstanceAttachment{UUID: from}
+		} else {
+			reqItem["from"] = InstanceAttachment{Name: from}
+		}
 	}
 
 	body, err := json.Marshal([]map[string]any{reqItem})
