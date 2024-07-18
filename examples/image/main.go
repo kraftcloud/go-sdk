@@ -29,7 +29,7 @@ func main() {
 	}
 
 	if token == "" {
-		fmt.Println("Please set the UNIKRAFTCLOUD_TOKEN environment variable")
+		fmt.Println("Please set the UKC_TOKEN environment variable")
 		os.Exit(1)
 	}
 
