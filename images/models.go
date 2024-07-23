@@ -10,12 +10,13 @@ import kcclient "sdk.kraft.cloud/client"
 // GetResponseItem is a data item from a response to a /images/list request.
 // https://docs.kraft.cloud/api/v1/images/#list-existing-images
 type GetResponseItem struct {
-	Digest      string   `json:"digest"`
-	Tags        []string `json:"tags"`
-	Initrd      bool     `json:"initrd"`
-	SizeInBytes int64    `json:"size_in_bytes"`
-	Args        string   `json:"args"`
-	KernelArgs  string   `json:"kernel_args"`
+	Digest      string            `json:"digest"`
+	Tags        []string          `json:"tags"`
+	Initrd      bool              `json:"initrd"`
+	SizeInBytes int64             `json:"size_in_bytes"`
+	Args        string            `json:"args"`
+	KernelArgs  string            `json:"kernel_args"`
+	Labels      map[string]string `json:"labels"`
 
 	kcclient.APIResponseCommon
 }
