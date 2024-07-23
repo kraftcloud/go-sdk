@@ -10,9 +10,11 @@ import kcclient "sdk.kraft.cloud/client"
 // CreateRequest is the payload for a POST /services request.
 // https://docs.kraft.cloud/api/v1/services/#creating-a-new-service-group
 type CreateRequest struct {
-	Name     *string                `json:"name,omitempty"`
-	Domains  []CreateRequestDomain  `json:"domains,omitempty"`
-	Services []CreateRequestService `json:"services,omitempty"`
+	Name      *string                `json:"name,omitempty"`
+	Domains   []CreateRequestDomain  `json:"domains,omitempty"`
+	Services  []CreateRequestService `json:"services,omitempty"`
+	SoftLimit *int                   `json:"soft_limit,omitempty"`
+	HardLimit *int                   `json:"hard_limit,omitempty"`
 }
 
 type CreateRequestDomain struct {
@@ -54,6 +56,8 @@ type GetResponseItem struct {
 	Services   []GetResponseService      `json:"services"`
 	Domains    []GetCreateResponseDomain `json:"domains"`
 	Instances  []GetResponseInstance     `json:"instances"`
+	SoftLimit  int                       `json:"soft_limit"`
+	HardLimit  int                       `json:"hard_limit"`
 
 	kcclient.APIResponseCommon
 }
