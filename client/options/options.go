@@ -7,14 +7,20 @@
 // options.
 package options
 
-import "sdk.kraft.cloud/client/httpclient"
+import (
+	"time"
+
+	"sdk.kraft.cloud/client/httpclient"
+)
 
 // Options contain necessary information for connecting to a KraftCloud service
 // endpoint.
 type Options struct {
-	token        string
-	defaultMetro string
-	httpClient   httpclient.HTTPClient
+	token          string
+	defaultTimeout time.Duration
+	defaultRetries int
+	defaultMetro   string
+	httpClient     httpclient.HTTPClient
 }
 
 func (opts *Options) SetToken(token string) {
@@ -23,6 +29,22 @@ func (opts *Options) SetToken(token string) {
 
 func (opts *Options) Token() string {
 	return opts.token
+}
+
+func (opts *Options) SetDefaultTimeout(timeout time.Duration) {
+	opts.defaultTimeout = timeout
+}
+
+func (opts *Options) DefaultTimeout() time.Duration {
+	return opts.defaultTimeout
+}
+
+func (opts *Options) SetDefaultRetries(retries int) {
+	opts.defaultRetries = retries
+}
+
+func (opts *Options) DefaultRetries() int {
+	return opts.defaultRetries
 }
 
 func (opts *Options) SetDefaultMetro(metro string) {

@@ -53,6 +53,15 @@ func (c *client) WithTimeout(to time.Duration) ServicesService {
 	return ccpy
 }
 
+// WithRetries returns a ServiceRequest that uses the specified number of
+// retries to make after a timed out request.  Note that this is specifically
+// only for timed-out requests and API requests which fail are not retried.
+func (c *client) WithRetries(retries int) ServicesService {
+	ccpy := c.clone()
+	ccpy.request = c.request.WithRetries(retries)
+	return ccpy
+}
+
 // clone returns a shallow copy of c.
 func (c *client) clone() *client {
 	ccpy := *c
