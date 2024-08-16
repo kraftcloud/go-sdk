@@ -516,10 +516,10 @@ type MetricsResponseItem struct {
 	Name string `json:"name"`
 
 	// Resident memory size of instance
-	RSS uint64 `json:"rss"`
+	RSS uint64 `json:"rss_bytes"`
 
-	// Active running time of instance in seconds
-	CPUTimeSeconds uint `json:"cpu"` // _time_seconds"`
+	// Active running time of instance in milliseconds
+	CPUTimeMs uint `json:"cpu_time_ms"`
 
 	// Amount of bytes received over network
 	RxBytes uint64 `json:"rx_bytes"`
@@ -532,6 +532,18 @@ type MetricsResponseItem struct {
 
 	// Count of packets transmitted over network
 	TxPackets uint64 `json:"tx_packets"`
+
+	// Number of currently established inbound connections (non-HTTP)
+	Connections uint64 `json:"nconns"`
+
+	// Number of in-flight HTTP requests
+	Requests uint64 `json:"nreqs"`
+
+	// Number of queued inbound connections and HTTP requests
+	Queued uint64 `json:"nqueued"`
+
+	// Total number of inbound connections and HTTP requests handled
+	Total uint64 `json:"ntotal"`
 
 	kcclient.APIResponseCommon
 }
