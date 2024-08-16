@@ -33,6 +33,16 @@ type CreateRequestService struct {
 	Handlers        []Handler `json:"handlers,omitempty"`
 }
 
+// PatchRequest is the payload for a PATCH /services request.
+// https://docs.kraft.cloud/api/v1/services/#update-a-service
+type PatchRequest struct {
+	UUID  string  `json:"uuid,omitempty"`
+	Name  *string `json:"name,omitempty"`
+	Op    *string `json:"op,omitempty"`
+	Value *any    `json:"value,omitempty"`
+	ID    *any    `json:"id,omitempty"`
+}
+
 // CreateResponseItem is a data item from a response to a POST /services request.
 // https://docs.kraft.cloud/api/v1/services/#creating-a-new-service-group
 type CreateResponseItem struct {
