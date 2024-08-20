@@ -30,6 +30,7 @@ type CreateRequest struct {
 	Replicas      *int                       `json:"replicas,omitempty"`
 	RestartPolicy *RestartPolicy             `json:"restart_policy,omitempty"`
 	ScaleToZero   *ScaleToZero               `json:"scale_to_zero,omitempty"`
+	Vcpus         *int                       `json:"vcpus,omitempty"`
 	WaitTimeoutMs *int                       `json:"wait_timeout_ms,omitempty"`
 	Features      []Feature                  `json:"features,omitempty"`
 }
@@ -113,6 +114,7 @@ type GetResponseItem struct {
 	PrivateIP         string                         `json:"private_ip"`
 	ServiceGroup      *GetCreateResponseServiceGroup `json:"service_group"`
 	ScaleToZero       *ScaleToZero                   `json:"scale_to_zero,omitempty"`
+	Vcpus             int                            `json:"vcpus"`
 	Volumes           []GetResponseVolume            `json:"volumes"`
 	NetworkInterfaces []GetResponseNetworkInterface  `json:"network_interfaces"`
 	BootTimeUs        int                            `json:"boot_time_us"` // always returned, even if never started
