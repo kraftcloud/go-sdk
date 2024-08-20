@@ -20,7 +20,7 @@ type QuotasResponseItem struct {
 
 type QuotasResponseUsed struct {
 	Instances     int `json:"instances"`
-	LiveInstances int `json:"live_instances"`
+	LiveVcpus     int `json:"live_vcpus"`
 	LiveMemoryMb  int `json:"live_memory_mb"`
 	ServiceGroups int `json:"service_groups"`
 	Services      int `json:"services"`
@@ -31,6 +31,8 @@ type QuotasResponseUsed struct {
 type QuotasResponseLimits struct {
 	MinMemoryMb      int `json:"min_memory_mb"`
 	MaxMemoryMb      int `json:"max_memory_mb"`
+	MinVcpus         int `json:"min_vcpus"`
+	MaxVcpus         int `json:"max_vcpus"`
 	MinVolumeMb      int `json:"min_volume_mb"`
 	MaxVolumeMb      int `json:"max_volume_mb"`
 	MinAutoscaleSize int `json:"min_autoscale_size"`
