@@ -12,13 +12,24 @@ import kcclient "sdk.kraft.cloud/client"
 type QuotasResponseItem struct {
 	UUID   string               `json:"uuid"`
 	Used   QuotasResponseUsed   `json:"used"`
-	Hard   QuotasResponseUsed   `json:"hard"`
+	Hard   QuotasResponseHard   `json:"hard"`
 	Limits QuotasResponseLimits `json:"limits"`
 
 	kcclient.APIResponseCommon
 }
 
 type QuotasResponseUsed struct {
+	Instances     int `json:"instances"`
+	LiveInstances int `json:"live_instances"`
+	LiveVcpus     int `json:"live_vcpus"`
+	LiveMemoryMb  int `json:"live_memory_mb"`
+	ServiceGroups int `json:"service_groups"`
+	Services      int `json:"services"`
+	Volumes       int `json:"volumes"`
+	TotalVolumeMb int `json:"total_volume_mb"`
+}
+
+type QuotasResponseHard struct {
 	Instances     int `json:"instances"`
 	LiveVcpus     int `json:"live_vcpus"`
 	LiveMemoryMb  int `json:"live_memory_mb"`
