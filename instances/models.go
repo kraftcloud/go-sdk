@@ -517,6 +517,30 @@ type MetricsResponseItem struct {
 	// Name of the instance
 	Name string `json:"name"`
 
+	// Current state of the instance
+	State InstanceState `json:"state"`
+
+	// Total number of times the instance has been started
+	StartCount uint `json:"start_count"`
+
+	// Total number of times the instance has been restarted by restart policy
+	RestartCount uint `json:"restart_count"`
+
+	// Date and time of last start in ISO8601
+	StartedAt string `json:"started_at"`
+
+	// Date and time of last stop in ISO8601
+	StoppedAt string `json:"stopped_at"`
+
+	// Uptime of instance in milliseconds
+	UptimeMs uint `json:"uptime_ms"`
+
+	// Time from start of instance to finish booting of Unikraft in microseconds
+	BootTimeUs uint `json:"boot_time_us"`
+
+	// Time from start of instance to first listen socket in microseconds
+	ListenTimeUs uint `json:"listen_time_us"`
+
 	// Resident memory size of instance
 	RSS uint64 `json:"rss_bytes"`
 
