@@ -539,7 +539,7 @@ type MetricsResponseItem struct {
 	BootTimeUs uint `json:"boot_time_us"`
 
 	// Time from start of instance to first listen socket in microseconds
-	ListenTimeUs uint `json:"listen_time_us"`
+	NetTimeUs uint `json:"net_time_us"`
 
 	// Resident memory size of instance
 	RSS uint64 `json:"rss_bytes"`
