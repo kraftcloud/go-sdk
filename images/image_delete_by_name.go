@@ -46,7 +46,7 @@ func (c *client) DeleteByName(ctx context.Context, name string) error {
 	pass := split[1]
 	ropts := []remote.Option{
 		remote.WithPlatform(gcrv1.Platform{
-			OS:           "kraftcloud",
+			OS:           "cloud",
 			Architecture: "x86_64",
 		}),
 		remote.WithAuth(&simpleAuth{

@@ -14,12 +14,12 @@ import (
 	"net/http"
 	"time"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/uuid"
 )
 
 // Log implements InstancesService.
-func (c *client) Log(ctx context.Context, id string, offset int, limit int) (*kcclient.ServiceResponse[LogResponseItem], error) {
+func (c *client) Log(ctx context.Context, id string, offset int, limit int) (*ukcclient.ServiceResponse[LogResponseItem], error) {
 	if len(id) == 0 {
 		return nil, fmt.Errorf("identifier cannot be empty")
 	}
@@ -38,7 +38,7 @@ func (c *client) Log(ctx context.Context, id string, offset int, limit int) (*kc
 		return nil, fmt.Errorf("marshalling request body: %w", err)
 	}
 
-	resp := &kcclient.ServiceResponse[LogResponseItem]{}
+	resp := &ukcclient.ServiceResponse[LogResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/log", bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

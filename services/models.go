@@ -5,7 +5,7 @@
 
 package services
 
-import kcclient "sdk.kraft.cloud/client"
+import ukcclient "sdk.kraft.cloud/client"
 
 // CreateRequest is the payload for a POST /services request.
 // https://docs.kraft.cloud/api/v1/services/#creating-a-new-service-group
@@ -51,7 +51,7 @@ type CreateResponseItem struct {
 	Name    string                    `json:"name"`
 	Domains []GetCreateResponseDomain `json:"domains"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // GetResponseItem is a data item from a response to a GET /services request.
@@ -69,7 +69,7 @@ type GetResponseItem struct {
 	SoftLimit  int                       `json:"soft_limit"`
 	HardLimit  int                       `json:"hard_limit"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 type GetCreateResponseDomain struct {
@@ -101,7 +101,7 @@ type DeleteResponseItem struct {
 	UUID   string `json:"uuid"`
 	Name   string `json:"name"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // ListResponseItem is a data item from a response to a GET /services/list request.
@@ -110,5 +110,5 @@ type ListResponseItem struct {
 	UUID string `json:"uuid"`
 	Name string `json:"name"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }

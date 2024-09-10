@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"os"
 
-	kraftcloud "sdk.kraft.cloud"
+	cloud "sdk.kraft.cloud"
 )
 
 // This demonstrates how to list images in your project.
@@ -33,8 +33,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	client := kraftcloud.NewImagesClient(
-		kraftcloud.WithToken(token),
+	client := cloud.NewImagesClient(
+		cloud.WithToken(token),
 	)
 	images, err := client.List(context.Background())
 	if err != nil {

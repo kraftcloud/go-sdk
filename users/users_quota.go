@@ -10,12 +10,12 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 )
 
 // Quotas implements UsersService.
-func (c *client) Quotas(ctx context.Context) (*kcclient.ServiceResponse[QuotasResponseItem], error) {
-	resp := &kcclient.ServiceResponse[QuotasResponseItem]{}
+func (c *client) Quotas(ctx context.Context) (*ukcclient.ServiceResponse[QuotasResponseItem], error) {
+	resp := &ukcclient.ServiceResponse[QuotasResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/quotas", nil, resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
