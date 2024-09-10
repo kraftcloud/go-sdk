@@ -13,12 +13,12 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/uuid"
 )
 
 // Detach implements VolumesService.
-func (c *client) Detach(ctx context.Context, id string, from string) (*kcclient.ServiceResponse[DetachResponseItem], error) {
+func (c *client) Detach(ctx context.Context, id string, from string) (*ukcclient.ServiceResponse[DetachResponseItem], error) {
 	if id == "" {
 		return nil, errors.New("identifier cannot be empty")
 	}
@@ -43,7 +43,7 @@ func (c *client) Detach(ctx context.Context, id string, from string) (*kcclient.
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
-	resp := &kcclient.ServiceResponse[DetachResponseItem]{}
+	resp := &ukcclient.ServiceResponse[DetachResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/detach", bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

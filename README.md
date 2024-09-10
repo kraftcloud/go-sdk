@@ -1,15 +1,15 @@
-# KraftCloud Go SDK
+# UnikraftCloud Go SDK
 
-This SDK is an early version of a Go-based client designed to interface with the [KraftCloud](https://kraft.cloud) API.
+This SDK is an early version of a Go-based client designed to interface with the [UnikraftCloud](https://kraft.cloud) API.
 
 > 📖 **Documentation**
 >
-> For a comprehensive list of all API endpoints and detailed usage, refer to the [official KraftCloud documentation](https://docs.kraft.cloud/).
+> For a comprehensive list of all API endpoints and detailed usage, refer to the [official UnikraftCloud documentation](https://docs.kraft.cloud/).
 
 ## Requirements
 
 - Go 1.20 or higher.
-- Valid KraftCloud authentication credentials. [Sign up for the beta!](https://kraft.cloud)
+- Valid UnikraftCloud authentication credentials. [Sign up for the beta!](https://kraft.cloud)
 
 ## Quick start
 
@@ -20,12 +20,12 @@ import (
 	"fmt"
 	"context"
 
-	kraftcloud "sdk.kraft.cloud"
+	cloud "sdk.kraft.cloud"
 )
 
 func main() {
-	client := kraftcloud.NewClient(
-		kraftcloud.WithToken("token"),
+	client := cloud.NewClient(
+		cloud.WithToken("token"),
 	)
 
 	images, err := client.Images().List(context.Background())

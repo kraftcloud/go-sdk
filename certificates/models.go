@@ -5,7 +5,7 @@
 
 package certificates
 
-import kcclient "sdk.kraft.cloud/client"
+import ukcclient "sdk.kraft.cloud/client"
 
 // CreateRequest is a data structure for a request to a POST /certificates request.
 // https://docs.kraft.cloud/api/v1/certificates/#uploading-an-existing-certificate
@@ -22,7 +22,7 @@ type CreateResponseItem struct {
 	UUID string `json:"uuid"`
 	Name string `json:"name"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // GetResponseItem is a data item from a response to a GET /certificates request.
@@ -42,7 +42,7 @@ type GetResponseItem struct {
 	NotAfter      string                    `json:"not_after"`
 	ServiceGroups []GetResponseServiceGroup `json:"service_groups"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 type GetResponseValidation struct {
@@ -62,7 +62,7 @@ type DeleteResponseItem struct {
 	UUID   string `json:"uuid"`
 	Name   string `json:"name"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // ListResponseItem is a data item from a response to a GET /certificates/list request.
@@ -71,5 +71,5 @@ type ListResponseItem struct {
 	UUID string `json:"uuid"`
 	Name string `json:"name"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }

@@ -13,12 +13,12 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/uuid"
 )
 
 // Stop implements InstancesService.
-func (c *client) Stop(ctx context.Context, drainTimeoutMs int, force bool, ids ...string) (*kcclient.ServiceResponse[StopResponseItem], error) {
+func (c *client) Stop(ctx context.Context, drainTimeoutMs int, force bool, ids ...string) (*ukcclient.ServiceResponse[StopResponseItem], error) {
 	if len(ids) == 0 {
 		return nil, errors.New("requires at least one identifier")
 	}
@@ -43,7 +43,7 @@ func (c *client) Stop(ctx context.Context, drainTimeoutMs int, force bool, ids .
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
-	resp := &kcclient.ServiceResponse[StopResponseItem]{}
+	resp := &ukcclient.ServiceResponse[StopResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/stop", bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

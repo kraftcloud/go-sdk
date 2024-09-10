@@ -10,12 +10,12 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 )
 
 // List implements VolumesService.
-func (c *client) List(ctx context.Context) (*kcclient.ServiceResponse[GetResponseItem], error) {
-	resp := &kcclient.ServiceResponse[GetResponseItem]{}
+func (c *client) List(ctx context.Context) (*ukcclient.ServiceResponse[GetResponseItem], error) {
+	resp := &ukcclient.ServiceResponse[GetResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, nil, resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

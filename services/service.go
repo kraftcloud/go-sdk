@@ -8,7 +8,7 @@ package services
 // Endpoint is the public path for the services service.
 const Endpoint = "/services"
 
-// Connection Handlers. KraftCloud uses connection handlers to decide how to
+// Connection Handlers. UnikraftCloud uses connection handlers to decide how to
 // forward connections from the Internet to your application. You configure the
 // handlers for every published service port individually.
 //
@@ -21,7 +21,7 @@ const Endpoint = "/services"
 type Handler string
 
 const (
-	// Terminate the TLS connection at the KraftCloud gateway using our wildcard
+	// Terminate the TLS connection at the UnikraftCloud gateway using our wildcard
 	// certificate issued for the kraft.cloud domain. The gateway forwards the
 	// unencrypted traffic to your application.
 	HandlerTLS Handler = "tls"

@@ -22,7 +22,7 @@ import (
 )
 
 // ServiceRequest is the utility structure for performing individual requests to
-// a service location at KraftCloud.
+// a service location at UnikraftCloud.
 type ServiceRequest struct {
 	// constructors must ensure that opts is non-nil, and that all its nested
 	// fields are populated to at least a default value
@@ -70,7 +70,7 @@ func (r *ServiceRequest) Metro() string {
 	return r.metro
 }
 
-// Metrolink returns the full URI representing the API endpoint of a KraftCloud
+// Metrolink returns the full URI representing the API endpoint of a UnikraftCloud
 // metro.
 func (r *ServiceRequest) Metrolink(path string) string {
 	// If the metro contains a full URL, quantified by the presence of a scheme,

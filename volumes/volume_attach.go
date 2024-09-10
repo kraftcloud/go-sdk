@@ -13,12 +13,12 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/uuid"
 )
 
 // Attach implements VolumesService.
-func (c *client) Attach(ctx context.Context, volID, instance, at string, readOnly bool) (*kcclient.ServiceResponse[AttachResponseItem], error) {
+func (c *client) Attach(ctx context.Context, volID, instance, at string, readOnly bool) (*ukcclient.ServiceResponse[AttachResponseItem], error) {
 	if volID == "" {
 		return nil, errors.New("volume identifier cannot be empty")
 	}
@@ -53,7 +53,7 @@ func (c *client) Attach(ctx context.Context, volID, instance, at string, readOnl
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
 
-	resp := &kcclient.ServiceResponse[AttachResponseItem]{}
+	resp := &ukcclient.ServiceResponse[AttachResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/attach", bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

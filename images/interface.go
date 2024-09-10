@@ -8,16 +8,16 @@ package images
 import (
 	"context"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 )
 
 type ImagesService interface {
-	kcclient.ServiceClient[ImagesService]
+	ukcclient.ServiceClient[ImagesService]
 
 	// Lists all existing images.
 	//
 	// See: https://docs.kraft.cloud/api/v1/images/#list-existing-images
-	List(ctx context.Context) (*kcclient.ServiceResponse[GetResponseItem], error)
+	List(ctx context.Context) (*ukcclient.ServiceResponse[GetResponseItem], error)
 
 	// Get an existing image. You can filter by digest, tag and based on
 	// whether the image is public or not. The returned groups fulfill all
@@ -25,7 +25,7 @@ type ImagesService interface {
 	// part of the request.
 	//
 	// See: https://docs.kraft.cloud/api/v1/images/#list-existing-images
-	Get(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
+	Get(ctx context.Context, ids ...string) (*ukcclient.ServiceResponse[GetResponseItem], error)
 
 	// Delete an image by its provided name.
 	DeleteByName(ctx context.Context, name string) error

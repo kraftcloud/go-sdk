@@ -3,5 +3,5 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-// Package certificates manages TLS certificates on KraftCloud.
+// Package certificates manages TLS certificates on UnikraftCloud.
 package certificates

@@ -10,7 +10,7 @@ import (
 	"os"
 	"time"
 
-	kraftcloud "sdk.kraft.cloud"
+	cloud "sdk.kraft.cloud"
 	"sdk.kraft.cloud/instances"
 	"sdk.kraft.cloud/services"
 )
@@ -37,8 +37,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	client := kraftcloud.NewInstancesClient(
-		kraftcloud.WithToken(token),
+	client := cloud.NewInstancesClient(
+		cloud.WithToken(token),
 	)
 
 	ctx := context.Background()

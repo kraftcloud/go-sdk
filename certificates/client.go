@@ -8,17 +8,17 @@ package certificates
 import (
 	"time"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/client/httpclient"
 	"sdk.kraft.cloud/client/options"
 )
 
-// client is a basic wrapper around the v1 Certificate client of KraftCloud.
+// client is a basic wrapper around the v1 Certificate client of UnikraftCloud.
 //
 // See: https://docs.kraft.cloud/api/v1/certificates/
 type client struct {
 	// constructors must ensure that request is non-nil
-	request *kcclient.ServiceRequest
+	request *ukcclient.ServiceRequest
 }
 
 var _ CertificatesService = (*client)(nil)
@@ -27,12 +27,12 @@ var _ CertificatesService = (*client)(nil)
 // client based on the provided pre-existing options.
 func NewCertificatesClientFromOptions(opts *options.Options) CertificatesService {
 	return &client{
-		request: kcclient.NewServiceRequestFromDefaultOptions(opts),
+		request: ukcclient.NewServiceRequestFromDefaultOptions(opts),
 	}
 }
 
 // WithMetro sets the just-in-time metro to use when connecting to the
-// KraftCloud API.
+// UnikraftCloud API.
 func (c *client) WithMetro(m string) CertificatesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithMetro(m)

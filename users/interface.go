@@ -8,14 +8,14 @@ package users
 import (
 	"context"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 )
 
 type UsersService interface {
-	kcclient.ServiceClient[UsersService]
+	ukcclient.ServiceClient[UsersService]
 
 	// Lists quota usage and limits of your user account. Limits are hard limits
 	// that cannot be exceeded.
 	// https://docs.kraft.cloud/api/v1/users/#list-quota-usage-and-limits
-	Quotas(ctx context.Context) (*kcclient.ServiceResponse[QuotasResponseItem], error)
+	Quotas(ctx context.Context) (*ukcclient.ServiceResponse[QuotasResponseItem], error)
 }

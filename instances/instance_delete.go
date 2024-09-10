@@ -13,12 +13,12 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/uuid"
 )
 
 // Delete implements InstancesService.
-func (c *client) Delete(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error) {
+func (c *client) Delete(ctx context.Context, ids ...string) (*ukcclient.ServiceResponse[DeleteResponseItem], error) {
 	if len(ids) == 0 {
 		return nil, errors.New("requires at least one identifier")
 	}
@@ -37,7 +37,7 @@ func (c *client) Delete(ctx context.Context, ids ...string) (*kcclient.ServiceRe
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
-	resp := &kcclient.ServiceResponse[DeleteResponseItem]{}
+	resp := &ukcclient.ServiceResponse[DeleteResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodDelete, Endpoint, bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

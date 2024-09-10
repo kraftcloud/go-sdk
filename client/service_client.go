@@ -17,7 +17,7 @@ import (
 // the client.
 type ServiceClient[T any] interface {
 	// WithMetro sets the just-in-time metro to use when connecting to the
-	// KraftCloud API.
+	// UnikraftCloud API.
 	WithMetro(string) T
 
 	// WithTimeout sets the timeout when making the request.

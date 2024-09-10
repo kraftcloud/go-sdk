@@ -8,11 +8,11 @@ package volumes
 import (
 	"context"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 )
 
 type VolumesService interface {
-	kcclient.ServiceClient[VolumesService]
+	ukcclient.ServiceClient[VolumesService]
 
 	// Creates one or more volumes with the given configuration. The volumes are
 	// automatically initialized with an empty file system. After initialization
@@ -21,12 +21,12 @@ type VolumesService interface {
 	// be changed after creation.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#creating-volumes
-	Create(ctx context.Context, name string, sizeMB int) (*kcclient.ServiceResponse[CreateResponseItem], error)
+	Create(ctx context.Context, name string, sizeMB int) (*ukcclient.ServiceResponse[CreateResponseItem], error)
 
 	// Get returns the current state and the configuration of volumes.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#getting-the-status-of-a-volume
-	Get(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
+	Get(ctx context.Context, ids ...string) (*ukcclient.ServiceResponse[GetResponseItem], error)
 
 	// Attach attaches a volume to an instance so that the volume is mounted
 	// when the instance starts using the volume and instance name.  The volume
@@ -34,7 +34,7 @@ type VolumesService interface {
 	// Currently, each instance can have only one volume attached at most.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#attaching-a-volume-to-an-instance
-	Attach(ctx context.Context, volID, instance, at string, readOnly bool) (*kcclient.ServiceResponse[AttachResponseItem], error)
+	Attach(ctx context.Context, volID, instance, at string, readOnly bool) (*ukcclient.ServiceResponse[AttachResponseItem], error)
 
 	// Detach detaches a volume from an instance.
 	// The instance from which to detach must in stopped state. If the volume
@@ -42,19 +42,19 @@ type VolumesService interface {
 	// make it persistent (i.e., it survives the deletion of the instance).
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#detaching-a-volume-from-an-instance
-	Detach(ctx context.Context, id string, from string) (*kcclient.ServiceResponse[DetachResponseItem], error)
+	Detach(ctx context.Context, id string, from string) (*ukcclient.ServiceResponse[DetachResponseItem], error)
 
 	// Delete deletes the specified volume(s).
 	// Fails if any of the specified volumes is still attached to an instance.
 	// After this call the UUID of the volumes is no longer valid.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#deleting-a-volume
-	Delete(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
+	Delete(ctx context.Context, ids ...string) (*ukcclient.ServiceResponse[DeleteResponseItem], error)
 
 	// Lists all existing volumes. You can filter by persistence and volume
 	// state. The returned volumes fulfill all provided filter criteria. No
 	// particular value is assumed if a filter is not part of the request.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#list-existing-volumes
-	List(ctx context.Context) (*kcclient.ServiceResponse[GetResponseItem], error)
+	List(ctx context.Context) (*ukcclient.ServiceResponse[GetResponseItem], error)
 }

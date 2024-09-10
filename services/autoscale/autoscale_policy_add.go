@@ -13,12 +13,12 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/services"
 )
 
 // AddPolicy implements AutoscaleService.
-func (c *client) AddPolicy(ctx context.Context, autoscaleUUID string, req Policy) (*kcclient.ServiceResponse[AddPolicyResponseItem], error) {
+func (c *client) AddPolicy(ctx context.Context, autoscaleUUID string, req Policy) (*ukcclient.ServiceResponse[AddPolicyResponseItem], error) {
 	if autoscaleUUID == "" {
 		return nil, errors.New("autoscaleUUID cannot be empty")
 	}
@@ -30,7 +30,7 @@ func (c *client) AddPolicy(ctx context.Context, autoscaleUUID string, req Policy
 
 	endpoint := services.Endpoint + "/" + autoscaleUUID + AutoscaleEndpoint + AutoscalePolicyEndpoint
 
-	resp := &kcclient.ServiceResponse[AddPolicyResponseItem]{}
+	resp := &ukcclient.ServiceResponse[AddPolicyResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodPost, endpoint, bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

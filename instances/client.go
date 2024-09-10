@@ -8,17 +8,17 @@ package instances
 import (
 	"time"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/client/httpclient"
 	"sdk.kraft.cloud/client/options"
 )
 
-// client is a basic wrapper around the v1 Instance client of KraftCloud.
+// client is a basic wrapper around the v1 Instance client of UnikraftCloud.
 //
 // See: https://docs.kraft.cloud/api/v1/instances/
 type client struct {
 	// constructors must ensure that request is non-nil
-	request *kcclient.ServiceRequest
+	request *ukcclient.ServiceRequest
 }
 
 var _ InstancesService = (*client)(nil)
@@ -27,12 +27,12 @@ var _ InstancesService = (*client)(nil)
 // based on the provided pre-existing options.
 func NewInstancesClientFromOptions(opts *options.Options) InstancesService {
 	return &client{
-		request: kcclient.NewServiceRequestFromDefaultOptions(opts),
+		request: ukcclient.NewServiceRequestFromDefaultOptions(opts),
 	}
 }
 
 // WithMetro sets the just-in-time metro to use when connecting to the
-// KraftCloud API.
+// UnikraftCloud API.
 func (c *client) WithMetro(m string) InstancesService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithMetro(m)

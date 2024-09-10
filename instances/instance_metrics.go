@@ -13,12 +13,12 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/uuid"
 )
 
 // Metrics implements InstancesService.
-func (c *client) Metrics(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[MetricsResponseItem], error) {
+func (c *client) Metrics(ctx context.Context, ids ...string) (*ukcclient.ServiceResponse[MetricsResponseItem], error) {
 	if len(ids) == 0 {
 		return nil, errors.New("requires at least one identifier")
 	}
@@ -39,7 +39,7 @@ func (c *client) Metrics(ctx context.Context, ids ...string) (*kcclient.ServiceR
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
-	resp := &kcclient.ServiceResponse[MetricsResponseItem]{}
+	resp := &ukcclient.ServiceResponse[MetricsResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/metrics", bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

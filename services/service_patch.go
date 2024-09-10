@@ -12,17 +12,17 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 )
 
 // Patch implements ServicesService.
-func (c *client) Patch(ctx context.Context, req PatchRequest) (*kcclient.ServiceResponse[CreateResponseItem], error) {
+func (c *client) Patch(ctx context.Context, req PatchRequest) (*ukcclient.ServiceResponse[CreateResponseItem], error) {
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
 
-	resp := &kcclient.ServiceResponse[CreateResponseItem]{}
+	resp := &ukcclient.ServiceResponse[CreateResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodPatch, Endpoint, bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

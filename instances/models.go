@@ -12,7 +12,7 @@ import (
 	"syscall"
 	"time"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/services"
 )
 
@@ -62,7 +62,7 @@ type CreateResponseItem struct {
 	ServiceGroup *GetCreateResponseServiceGroup `json:"service_group"` // only if service_group was set in the request
 	BootTimeUs   *int                           `json:"boot_time_us"`  // only if wait_timeout_ms was set in the request
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 type InstanceState string
@@ -119,7 +119,7 @@ type GetResponseItem struct {
 	NetworkInterfaces []GetResponseNetworkInterface  `json:"network_interfaces"`
 	BootTimeUs        int                            `json:"boot_time_us"` // always returned, even if never started
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // Stop code of the kernel.  This value encodes multiple details about the stop
@@ -460,7 +460,7 @@ type DeleteResponseItem struct {
 	Name          string `json:"name"`
 	PreviousState string `json:"previous_state"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // ListResponseItem is a data item from a response to a GET /instances/list request.
@@ -469,7 +469,7 @@ type ListResponseItem struct {
 	UUID string `json:"uuid"`
 	Name string `json:"name"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // StartResponseItem is a data item from a response to a POST /instances/start request.
@@ -481,7 +481,7 @@ type StartResponseItem struct {
 	State         string `json:"state"`
 	PreviousState string `json:"previous_state"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // StopResponseItem is a data item from a response to a POST /instances/stop request.
@@ -493,7 +493,7 @@ type StopResponseItem struct {
 	State         string `json:"state"`
 	PreviousState string `json:"previous_state"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // LogResponseItem is a data item from a response to a GET /instances/log request.
@@ -506,7 +506,7 @@ type LogResponseItem struct {
 	Range     LogResponseRange     `json:"range"`
 	Available LogResponseAvailable `json:"available"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // MetricsResponseItem is a data item from a response to a GET /instances/metrics request.
@@ -571,7 +571,7 @@ type MetricsResponseItem struct {
 	// Total number of inbound connections and HTTP requests handled
 	Total uint64 `json:"ntotal"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 type LogResponseRange struct {
@@ -592,7 +592,7 @@ type WaitResponseItem struct {
 	Name   string `json:"name"`
 	State  string `json:"state"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 type ScaleToZero struct {

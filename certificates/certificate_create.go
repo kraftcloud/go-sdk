@@ -12,17 +12,17 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 )
 
 // Create implements InstancesService.
-func (c *client) Create(ctx context.Context, req *CreateRequest) (*kcclient.ServiceResponse[CreateResponseItem], error) {
+func (c *client) Create(ctx context.Context, req *CreateRequest) (*ukcclient.ServiceResponse[CreateResponseItem], error) {
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
 
-	resp := &kcclient.ServiceResponse[CreateResponseItem]{}
+	resp := &ukcclient.ServiceResponse[CreateResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodPost, Endpoint, bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

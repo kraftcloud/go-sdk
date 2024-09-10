@@ -3,7 +3,7 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package kraftcloud
+package cloud
 
 import (
 	"os"
@@ -17,7 +17,7 @@ import (
 type Option func(*options.Options)
 
 // NewDefaultOptions is a constructor method for instantiation a new set of
-// default options for underlying requests to the KraftCloud API.
+// default options for underlying requests to the UnikraftCloud API.
 func NewDefaultOptions(opts ...Option) *options.Options {
 	options := options.Options{}
 
@@ -52,7 +52,7 @@ func NewDefaultOptions(opts ...Option) *options.Options {
 	return &options
 }
 
-// WithToken sets the access token of the client connecting to KraftCloud.
+// WithToken sets the access token of the client connecting to UnikraftCloud.
 func WithToken(token string) Option {
 	return func(client *options.Options) {
 		client.SetToken(token)
@@ -60,14 +60,14 @@ func WithToken(token string) Option {
 }
 
 // WithHTTPClient sets the HTTP client that's used to customize the connection
-// to KraftCloud's API.
+// to UnikraftCloud's API.
 func WithHTTPClient(httpClient httpclient.HTTPClient) Option {
 	return func(client *options.Options) {
 		client.SetHTTPClient(httpClient)
 	}
 }
 
-// WithDefaultMetro sets a KraftCloud metro, e.g. `fra0` which is based in
+// WithDefaultMetro sets a UnikraftCloud metro, e.g. `fra0` which is based in
 // Frankfurt.
 func WithDefaultMetro(metro string) Option {
 	return func(client *options.Options) {

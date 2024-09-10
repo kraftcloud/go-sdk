@@ -8,17 +8,17 @@ package users
 import (
 	"time"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/client/httpclient"
 	"sdk.kraft.cloud/client/options"
 )
 
-// client wraps the v1 Users client of KraftCloud.
+// client wraps the v1 Users client of UnikraftCloud.
 //
 // See: https://docs.kraft.cloud/api/v1/users/
 type client struct {
 	// constructors must ensure that request is non-nil
-	request *kcclient.ServiceRequest
+	request *ukcclient.ServiceRequest
 }
 
 var _ UsersService = (*client)(nil)
@@ -27,12 +27,12 @@ var _ UsersService = (*client)(nil)
 // the provided pre-existing options.
 func NewUsersClientFromOptions(opts *options.Options) UsersService {
 	return &client{
-		request: kcclient.NewServiceRequestFromDefaultOptions(opts),
+		request: ukcclient.NewServiceRequestFromDefaultOptions(opts),
 	}
 }
 
 // WithMetro sets the just-in-time metro to use when connecting to the
-// KraftCloud API.
+// UnikraftCloud API.
 func (c *client) WithMetro(m string) UsersService {
 	ccpy := c.clone()
 	ccpy.request = c.request.WithMetro(m)

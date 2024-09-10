@@ -11,19 +11,19 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/services"
 )
 
 // GetPolicy implements AutoscaleService.
-func (c *client) GetPolicy(ctx context.Context, autoscaleUUID, name string) (*kcclient.ServiceResponse[GetPolicyResponseItem], error) {
+func (c *client) GetPolicy(ctx context.Context, autoscaleUUID, name string) (*ukcclient.ServiceResponse[GetPolicyResponseItem], error) {
 	if name == "" {
 		return nil, errors.New("name cannot be empty")
 	}
 
 	endpoint := services.Endpoint + "/" + autoscaleUUID + AutoscaleEndpoint + AutoscalePolicyEndpoint + "/" + name
 
-	resp := &kcclient.ServiceResponse[GetPolicyResponseItem]{}
+	resp := &ukcclient.ServiceResponse[GetPolicyResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

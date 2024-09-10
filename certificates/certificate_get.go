@@ -13,12 +13,12 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/uuid"
 )
 
 // Get implements CertificatesService.
-func (c *client) Get(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error) {
+func (c *client) Get(ctx context.Context, ids ...string) (*ukcclient.ServiceResponse[GetResponseItem], error) {
 	if len(ids) == 0 {
 		return nil, errors.New("requires at least one identifier")
 	}
@@ -37,7 +37,7 @@ func (c *client) Get(ctx context.Context, ids ...string) (*kcclient.ServiceRespo
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
-	resp := &kcclient.ServiceResponse[GetResponseItem]{}
+	resp := &ukcclient.ServiceResponse[GetResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

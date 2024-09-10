@@ -11,19 +11,19 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/services"
 )
 
 // DeletePolicy implements AutoscaleService.
-func (c *client) DeletePolicy(ctx context.Context, autoscaleUUID, name string) (*kcclient.ServiceResponse[DeletePolicyResponseItem], error) {
+func (c *client) DeletePolicy(ctx context.Context, autoscaleUUID, name string) (*ukcclient.ServiceResponse[DeletePolicyResponseItem], error) {
 	if autoscaleUUID == "" || name == "" {
 		return nil, errors.New("policyName and autoscaleUUID cannot be empty")
 	}
 
 	endpoint := services.Endpoint + "/" + autoscaleUUID + AutoscaleEndpoint + AutoscalePolicyEndpoint + "/" + name
 
-	resp := &kcclient.ServiceResponse[DeletePolicyResponseItem]{}
+	resp := &ukcclient.ServiceResponse[DeletePolicyResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodDelete, endpoint, nil, resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

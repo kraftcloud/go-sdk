@@ -8,29 +8,29 @@ package certificates
 import (
 	"context"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 )
 
 type CertificatesService interface {
-	kcclient.ServiceClient[CertificatesService]
+	ukcclient.ServiceClient[CertificatesService]
 
 	// Create creates a new certificate.
 	//
 	// See: https://docs.kraft.cloud/api/v1/certificates/#uploading-an-existing-certificate
-	Create(ctx context.Context, req *CreateRequest) (*kcclient.ServiceResponse[CreateResponseItem], error)
+	Create(ctx context.Context, req *CreateRequest) (*ukcclient.ServiceResponse[CreateResponseItem], error)
 
 	// Get returns the current status and the properties of one or more certificate(s).
 	//
 	// See: https://docs.kraft.cloud/api/v1/certificates/#getting-the-status-of-a-certificate
-	Get(ctx context.Context, uuids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
+	Get(ctx context.Context, uuids ...string) (*ukcclient.ServiceResponse[GetResponseItem], error)
 
 	// Delete deletes one or more certificate(s).
 	//
 	// See: https://docs.kraft.cloud/api/v1/certificates/#deleting-a-certificate
-	Delete(ctx context.Context, uuids ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
+	Delete(ctx context.Context, uuids ...string) (*ukcclient.ServiceResponse[DeleteResponseItem], error)
 
 	// List all existing certificates.
 	//
 	// See: https://docs.kraft.cloud/api/v1/certificates/#list-existing-certificates
-	List(ctx context.Context) (*kcclient.ServiceResponse[GetResponseItem], error)
+	List(ctx context.Context) (*ukcclient.ServiceResponse[GetResponseItem], error)
 }
