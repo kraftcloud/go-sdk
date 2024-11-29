@@ -23,8 +23,8 @@ type CreateRequestDomain struct {
 }
 
 type CreateRequestDomainCertificate struct {
-	UUID string `json:"uuid"`
-	Name string `json:"name"`
+	UUID *string `json:"uuid,omitempty"`
+	Name *string `json:"name,omitempty"`
 }
 
 type CreateRequestService struct {
