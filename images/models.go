@@ -5,7 +5,7 @@
 
 package images
 
-import kcclient "sdk.kraft.cloud/client"
+import ukcclient "sdk.kraft.cloud/client"
 
 // GetResponseItem is a data item from a response to a /images/list request.
 // https://docs.kraft.cloud/api/v1/images/#list-existing-images
@@ -18,7 +18,7 @@ type GetResponseItem struct {
 	KernelArgs  string            `json:"kernel_args"`
 	Labels      map[string]string `json:"labels"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // QuotasResponseItem is a data item from a parsed response to a registry request at

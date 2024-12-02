@@ -15,7 +15,7 @@ import (
 	"sync"
 	"testing"
 
-	kraftcloud "sdk.kraft.cloud"
+	cloud "sdk.kraft.cloud"
 )
 
 const (
@@ -27,8 +27,8 @@ const (
 func TestClientThreadSafety(t *testing.T) {
 	const requests = 100
 
-	cli := kraftcloud.NewInstancesClient(
-		kraftcloud.WithHTTPClient(httpMockStatusClient()),
+	cli := cloud.NewInstancesClient(
+		cloud.WithHTTPClient(httpMockStatusClient()),
 	)
 
 	errCh := make(chan error)

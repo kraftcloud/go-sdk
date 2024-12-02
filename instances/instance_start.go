@@ -13,12 +13,12 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/uuid"
 )
 
 // Start implements InstancesService.
-func (c *client) Start(ctx context.Context, waitTimeoutMs int, ids ...string) (*kcclient.ServiceResponse[StartResponseItem], error) {
+func (c *client) Start(ctx context.Context, waitTimeoutMs int, ids ...string) (*ukcclient.ServiceResponse[StartResponseItem], error) {
 	if len(ids) == 0 {
 		return nil, errors.New("requires at least one identifier")
 	}
@@ -42,7 +42,7 @@ func (c *client) Start(ctx context.Context, waitTimeoutMs int, ids ...string) (*
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
-	resp := &kcclient.ServiceResponse[StartResponseItem]{}
+	resp := &ukcclient.ServiceResponse[StartResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodPut, Endpoint+"/start", bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

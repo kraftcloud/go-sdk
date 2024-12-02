@@ -8,28 +8,28 @@ package autoscale
 import (
 	"context"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 )
 
 type AutoscaleService interface {
-	kcclient.ServiceClient[AutoscaleService]
+	ukcclient.ServiceClient[AutoscaleService]
 
 	// CreateConfiguration creates a new autoscale configuration.
-	CreateConfiguration(ctx context.Context, req CreateRequest) (*kcclient.ServiceResponse[CreateResponseItem], error)
+	CreateConfiguration(ctx context.Context, req CreateRequest) (*ukcclient.ServiceResponse[CreateResponseItem], error)
 
 	// GetConfigurations returns the current states and configurations of
 	// autoscale configurations.
-	GetConfigurations(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
+	GetConfigurations(ctx context.Context, ids ...string) (*ukcclient.ServiceResponse[GetResponseItem], error)
 
 	// DeleteConfigurations deletes autoscale configurations.
-	DeleteConfigurations(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
+	DeleteConfigurations(ctx context.Context, ids ...string) (*ukcclient.ServiceResponse[DeleteResponseItem], error)
 
 	// AddPolicy adds a new autoscale policy to an autoscale configuration.
-	AddPolicy(ctx context.Context, autoscaleUUID string, req Policy) (*kcclient.ServiceResponse[AddPolicyResponseItem], error)
+	AddPolicy(ctx context.Context, autoscaleUUID string, req Policy) (*ukcclient.ServiceResponse[AddPolicyResponseItem], error)
 
 	// GetPolicy returns the current state and configuration of an autoscale policy.
-	GetPolicy(ctx context.Context, autoscaleUUID, name string) (*kcclient.ServiceResponse[GetPolicyResponseItem], error)
+	GetPolicy(ctx context.Context, autoscaleUUID, name string) (*ukcclient.ServiceResponse[GetPolicyResponseItem], error)
 
 	// DeletePolicy deletes an autoscale policy.
-	DeletePolicy(ctx context.Context, autoscaleUUID, name string) (*kcclient.ServiceResponse[DeletePolicyResponseItem], error)
+	DeletePolicy(ctx context.Context, autoscaleUUID, name string) (*ukcclient.ServiceResponse[DeletePolicyResponseItem], error)
 }

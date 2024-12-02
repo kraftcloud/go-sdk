@@ -5,7 +5,7 @@
 
 package users
 
-import kcclient "sdk.kraft.cloud/client"
+import ukcclient "sdk.kraft.cloud/client"
 
 // QuotasResponseItem is a data item from a response to a GET /users/quotas request.
 // https://docs.kraft.cloud/api/v1/users/#list-quota-usage-and-limits
@@ -15,7 +15,7 @@ type QuotasResponseItem struct {
 	Hard   QuotasResponseHard   `json:"hard"`
 	Limits QuotasResponseLimits `json:"limits"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 type QuotasResponseUsed struct {

@@ -5,7 +5,7 @@
 
 package volumes
 
-import kcclient "sdk.kraft.cloud/client"
+import ukcclient "sdk.kraft.cloud/client"
 
 // CreateResponseItem is a data item from a response to a POST /volumes request.
 // https://docs.kraft.cloud/api/v1/volumes/#creating-volumes
@@ -14,7 +14,7 @@ type CreateResponseItem struct {
 	UUID   string `json:"uuid"`
 	Name   string `json:"name"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // GetResponseItem is a data item from a response to a GET /volumes request.
@@ -30,7 +30,7 @@ type GetResponseItem struct {
 	Persistent bool                 `json:"persistent"`
 	CreatedAt  string               `json:"created_at"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 type InstanceAttachment struct {
@@ -51,7 +51,7 @@ type AttachResponseItem struct {
 	UUID   string `json:"uuid"`
 	Name   string `json:"name"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // DetachResponseItem is a data item from a response to a PUT /volumes/detach request.
@@ -61,7 +61,7 @@ type DetachResponseItem struct {
 	UUID   string `json:"uuid"`
 	Name   string `json:"name"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // DeleteResponseItem is a data item from a response to a DELETE /volumes request.
@@ -71,7 +71,7 @@ type DeleteResponseItem struct {
 	UUID   string `json:"uuid"`
 	Name   string `json:"name"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // ListResponseItem is a data item from a response to a GET /volumes/list request.
@@ -80,5 +80,5 @@ type ListResponseItem struct {
 	UUID string `json:"uuid"`
 	Name string `json:"name"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
