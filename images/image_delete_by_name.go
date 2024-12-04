@@ -115,17 +115,19 @@ func (c *client) DeleteByName(ctx context.Context, name string) error {
 		}
 
 		// Fetch the repository name as the last part of the image name
-		repoSplit := strings.Split(name, "/")
-		project := repoSplit[1]
-		repo := strings.Join(repoSplit[2:], "/")
+		_, noIndex, _ := strings.Cut(name, "/")
+		project, repo, _ := strings.Cut(noIndex, "/")
 
 		params := repository.NewDeleteRepositoryParams()
 		params.SetContext(ctx)
 		params.SetProjectName(project)
 		params.SetRepositoryName(repo)
-		ok, err := harborAPI.V2().Repository.DeleteRepository(ctx, params)
+		_, err = harborAPI.V2().Repository.DeleteRepository(ctx, params)
 		if err != nil {
-			return fmt.Errorf("could not delete repository: %s, %s", ok, err)
+			if strings.Contains(err.Error(), "404") {
+				return fmt.Errorf("%s", "could not delete repository: repository not found")
+			}
+			return fmt.Errorf("could not delete repository: %s", err)
 		}
 	}
 
