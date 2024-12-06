@@ -379,10 +379,11 @@ func (item *GetResponseItem) StopReasonCode() string {
 func (item *GetResponseItem) DescribeStatus() string {
 	switch item.State {
 	case InstanceStateRunning:
-		dur, err := time.ParseDuration(fmt.Sprintf("%dms", item.UptimeMs))
+		started, err := time.Parse(time.RFC3339, item.StartedAt)
 		if err != nil {
 			return err.Error()
 		}
+		dur := time.Since(started)
 
 		days := int64(dur.Hours() / 24)
 		hours := int64(math.Mod(dur.Hours(), 24))
