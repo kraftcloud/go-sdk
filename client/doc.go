@@ -4,5 +4,5 @@
 // You may not use this file except in compliance with the License.
 
 // Package client provides the underlying structures, interfaces and methods for
-// peforming requests against KraftCloud's API.
+// peforming requests against UnikraftCloud's API.
 package client

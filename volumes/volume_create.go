@@ -12,11 +12,11 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 )
 
 // Create implements VolumesService.
-func (c *client) Create(ctx context.Context, name string, sizeMB int) (*kcclient.ServiceResponse[CreateResponseItem], error) {
+func (c *client) Create(ctx context.Context, name string, sizeMB int) (*ukcclient.ServiceResponse[CreateResponseItem], error) {
 	var err error
 	var body []byte
 
@@ -38,7 +38,7 @@ func (c *client) Create(ctx context.Context, name string, sizeMB int) (*kcclient
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
 
-	resp := &kcclient.ServiceResponse[CreateResponseItem]{}
+	resp := &ukcclient.ServiceResponse[CreateResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodPost, Endpoint, bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}

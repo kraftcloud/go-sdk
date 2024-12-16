@@ -8,7 +8,7 @@ package metros
 import (
 	"time"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 )
 
 // ListResponseItem is a data item from a response to a /metros/list request.
@@ -21,5 +21,5 @@ type ListResponseItem struct {
 	Online   bool          `json:"online"`
 	Proxy    string        `json:"proxy"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }

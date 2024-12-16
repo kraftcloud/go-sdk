@@ -20,7 +20,7 @@ type ErrorResponse struct {
 }
 
 // ServiceResponse embodies the the API response for an invocation to a service
-// on KraftCloud.  It uses standard HTTP response codes to indicate success or
+// on UnikraftCloud.  It uses standard HTTP response codes to indicate success or
 // failure. In addition, the response body contains more details about the
 // result of the operation in a JSON object. On success the data member contains
 // an array of objects with one object per result. The array is named according
