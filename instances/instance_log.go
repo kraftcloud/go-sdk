@@ -11,6 +11,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"time"
 
@@ -169,13 +170,17 @@ func (c *client) TailLogs(ctx context.Context, id string, follow bool, tail int,
 			}
 		}
 
-		// If we've tailed, then we've reached the latest logs, and if following has
-		// not been set, we can safely return early.
-		// return early.
-		if !follow && tail > 0 {
-			close(logChan)
-			close(errChan)
-			return
+		// If we've tailed, then we've reached the latest logs.
+		if tail > 0 {
+			// First send an EOF to the error channel to signal the end of the logs.
+			errChan <- io.EOF
+
+			// If tailing has been disabled, we can close the channels now.
+			if !follow {
+				close(logChan)
+				close(errChan)
+				return
+			}
 		}
 
 		// Set the page size to the maximum.  We are now moving forwards through the
@@ -231,12 +236,17 @@ func (c *client) TailLogs(ctx context.Context, id string, follow bool, tail int,
 			}
 
 			// We've received the last payload of logs if the size of the logs is less
-			// than the page size.  If tailing has been disabled, we can close the
-			// channel now.
-			if !follow && startOffset == item.Range.End {
-				close(logChan)
-				close(errChan)
-				return
+			// than the page size, signalling end of file.
+			if startOffset == item.Range.End {
+				// First send an EOF to the error channel to signal the end of the logs.
+				errChan <- io.EOF
+
+				// If tailing has been disabled, we can close the channels now.
+				if !follow {
+					close(logChan)
+					close(errChan)
+					return
+				}
 			}
 
 			time.Sleep(delay)
