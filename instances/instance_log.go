@@ -237,7 +237,9 @@ func (c *client) TailLogs(ctx context.Context, id string, follow bool, tail int,
 
 			// We've received the last payload of logs if the size of the logs is less
 			// than the page size, signalling end of file.
-			if startOffset == item.Range.End {
+			if startOffset == item.Range.End ||
+				State(item.State) == StateStopped ||
+				State(item.State) == StateStandby {
 				// First send an EOF to the error channel to signal the end of the logs.
 				errChan <- io.EOF
 
