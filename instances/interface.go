@@ -9,11 +9,11 @@ import (
 	"context"
 	"time"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 )
 
 type InstancesService interface {
-	kcclient.ServiceClient[InstancesService]
+	ukcclient.ServiceClient[InstancesService]
 
 	// Creates one or more new instances of the specified Unikraft images. You can
 	// describe the properties of the new instances such as their startup
@@ -21,30 +21,30 @@ type InstancesService interface {
 	// be defined during creation. They cannot be changed later.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#creating-a-new-instance
-	Create(ctx context.Context, req CreateRequest) (*kcclient.ServiceResponse[CreateResponseItem], error)
+	Create(ctx context.Context, req CreateRequest) (*ukcclient.ServiceResponse[CreateResponseItem], error)
 
 	// Get returns the current state and the configuration of one or more instance(s).
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#getting-the-status-of-an-instance
-	Get(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
+	Get(ctx context.Context, ids ...string) (*ukcclient.ServiceResponse[GetResponseItem], error)
 
 	// Delete deletes the specified instance(s).
 	// After this call the UUIDs of the instances are no longer valid. If the
 	// instances are currently running, they are force stopped.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#deleting-an-instance
-	Delete(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[DeleteResponseItem], error)
+	Delete(ctx context.Context, ids ...string) (*ukcclient.ServiceResponse[DeleteResponseItem], error)
 
 	// Lists all existing instances.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#list-existing-instances
-	List(ctx context.Context) (*kcclient.ServiceResponse[GetResponseItem], error)
+	List(ctx context.Context) (*ukcclient.ServiceResponse[GetResponseItem], error)
 
 	// Start starts previously stopped instance(s).
 	// Does nothing for instances that are already running.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#starting-an-instance
-	Start(ctx context.Context, waitTimeoutMs int, ids ...string) (*kcclient.ServiceResponse[StartResponseItem], error)
+	Start(ctx context.Context, waitTimeoutMs int, ids ...string) (*ukcclient.ServiceResponse[StartResponseItem], error)
 
 	// Stop stops the specified instance(s), but does not destroy them.
 	// All volatile state (e.g., RAM contents) is lost. Does nothing for
@@ -52,17 +52,17 @@ type InstancesService interface {
 	// the start endpoint.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#stopping-an-instance
-	Stop(ctx context.Context, drainTimeoutMs int, force bool, ids ...string) (*kcclient.ServiceResponse[StopResponseItem], error)
+	Stop(ctx context.Context, drainTimeoutMs int, force bool, ids ...string) (*ukcclient.ServiceResponse[StopResponseItem], error)
 
 	// Log returns the console output of the specified instance.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#retrieve-the-console-output
-	Log(ctx context.Context, id string, offset int, limit int) (*kcclient.ServiceResponse[LogResponseItem], error)
+	Log(ctx context.Context, id string, offset int, limit int) (*ukcclient.ServiceResponse[LogResponseItem], error)
 
 	// Metrics returns the metrics of the specified instance(s).
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#metrics
-	Metrics(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[MetricsResponseItem], error)
+	Metrics(ctx context.Context, ids ...string) (*ukcclient.ServiceResponse[MetricsResponseItem], error)
 
 	// TailLogs is a utility method which returns a channel that streams the
 	// console output of the specified instance.
@@ -71,5 +71,5 @@ type InstancesService interface {
 	// Wait waits for the specified instance(s) to reach the desired state.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#waiting-for-an-instance-to-reach-a-desired-state
-	Wait(ctx context.Context, state State, timeoutMs int, ids ...string) (*kcclient.ServiceResponse[WaitResponseItem], error)
+	Wait(ctx context.Context, state State, timeoutMs int, ids ...string) (*ukcclient.ServiceResponse[WaitResponseItem], error)
 }

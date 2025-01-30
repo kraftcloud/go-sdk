@@ -9,7 +9,7 @@ package options
 
 import "sdk.kraft.cloud/client/httpclient"
 
-// Options contain necessary information for connecting to a KraftCloud service
+// Options contain necessary information for connecting to a UnikraftCloud service
 // endpoint.
 type Options struct {
 	token        string

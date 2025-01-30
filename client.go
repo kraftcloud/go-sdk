@@ -3,7 +3,7 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-package kraftcloud
+package cloud
 
 import (
 	"sdk.kraft.cloud/certificates"
@@ -17,7 +17,7 @@ import (
 	"sdk.kraft.cloud/volumes"
 )
 
-// Client provides access to the KraftCloud API.
+// Client provides access to the UnikraftCloud API.
 type Client struct {
 	autoscale    scale.AutoscaleService
 	certificates certificates.CertificatesService
@@ -29,8 +29,8 @@ type Client struct {
 	users        users.UsersService
 }
 
-// KraftCloud are the public endpoint categories for the KraftCloud API.
-type KraftCloud interface {
+// UnikraftCloud are the public endpoint categories for the UnikraftCloud API.
+type UnikraftCloud interface {
 	Autoscale() scale.AutoscaleService
 	Certificates() certificates.CertificatesService
 	Instances() instances.InstancesService
@@ -41,15 +41,15 @@ type KraftCloud interface {
 	Volumes() volumes.VolumesService
 }
 
-// NewClient is the top-level KraftCloud Services client used to speak
+// NewClient is the top-level UnikraftCloud Services client used to speak
 // with the API.
-func NewClient(copts ...Option) KraftCloud {
+func NewClient(copts ...Option) UnikraftCloud {
 	return NewClientFromOptions(NewDefaultOptions(copts...))
 }
 
-// NewClientFromOptions is the top-level KraftCloud Services client used
+// NewClientFromOptions is the top-level UnikraftCloud Services client used
 // to speak with the API with pre-defined options.
-func NewClientFromOptions(opts *options.Options) KraftCloud {
+func NewClientFromOptions(opts *options.Options) UnikraftCloud {
 	// TODO(nderjung): Use dependency injection to dynamically instantiate all or
 	// user-requested services. For now, instantiate all services.
 
@@ -67,14 +67,14 @@ func NewClientFromOptions(opts *options.Options) KraftCloud {
 	return &client
 }
 
-// NewAutoscaleClient instantiates a client which interfaces with KraftCloud's
+// NewAutoscaleClient instantiates a client which interfaces with UnikraftCloud's
 // autoscale API.
 func NewAutoscaleClient(opts ...Option) scale.AutoscaleService {
 	return scale.NewAutoscaleClientFromOptions(NewDefaultOptions(opts...))
 }
 
 // NewCertificatesClient instantiates a client which interfaces with
-// KraftCloud's certificates API.
+// UnikraftCloud's certificates API.
 func NewCertificatesClient(opts ...Option) certificates.CertificatesService {
 	return certificates.NewCertificatesClientFromOptions(NewDefaultOptions(opts...))
 }
@@ -85,31 +85,31 @@ func NewImagesClient(opts ...Option) images.ImagesService {
 	return images.NewImagesClientFromOptions(NewDefaultOptions(opts...))
 }
 
-// NewInstancesClient instantiates a client which interfaces with KraftCloud's
+// NewInstancesClient instantiates a client which interfaces with UnikraftCloud's
 // instances API.
 func NewInstancesClient(opts ...Option) instances.InstancesService {
 	return instances.NewInstancesClientFromOptions(NewDefaultOptions(opts...))
 }
 
-// NewMetrosClient instantiates a client which interfaces with KraftCloud's
+// NewMetrosClient instantiates a client which interfaces with UnikraftCloud's
 // metros API.
 func NewMetrosClient(opts ...Option) metros.MetrosService {
 	return metros.NewMetrosClientFromOptions(NewDefaultOptions(opts...))
 }
 
-// NewServicesClient instantiates a client which interfaces with KraftCloud's
+// NewServicesClient instantiates a client which interfaces with UnikraftCloud's
 // volumes API.
 func NewServicesClient(opts ...Option) services.ServicesService {
 	return services.NewServicesClientFromOptions(NewDefaultOptions(opts...))
 }
 
-// NewUsersClient instantiates a client which interfaces with KraftCloud's users
+// NewUsersClient instantiates a client which interfaces with UnikraftCloud's users
 // API.
 func NewUsersClient(opts ...Option) users.UsersService {
 	return users.NewUsersClientFromOptions(NewDefaultOptions(opts...))
 }
 
-// NewVolumesClient instantiates a client which interfaces with KraftCloud's
+// NewVolumesClient instantiates a client which interfaces with UnikraftCloud's
 // volumes API.
 func NewVolumesClient(opts ...Option) volumes.VolumesService {
 	return volumes.NewVolumesClientFromOptions(NewDefaultOptions(opts...))

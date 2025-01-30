@@ -8,7 +8,7 @@ package client
 const (
 	// BaseURL defines the default location of the Kraftcloud API.
 	BaseURL = "https://api." + DefaultMetro + ".kraft.cloud/v1"
-	// BaseV1FormatURL defines the default location of the KraftCloud API which is
+	// BaseV1FormatURL defines the default location of the UnikraftCloud API which is
 	// formatted to allow setting the metro.
 	BaseV1FormatURL = "https://api.%s.kraft.cloud/v1"
 	// DefaultPort is the port the instance will listen on externally by default.

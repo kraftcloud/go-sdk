@@ -9,7 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 )
 
 // CreateRequest is the payload for a POST /services/<uuid>/autoscale request.
@@ -37,7 +37,7 @@ type CreateResponseItem struct {
 	UUID   string `json:"uuid"`
 	Name   string `json:"name"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // GetResponseItem is a data item from a response to a GET /services/<uuid>/autoscale request.
@@ -54,7 +54,7 @@ type GetResponseItem struct {
 	Master         *GetResponseMaster `json:"master"`           // only if enabled
 	Policies       []Policy           `json:"policies"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 type GetResponseMaster struct {
@@ -128,7 +128,7 @@ type DeleteResponseItem struct {
 	UUID   string `json:"uuid"`
 	Name   string `json:"name"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // AddPolicyResponseItem is a data item from a response to a POST /services/<uuid>/autoscale/policies request.
@@ -138,7 +138,7 @@ type AddPolicyResponseItem struct {
 	UUID   string `json:"uuid"`
 	Name   string `json:"name"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // GetPolicyResponseItem is a data item from a response to a GET /services/<uuid>/autoscale/policies request.
@@ -148,7 +148,7 @@ type GetPolicyResponseItem struct {
 	Enabled bool
 	Details Policy
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }
 
 // UnmarshalJSON implements json.Unmarshaler.
@@ -194,5 +194,5 @@ type DeletePolicyResponseItem struct {
 	Status string `json:"status"`
 	Name   string `json:"name"`
 
-	kcclient.APIResponseCommon
+	ukcclient.APIResponseCommon
 }

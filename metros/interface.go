@@ -8,11 +8,11 @@ package metros
 import (
 	"context"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 )
 
 type MetrosService interface {
-	kcclient.ServiceClient[MetrosService]
+	ukcclient.ServiceClient[MetrosService]
 
 	// Lists all existing metros. This list is currently hard-coded so the
 	// returned result is always the same.

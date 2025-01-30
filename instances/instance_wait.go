@@ -13,12 +13,12 @@ import (
 	"fmt"
 	"net/http"
 
-	kcclient "sdk.kraft.cloud/client"
+	ukcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/uuid"
 )
 
 // Wait implements InstancesService.
-func (c *client) Wait(ctx context.Context, state State, timeoutMs int, ids ...string) (*kcclient.ServiceResponse[WaitResponseItem], error) {
+func (c *client) Wait(ctx context.Context, state State, timeoutMs int, ids ...string) (*ukcclient.ServiceResponse[WaitResponseItem], error) {
 	if len(ids) == 0 {
 		return nil, errors.New("requires at least one identifier")
 	}
@@ -41,7 +41,7 @@ func (c *client) Wait(ctx context.Context, state State, timeoutMs int, ids ...st
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
-	resp := &kcclient.ServiceResponse[WaitResponseItem]{}
+	resp := &ukcclient.ServiceResponse[WaitResponseItem]{}
 	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/wait", bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
