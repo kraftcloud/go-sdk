@@ -124,6 +124,7 @@ func (r *ServiceRequest) DoRequest(ctx context.Context, method, url string, body
 func (r *ServiceRequest) DoWithAuth(req *http.Request) (*http.Response, error) {
 	req.Header.Set("Authorization", r.GetBearerToken())
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
 
 	hc := r.opts.HTTPClient()
 	if r.httpClient != nil {
