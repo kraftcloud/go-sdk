@@ -505,6 +505,7 @@ type LogResponseItem struct {
 	Name      string               `json:"name"`
 	Output    string               `json:"output"`
 	Range     LogResponseRange     `json:"range"`
+	State     string               `json:"state"`
 	Available LogResponseAvailable `json:"available"`
 
 	kcclient.APIResponseCommon
