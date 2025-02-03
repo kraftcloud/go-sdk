@@ -57,4 +57,33 @@ type VolumesService interface {
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#list-existing-volumes
 	List(ctx context.Context) (*kcclient.ServiceResponse[GetResponseItem], error)
+
+	// Clone creates a new volume by cloning an existing volume. It can also
+	// create a volume from a template.
+	//
+	// See: https://docs.kraft.cloud/api/v1/volumes#cloning-a-volume
+	Clone(ctx context.Context, source string, target string) (*kcclient.ServiceResponse[CloneResponseItem], error)
+
+	// CreateTemplate a new volume template from a volume. The volume is
+	// transformed into the template.
+	//
+	// See: https://docs.kraft.cloud/api/v1/volumes/templates#creating-templates
+	CreateTemplate(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[TemplateCreateResponseItem], error)
+
+	// GetTemplate returns the current state and the configuration of volume
+	// templates.
+	//
+	// See: https://docs.kraft.cloud/api/v1/volumes/templates#getting-the-status-of-a-template
+	GetTemplate(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[TemplateGetResponseItem], error)
+
+	// Delete deletes the specified template(s).
+	// After this call the UUID of the templates is no longer valid.
+	//
+	// See: https://docs.kraft.cloud/api/v1/volumes/templates#deleting-a-template
+	DeleteTemplate(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[TemplateDeleteResponseItem], error)
+
+	// Lists all existing templates.
+	//
+	// See: https://docs.kraft.cloud/api/v1/volumes/templates#list-existing-templates
+	ListTemplate(ctx context.Context) (*kcclient.ServiceResponse[TemplateGetResponseItem], error)
 }

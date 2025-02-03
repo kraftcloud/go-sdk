@@ -30,4 +30,7 @@ const (
 
 	// There are maintenance tasks running on the volume.
 	StateBusy State = "busy"
+
+	// The volume is a template.
+	StateTemplate State = "template"
 )
