@@ -82,3 +82,59 @@ type ListResponseItem struct {
 
 	kcclient.APIResponseCommon
 }
+
+// CloneResponseItem is a data item from a response to a PUT /volumes/clone request.
+// https://docs.kraft.cloud/api/v1/volumes#cloning-a-volume
+type CloneResponseItem struct {
+	State State  `json:"status"`
+	UUID  string `json:"uuid"`
+	Name  string `json:"name"`
+
+	kcclient.APIResponseCommon
+}
+
+// TemplateCreateResponseItem is a data item from a response to a POST /volumes/templates request.
+// https://docs.kraft.cloud/api/v1/volumes/templates#creating-templates
+type TemplateCreateResponseItem struct {
+	Status string `json:"status"`
+	State  string `json:"state"`
+	UUID   string `json:"uuid"`
+	Name   string `json:"name"`
+
+	kcclient.APIResponseCommon
+}
+
+// TemplateGetResponseItem is a data item from a response to a GET /volumes/templates request.
+// https://docs.kraft.cloud/api/v1/volumes/templates#getting-the-status-of-a-template
+type TemplateGetResponseItem struct {
+	State       string               `json:"state"`
+	UUID        string               `json:"uuid"`
+	Name        string               `json:"name"`
+	SizeMB      int                  `json:"size_mb"`
+	FreeMB      int                  `json:"free_mb"`
+	AttachedTo  []InstanceAttachment `json:"attached_to"`
+	Persistent  bool                 `json:"persistent"`
+	QuotaPolicy string               `json:"quota_policy"`
+	CreatedAt   string               `json:"created_at"`
+
+	kcclient.APIResponseCommon
+}
+
+// TemplateDeleteResponseItem is a data item from a response to a DELETE /volumes/templates request.
+// https://docs.kraft.cloud/api/v1/volumes/templates#deleting-a-template
+type TemplateDeleteResponseItem struct {
+	Status string `json:"status"`
+	UUID   string `json:"uuid"`
+	Name   string `json:"name"`
+
+	kcclient.APIResponseCommon
+}
+
+// TemplateListResponseItem is a data item from a response to a GET /volumes/templates request.
+// https://docs.kraft.cloud/api/v1/volumes/templates#list-existing-templates
+type TemplateListResponseItem struct {
+	UUID string `json:"uuid"`
+	Name string `json:"name"`
+
+	kcclient.APIResponseCommon
+}
