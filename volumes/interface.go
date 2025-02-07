@@ -21,7 +21,7 @@ type VolumesService interface {
 	// be changed after creation.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#creating-volumes
-	Create(ctx context.Context, name string, sizeMB int) (*kcclient.ServiceResponse[CreateResponseItem], error)
+	Create(ctx context.Context, name string, sizeMB int, template string) (*kcclient.ServiceResponse[CreateResponseItem], error)
 
 	// Get returns the current state and the configuration of volumes.
 	//
@@ -57,18 +57,6 @@ type VolumesService interface {
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#list-existing-volumes
 	List(ctx context.Context) (*kcclient.ServiceResponse[GetResponseItem], error)
-
-	// Clone creates a new volume by cloning an existing volume. It can also
-	// create a volume from a template.
-	//
-	// See: https://docs.kraft.cloud/api/v1/volumes#cloning-a-volume
-	Clone(ctx context.Context, source string, target string) (*kcclient.ServiceResponse[CloneResponseItem], error)
-
-	// CreateTemplate a new volume template from a volume. The volume is
-	// transformed into the template.
-	//
-	// See: https://docs.kraft.cloud/api/v1/volumes/templates#creating-templates
-	CreateTemplate(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[TemplateCreateResponseItem], error)
 
 	// GetTemplate returns the current state and the configuration of volume
 	// templates.
