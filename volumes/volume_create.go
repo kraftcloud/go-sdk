@@ -13,27 +13,42 @@ import (
 	"net/http"
 
 	kcclient "sdk.kraft.cloud/client"
+	"sdk.kraft.cloud/uuid"
 )
 
+type CreateRequestTemplate struct {
+	Name *string `json:"name,omitempty"`
+	UUID *string `json:"uuid,omitempty"`
+}
+
+type CreateRequest struct {
+	Name     string                 `json:"name"`
+	Template *CreateRequestTemplate `json:"template,omitempty"`
+	SizeMb   *int                   `json:"size_mb,omitempty"`
+}
+
 // Create implements VolumesService.
-func (c *client) Create(ctx context.Context, name string, sizeMB int) (*kcclient.ServiceResponse[CreateResponseItem], error) {
+func (c *client) Create(ctx context.Context, name string, sizeMB int, template string) (*kcclient.ServiceResponse[CreateResponseItem], error) {
 	var err error
 	var body []byte
+	bodyMap := CreateRequest{}
 
-	if sizeMB < 1 {
-		return nil, fmt.Errorf("size_mb must be greater than 0")
-	}
-
-	if name == "" {
-		body, err = json.Marshal(map[string]any{
-			"size_mb": sizeMB,
-		})
+	if template == "" {
+		if sizeMB < 1 {
+			return nil, fmt.Errorf("size_mb must be greater than 0")
+		}
+		bodyMap.SizeMb = &sizeMB
 	} else {
-		body, err = json.Marshal(map[string]any{
-			"name":    name,
-			"size_mb": sizeMB,
-		})
+		if uuid.IsValid(template) {
+			bodyMap.Template = &CreateRequestTemplate{UUID: &template}
+		} else {
+			bodyMap.Template = &CreateRequestTemplate{Name: &template}
+		}
 	}
+	if name != "" {
+		bodyMap.Name = name
+	}
+	body, err = json.Marshal(bodyMap)
 	if err != nil {
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
