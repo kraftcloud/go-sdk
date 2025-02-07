@@ -16,24 +16,11 @@ import (
 )
 
 // Create implements VolumesService.
-func (c *client) Create(ctx context.Context, name string, sizeMB int) (*kcclient.ServiceResponse[CreateResponseItem], error) {
+func (c *client) Create(ctx context.Context, req *CreateRequest) (*kcclient.ServiceResponse[CreateResponseItem], error) {
 	var err error
 	var body []byte
 
-	if sizeMB < 1 {
-		return nil, fmt.Errorf("size_mb must be greater than 0")
-	}
-
-	if name == "" {
-		body, err = json.Marshal(map[string]any{
-			"size_mb": sizeMB,
-		})
-	} else {
-		body, err = json.Marshal(map[string]any{
-			"name":    name,
-			"size_mb": sizeMB,
-		})
-	}
+	body, err = json.Marshal(req)
 	if err != nil {
 		return nil, fmt.Errorf("error marshalling request body: %w", err)
 	}
