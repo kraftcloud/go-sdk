@@ -7,10 +7,26 @@ package volumes
 
 import kcclient "sdk.kraft.cloud/client"
 
+// CreateRequest is a data structure for a request to a POST /volumes request.
+// https://docs.kraft.cloud/api/v1/volumes/#creating-volumes-templates
+type CreateRequestTemplate struct {
+	Name *string `json:"name,omitempty"`
+	UUID *string `json:"uuid,omitempty"`
+}
+
+// CreateRequest is a data structure for a request to a POST /volumes request.
+// https://docs.kraft.cloud/api/v1/volumes/#creating-volumes
+type CreateRequest struct {
+	Name     *string                `json:"name"`
+	Template *CreateRequestTemplate `json:"template,omitempty"`
+	SizeMb   *int                   `json:"size_mb,omitempty"`
+}
+
 // CreateResponseItem is a data item from a response to a POST /volumes request.
 // https://docs.kraft.cloud/api/v1/volumes/#creating-volumes
 type CreateResponseItem struct {
 	Status string `json:"status"`
+	State  string `json:"state"`
 	UUID   string `json:"uuid"`
 	Name   string `json:"name"`
 
@@ -79,16 +95,6 @@ type DeleteResponseItem struct {
 type ListResponseItem struct {
 	UUID string `json:"uuid"`
 	Name string `json:"name"`
-
-	kcclient.APIResponseCommon
-}
-
-// CloneResponseItem is a data item from a response to a PUT /volumes/clone request.
-// https://docs.kraft.cloud/api/v1/volumes#cloning-a-volume
-type CloneResponseItem struct {
-	State State  `json:"status"`
-	UUID  string `json:"uuid"`
-	Name  string `json:"name"`
 
 	kcclient.APIResponseCommon
 }
