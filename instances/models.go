@@ -86,7 +86,14 @@ const (
 
 	// The instance has scale-to-zero enabled. The instance is not running, but will be automatically started when there are incoming requests.
 	InstanceStateStandby InstanceState = "standby"
+
+	// The instance is a template. The instance is not running, but can be used to start other instances.
+	InstanceStateTemplate InstanceState = "template"
 )
+
+type InstanceSnapshot struct {
+	UUID string `json:"uuid"`
+}
 
 // GetResponseItem is a data item from a response to a GET /instances request.
 // https://docs.kraft.cloud/api/v1/instances/#getting-the-status-of-an-instance
@@ -118,6 +125,7 @@ type GetResponseItem struct {
 	Volumes           []GetResponseVolume            `json:"volumes"`
 	NetworkInterfaces []GetResponseNetworkInterface  `json:"network_interfaces"`
 	BootTimeUs        int                            `json:"boot_time_us"` // always returned, even if never started
+	Snapshot          InstanceSnapshot               `json:"snapshot"`
 
 	kcclient.APIResponseCommon
 }
@@ -601,4 +609,45 @@ type ScaleToZero struct {
 	Policy         *ScaleToZeroPolicy `json:"policy,omitempty"`
 	Stateful       *bool              `json:"stateful,omitempty"`
 	CooldownTimeMs *int               `json:"cooldown_time_ms,omitempty"`
+}
+
+// TemplateCreateResponseItem is a data item from a response to a POST /instances/templates request.
+// https://docs.kraft.cloud/api/v1/instances/#creating-a-new-instance-template
+type TemplateCreateResponseItem struct {
+	Status string `json:"status"`
+	State  string `json:"state"`
+	UUID   string `json:"uuid"`
+	Name   string `json:"name"`
+
+	kcclient.APIResponseCommon
+}
+
+// TemplateDeleteResponseItem is a data item from a response to a DELETE /instances/templates request.
+// https://docs.kraft.cloud/api/v1/instances/templates#deleting-a-template
+type TemplateDeleteResponseItem struct {
+	Status string `json:"status"`
+	UUID   string `json:"uuid"`
+	Name   string `json:"name"`
+
+	kcclient.APIResponseCommon
+}
+
+// TemplateGetResponseItem is a data item from a response to a GET /instances/templates request.
+// https://docs.kraft.cloud/api/v1/instances/templates#getting-the-status-of-a-template
+type TemplateGetResponseItem struct {
+	Status        string              `json:"status"`
+	UUID          string              `json:"uuid"`
+	Name          string              `json:"name"`
+	CreatedAt     string              `json:"created_at"`
+	State         InstanceState       `json:"state"`
+	Image         string              `json:"image"`
+	MemoryMB      uint                `json:"memory_mb"`
+	Vcpus         int                 `json:"vcpus"`
+	Args          []string            `json:"args"`
+	Env           map[string]string   `json:"env"`
+	RestartPolicy RestartPolicy       `json:"restart_policy"`
+	Snapshot      InstanceSnapshot    `json:"snapshot"`
+	Volumes       []GetResponseVolume `json:"volumes"`
+
+	kcclient.APIResponseCommon
 }
