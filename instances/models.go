@@ -20,7 +20,8 @@ import (
 // https://docs.kraft.cloud/api/v1/instances/#creating-a-new-instance
 type CreateRequest struct {
 	Name          *string                    `json:"name,omitempty"`
-	Image         string                     `json:"image"`
+	Image         *string                    `json:"image,omitempty"`
+	Template      *CreateRequestTemplate     `json:"template,omitempty"`
 	Args          []string                   `json:"args,omitempty"`
 	Env           map[string]string          `json:"env,omitempty"`
 	MemoryMB      *int                       `json:"memory_mb,omitempty"`
@@ -48,6 +49,11 @@ type CreateRequestVolume struct {
 	SizeMB   *int    `json:"size_mb,omitempty"`
 	At       *string `json:"at,omitempty"`
 	ReadOnly *bool   `json:"readonly,omitempty"`
+}
+
+type CreateRequestTemplate struct {
+	UUID *string `json:"uuid,omitempty"`
+	Name *string `json:"name,omitempty"`
 }
 
 // CreateResponseItem is a data item from a response to a POST /instances request.
