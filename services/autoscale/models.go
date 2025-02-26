@@ -15,17 +15,17 @@ import (
 // CreateRequest is the payload for a POST /services/<uuid>/autoscale request.
 // https://docs.kraft.cloud/api/v1/autoscale/#creating-an-autoscale-configuration
 type CreateRequest struct {
-	UUID           *string             `json:"uuid,omitempty"` // mutually exclusive with name
-	Name           *string             `json:"name,omitempty"` // mutually exclusive with uuid
-	MinSize        *int                `json:"min_size,omitempty"`
-	MaxSize        *int                `json:"max_size,omitempty"`
-	WarmupTimeMs   *int                `json:"warmup_time_ms,omitempty"`
-	CooldownTimeMs *int                `json:"cooldown_time_ms,omitempty"`
-	Master         CreateRequestMaster `json:"master"`
-	Policies       []Policy            `json:"policies,omitempty"`
+	UUID           *string               `json:"uuid,omitempty"` // mutually exclusive with name
+	Name           *string               `json:"name,omitempty"` // mutually exclusive with uuid
+	MinSize        *int                  `json:"min_size,omitempty"`
+	MaxSize        *int                  `json:"max_size,omitempty"`
+	WarmupTimeMs   *int                  `json:"warmup_time_ms,omitempty"`
+	CooldownTimeMs *int                  `json:"cooldown_time_ms,omitempty"`
+	Template       CreateRequestTemplate `json:"template"`
+	Policies       []Policy              `json:"policies,omitempty"`
 }
 
-type CreateRequestMaster struct {
+type CreateRequestTemplate struct {
 	UUID *string `json:"uuid,omitempty"` // mutually exclusive with name
 	Name *string `json:"name,omitempty"` // mutually exclusive with uuid
 }
@@ -43,21 +43,21 @@ type CreateResponseItem struct {
 // GetResponseItem is a data item from a response to a GET /services/<uuid>/autoscale request.
 // https://docs.kraft.cloud/api/v1/autoscale/#getting-an-existing-autoscale-configuration
 type GetResponseItem struct {
-	Status         string             `json:"status"`
-	UUID           string             `json:"uuid"`
-	Name           string             `json:"name"`
-	Enabled        bool               `json:"enabled"`
-	MinSize        *int               `json:"min_size"`         // only if enabled
-	MaxSize        *int               `json:"max_size"`         // only if enabled
-	WarmupTimeMs   *int               `json:"warmup_time_ms"`   // only if enabled
-	CooldownTimeMs *int               `json:"cooldown_time_ms"` // only if enabled
-	Master         *GetResponseMaster `json:"master"`           // only if enabled
-	Policies       []Policy           `json:"policies"`
+	Status         string               `json:"status"`
+	UUID           string               `json:"uuid"`
+	Name           string               `json:"name"`
+	Enabled        bool                 `json:"enabled"`
+	MinSize        *int                 `json:"min_size"`         // only if enabled
+	MaxSize        *int                 `json:"max_size"`         // only if enabled
+	WarmupTimeMs   *int                 `json:"warmup_time_ms"`   // only if enabled
+	CooldownTimeMs *int                 `json:"cooldown_time_ms"` // only if enabled
+	Template       *GetResponseTemplate `json:"templte"`          // only if enabled
+	Policies       []Policy             `json:"policies"`
 
 	kcclient.APIResponseCommon
 }
 
-type GetResponseMaster struct {
+type GetResponseTemplate struct {
 	UUID string `json:"uuid"`
 	Name string `json:"name"`
 }
