@@ -598,6 +598,7 @@ type WaitResponseItem struct {
 }
 
 type ScaleToZero struct {
+	Enabled        *bool              `json:"enabled,omitempty"`
 	Policy         *ScaleToZeroPolicy `json:"policy,omitempty"`
 	Stateful       *bool              `json:"stateful,omitempty"`
 	CooldownTimeMs *int               `json:"cooldown_time_ms,omitempty"`
