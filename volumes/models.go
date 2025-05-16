@@ -135,12 +135,3 @@ type TemplateDeleteResponseItem struct {
 
 	kcclient.APIResponseCommon
 }
-
-// TemplateListResponseItem is a data item from a response to a GET /volumes/templates request.
-// https://docs.kraft.cloud/api/v1/volumes/templates#list-existing-templates
-type TemplateListResponseItem struct {
-	UUID string `json:"uuid"`
-	Name string `json:"name"`
-
-	kcclient.APIResponseCommon
-}
