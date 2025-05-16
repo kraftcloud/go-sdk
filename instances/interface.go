@@ -72,4 +72,26 @@ type InstancesService interface {
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#waiting-for-an-instance-to-reach-a-desired-state
 	Wait(ctx context.Context, state State, timeoutMs int, ids ...string) (*kcclient.ServiceResponse[WaitResponseItem], error)
+
+	// CreateTemplate creates a new instance template with the given configuration.
+	//
+	// See: https://docs.kraft.cloud/api/v1/instances/templates#creating-a-template
+	CreateTemplate(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[TemplateCreateResponseItem], error)
+
+	// GetTemplate returns the current state and the configuration of volume
+	// templates.
+	//
+	// See: https://docs.kraft.cloud/api/v1/instances/templates#getting-the-status-of-a-template
+	GetTemplate(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[TemplateGetResponseItem], error)
+
+	// Delete deletes the specified template(s).
+	// After this call the UUID of the templates is no longer valid.
+	//
+	// See: https://docs.kraft.cloud/api/v1/instances/templates#deleting-a-template
+	DeleteTemplate(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[TemplateDeleteResponseItem], error)
+
+	// Lists all existing templates.
+	//
+	// See: https://docs.kraft.cloud/api/v1/instances/templates#list-existing-templates
+	ListTemplate(ctx context.Context) (*kcclient.ServiceResponse[TemplateGetResponseItem], error)
 }

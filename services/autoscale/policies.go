@@ -9,10 +9,3 @@ package autoscale
 type Policy interface {
 	Type() PolicyType
 }
-
-// JSON attributes
-const (
-	attrPolicies = "policies"
-	polAttrName  = "name"
-	polAttrType  = "type"
-)
