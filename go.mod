@@ -1,6 +1,6 @@
 module sdk.kraft.cloud
 
-go 1.23.0
+go 1.24
 
 require (
 	github.com/goharbor/go-client v0.210.0
