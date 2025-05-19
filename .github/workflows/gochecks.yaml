@@ -55,15 +55,15 @@ jobs:
 
       - name: gofumpt
         if: success() || failure()  # run this step even if the previous one failed
-        uses: golangci/golangci-lint-action@v6
+        uses: golangci/golangci-lint-action@v8
         with:
           version: latest
-          args: --no-config --disable-all --enable=gofumpt --out-format=colored-line-number
+          args: --timeout=30m --default none --output.text.path --output.text.print-linter-name --output.text.print-issued-lines --output.text.colors
           skip-cache: true
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v6
+        uses: golangci/golangci-lint-action@v8
         with:
           version: latest
-          args: --out-format=colored-line-number
+          args: --timeout=30m --output.text.path --output.text.print-linter-name --output.text.print-issued-lines --output.text.colors
           skip-cache: true
