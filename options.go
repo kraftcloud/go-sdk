@@ -7,6 +7,7 @@ package kraftcloud
 
 import (
 	"os"
+	"time"
 
 	"sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/client/httpclient"
@@ -43,6 +44,14 @@ func NewDefaultOptions(opts ...Option) *options.Options {
 
 	if options.DefaultMetro() == "" {
 		options.SetDefaultMetro(client.DefaultMetro)
+	}
+
+	if options.DefaultTimeout() == 0 {
+		options.SetDefaultTimeout(30 * time.Second)
+	}
+
+	if options.DefaultRetries() == 0 {
+		options.SetDefaultRetries(5)
 	}
 
 	if options.HTTPClient() == nil {
