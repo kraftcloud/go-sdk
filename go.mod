@@ -7,7 +7,7 @@ require (
 	github.com/google/go-containerregistry v0.20.2
 	github.com/google/uuid v1.6.0
 	github.com/mitchellh/mapstructure v1.4.1
-	golang.org/x/net v0.34.0
+	golang.org/x/net v0.40.0
 )
 
 replace github.com/mitchellh/mapstructure => github.com/go-viper/mapstructure v1.6.0
@@ -43,8 +43,8 @@ require (
 	github.com/sirupsen/logrus v1.9.1 // indirect
 	github.com/vbatts/tar-split v0.11.3 // indirect
 	go.mongodb.org/mongo-driver v1.7.3 // indirect
-	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/sys v0.29.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/sync v0.14.0 // indirect
+	golang.org/x/sys v0.33.0 // indirect
+	golang.org/x/text v0.25.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
