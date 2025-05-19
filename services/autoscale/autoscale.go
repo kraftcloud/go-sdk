@@ -8,7 +8,13 @@ package autoscale
 // PolicyType is the type of the autoscale policy.
 type PolicyType string
 
-const PolicyTypeStep PolicyType = "step"
+const (
+	// PolicyTypeStep is the step autoscale policy type.
+	PolicyTypeStep PolicyType = "step"
+
+	// PolicyTypeOnDemand is the on-demand autoscale policy type.
+	PolicyTypeOnDemand PolicyType = "on_demand"
+)
 
 const (
 	// Endpoint is the public path for the autoscale service.
@@ -27,6 +33,10 @@ type PolicyMetric string
 const (
 	// PolicyMetricCPU is the CPU autoscale policy metric.
 	PolicyMetricCPU = "cpu"
+
+	// PolicyMetricInflightRequests is the inflight requests autoscale policy
+	// metric.
+	PolicyMetricInflightRequests = "inflight_reqs"
 )
 
 // AdjustmentType is the autoscale adjustment type.
