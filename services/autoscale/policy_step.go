@@ -59,7 +59,7 @@ func (p StepPolicy) MarshalJSON() ([]byte, error) {
 
 // Step is a step in a StepPolicy.
 type Step struct {
-	Adjustment int
-	LowerBound *int
-	UpperBound *int
+	Adjustment int  `json:"adjustment"`
+	LowerBound *int `json:"lower_bound,omitempty"` // optional, can be nil
+	UpperBound *int `json:"upper_bound,omitempty"` // optional, can be nil
 }
