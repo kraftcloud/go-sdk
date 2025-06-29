@@ -3,7 +3,7 @@ module sdk.kraft.cloud
 go 1.24
 
 require (
-	github.com/goharbor/go-client v0.210.0
+	github.com/goharbor/go-client v0.213.1
 	github.com/google/go-containerregistry v0.20.2
 	github.com/google/uuid v1.6.0
 	github.com/mitchellh/mapstructure v1.4.1
