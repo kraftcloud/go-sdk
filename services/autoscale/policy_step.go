@@ -20,10 +20,11 @@ const (
 // StepPolicy is a Step autoscale policy.
 // https://docs.kraft.cloud/api/v1/autoscale/#step-policy
 type StepPolicy struct {
-	Name           string
-	Metric         PolicyMetric
-	AdjustmentType AdjustmentType
-	Steps          []Step
+	Name           string         `json:"name"`
+	Enabled        bool           `json:"enabled,omitempty"`
+	Metric         PolicyMetric   `json:"metric"`
+	AdjustmentType AdjustmentType `json:"adjustment_type"`
+	Steps          []Step         `json:"steps"`
 }
 
 // Type implements Policy.
