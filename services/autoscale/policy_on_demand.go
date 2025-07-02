@@ -23,6 +23,9 @@ func (p OnDemandPolicy) MarshalJSON() ([]byte, error) {
 
 	data["name"] = p.Name
 	data["type"] = p.Type()
+	if p.Exclusive {
+		data["exclusive"] = p.Exclusive
+	}
 
 	return json.Marshal(data)
 }

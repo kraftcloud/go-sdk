@@ -3,14 +3,12 @@ module sdk.kraft.cloud
 go 1.24
 
 require (
+	github.com/go-viper/mapstructure/v2 v2.3.0
 	github.com/goharbor/go-client v0.210.0
 	github.com/google/go-containerregistry v0.20.2
 	github.com/google/uuid v1.6.0
-	github.com/mitchellh/mapstructure v1.4.1
 	golang.org/x/net v0.40.0
 )
-
-replace github.com/mitchellh/mapstructure => github.com/go-viper/mapstructure v1.6.0
 
 require (
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
@@ -35,6 +33,7 @@ require (
 	github.com/klauspost/compress v1.16.5 // indirect
 	github.com/mailru/easyjson v0.7.6 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
+	github.com/mitchellh/mapstructure v1.4.1 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0-rc3 // indirect

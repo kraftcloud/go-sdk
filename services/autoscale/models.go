@@ -9,7 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mitchellh/mapstructure"
+	"github.com/go-viper/mapstructure/v2"
 
 	kcclient "sdk.kraft.cloud/client"
 )
@@ -145,11 +145,81 @@ type AddPolicyResponseItem struct {
 // GetPolicyResponseItem is a data item from a response to a GET /services/<uuid>/autoscale/policies request.
 // https://docs.kraft.cloud/api/v1/autoscale/#getting-the-configuration-of-an-autoscale-policy
 type GetPolicyResponseItem struct {
-	Status  string `json:"status"`
-	Enabled bool   `json:"enabled"`
-	Details Policy `json:"details"`
+	Status   string   `json:"status"`
+	Policies []Policy `json:"policies"`
 
 	kcclient.APIResponseCommon
+}
+
+// UnmarshalJSON implements json.Unmarshaler.
+func (i *GetPolicyResponseItem) UnmarshalJSON(data []byte) error {
+	unstructured := make(map[string]interface{})
+	err := json.Unmarshal(data, &unstructured)
+	if err != nil {
+		return fmt.Errorf("deserializing response JSON data: %w", err)
+	}
+
+	var policies []interface{}
+	if _, ok := unstructured["policies"].([]interface{}); ok {
+		policies = unstructured["policies"].([]interface{})
+	} else {
+		if len(unstructured) != 0 {
+			policies = []interface{}{unstructured}
+		} else {
+			return fmt.Errorf("expected 'policies' field to be an array or object, got: %T", unstructured)
+		}
+	}
+
+	for _, p := range policies {
+		policy, ok := p.(map[string]interface{})
+		if !ok {
+			continue
+		}
+
+		policyType, ok := policy["type"]
+		if !ok {
+			continue
+		}
+
+		switch PolicyType(policyType.(string)) {
+		case PolicyTypeStep:
+			var stepPolicy StepPolicy
+
+			if err := mapstructure.Decode(policy, &stepPolicy); err != nil {
+				return fmt.Errorf("initializing step policy from response data: %w", err)
+			}
+
+			// NOTE(craciunoiuc): Dirty hack to handle fields that are pointers
+			// This failed without it as integer responses could not be
+			// unmarshalled into a pointer with the mapstructure package.
+			remarshalled, err := json.Marshal(policy["steps"])
+			if err != nil {
+				return fmt.Errorf("marshalling steps from response data: %w", err)
+			}
+			json.Unmarshal(remarshalled, &stepPolicy.Steps)
+
+			remarshalled, err = json.Marshal(policy["adjustment_type"])
+			if err != nil {
+				return fmt.Errorf("marshalling steps from response data: %w", err)
+			}
+			json.Unmarshal(remarshalled, &stepPolicy.AdjustmentType)
+
+			i.Policies = append(i.Policies, stepPolicy)
+		case PolicyTypeOnDemand:
+			var onDemandPolicy OnDemandPolicy
+			if err := mapstructure.Decode(policy, &onDemandPolicy); err != nil {
+				return fmt.Errorf("initializing on-demand policy from response data: %w", err)
+			}
+
+			i.Policies = append(i.Policies, onDemandPolicy)
+		}
+	}
+
+	// Do not decode the "policies" field into the struct as it has already been
+	// processed above.
+	delete(unstructured, "policies")
+
+	return mapstructure.Decode(unstructured, &i)
 }
 
 // DeletePolicyResponseItem is a data item from a response to a DELETE /services/<uuid>/autoscale/policies request.
