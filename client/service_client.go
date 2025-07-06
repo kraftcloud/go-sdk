@@ -23,6 +23,11 @@ type ServiceClient[T any] interface {
 	// WithTimeout sets the timeout when making the request.
 	WithTimeout(time.Duration) T
 
+	// WithRetries sets the number of retries to make after a timed out request.
+	// Note that this is specifically only for timed-out requests and API requests
+	// which fail are not retried.
+	WithRetries(int) T
+
 	// WithHTTPClient overwrites the base HTTP client.
 	WithHTTPClient(httpclient.HTTPClient) T
 }

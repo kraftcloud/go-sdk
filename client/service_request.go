@@ -30,7 +30,8 @@ type ServiceRequest struct {
 
 	metro      string
 	httpClient httpclient.HTTPClient
-	timeout    time.Duration
+	timeout    *time.Duration
+	retries    *int
 }
 
 // NewServiceRequestFromDefaultOptions is a constructor method which uses the
@@ -53,7 +54,16 @@ func (r *ServiceRequest) WithMetro(m string) *ServiceRequest {
 // duration in API requests.
 func (r *ServiceRequest) WithTimeout(to time.Duration) *ServiceRequest {
 	rcpy := r.clone()
-	rcpy.timeout = to
+	rcpy.timeout = &to
+	return rcpy
+}
+
+// WithRetries returns a ServiceRequest that uses the specified number of
+// retries to make after a timed out request.  Note that this is specifically
+// only for timed-out requests and API requests which fail are not retried.
+func (r *ServiceRequest) WithRetries(retries int) *ServiceRequest {
+	rcpy := r.clone()
+	rcpy.retries = &retries
 	return rcpy
 }
 
@@ -129,6 +139,39 @@ func (r *ServiceRequest) DoWithAuth(req *http.Request) (*http.Response, error) {
 	hc := r.opts.HTTPClient()
 	if r.httpClient != nil {
 		hc = r.httpClient
+	}
+
+	to := r.opts.DefaultTimeout()
+	if r.timeout != nil {
+		to = *r.timeout
+	}
+
+	retries := r.opts.DefaultRetries()
+	if r.retries != nil {
+		retries = *r.retries
+	}
+
+	if retries > 0 {
+		var resp *http.Response
+		var err error
+
+		for i := 0; i < retries; i++ {
+			ctx, _ := context.WithTimeout(req.Context(), to) //nolint:all
+			resp, err = hc.Do(req.WithContext(ctx))
+			if err != nil && slices.ContainsFunc([]string{
+				"i/o timeout",
+				"operation timed out",
+				"context deadline exceeded",
+			}, func(str string) bool {
+				return strings.Contains(err.Error(), str)
+			}) {
+				continue // retry
+			}
+
+			break
+		}
+
+		return resp, err
 	}
 
 	return hc.Do(req)
