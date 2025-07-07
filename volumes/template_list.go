@@ -9,14 +9,21 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 
 	kcclient "sdk.kraft.cloud/client"
 )
 
 // List implements VolumesService.
-func (c *client) ListTemplate(ctx context.Context) (*kcclient.ServiceResponse[TemplateGetResponseItem], error) {
+func (c *client) ListTemplate(ctx context.Context, tags []string) (*kcclient.ServiceResponse[TemplateGetResponseItem], error) {
 	resp := &kcclient.ServiceResponse[TemplateGetResponseItem]{}
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/templates", nil, resp); err != nil {
+
+	endpoint := Endpoint + "/templates"
+	if len(tags) > 0 {
+		endpoint = fmt.Sprintf("%s?tags=%s", Endpoint, strings.Join(tags, ","))
+	}
+
+	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, nil, resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

@@ -20,6 +20,7 @@ type CreateRequest struct {
 	Name     *string                `json:"name"`
 	Template *CreateRequestTemplate `json:"template,omitempty"`
 	SizeMb   *int                   `json:"size_mb,omitempty"`
+	Tags     []string               `json:"tags,omitempty"`
 }
 
 // CreateResponseItem is a data item from a response to a POST /volumes request.
@@ -45,6 +46,7 @@ type GetResponseItem struct {
 	MountedBy  []InstanceMounting   `json:"mounted_by"`
 	Persistent bool                 `json:"persistent"`
 	CreatedAt  string               `json:"created_at"`
+	Tags       []string             `json:"tags"`
 
 	kcclient.APIResponseCommon
 }
@@ -122,6 +124,7 @@ type TemplateGetResponseItem struct {
 	Persistent  bool                 `json:"persistent"`
 	QuotaPolicy string               `json:"quota_policy"`
 	CreatedAt   string               `json:"created_at"`
+	Tags        []string             `json:"tags"`
 
 	kcclient.APIResponseCommon
 }

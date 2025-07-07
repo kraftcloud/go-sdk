@@ -34,6 +34,7 @@ type CreateRequest struct {
 	Vcpus         *int                       `json:"vcpus,omitempty"`
 	WaitTimeoutMs *int                       `json:"wait_timeout_ms,omitempty"`
 	Features      []Feature                  `json:"features,omitempty"`
+	Tags          []string                   `json:"tags,omitempty"`
 }
 
 type CreateRequestServiceGroup struct {
@@ -132,6 +133,7 @@ type GetResponseItem struct {
 	NetworkInterfaces []GetResponseNetworkInterface  `json:"network_interfaces"`
 	BootTimeUs        int                            `json:"boot_time_us"` // always returned, even if never started
 	Snapshot          InstanceSnapshot               `json:"snapshot"`
+	Tags              []string                       `json:"tags"`
 
 	kcclient.APIResponseCommon
 }
@@ -654,6 +656,7 @@ type TemplateGetResponseItem struct {
 	RestartPolicy RestartPolicy       `json:"restart_policy"`
 	Snapshot      InstanceSnapshot    `json:"snapshot"`
 	Volumes       []GetResponseVolume `json:"volumes"`
+	Tags          []string            `json:"tags"`
 
 	kcclient.APIResponseCommon
 }
