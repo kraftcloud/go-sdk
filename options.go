@@ -45,6 +45,10 @@ func NewDefaultOptions(opts ...Option) *options.Options {
 		options.SetDefaultMetro(client.DefaultMetro)
 	}
 
+	if options.AllowInsecure() && options.HTTPClient() == nil {
+		options.SetHTTPClient(httpclient.NewInsecureHTTPClient())
+	}
+
 	if options.HTTPClient() == nil {
 		options.SetHTTPClient(httpclient.NewHTTPClient())
 	}
@@ -72,5 +76,13 @@ func WithHTTPClient(httpClient httpclient.HTTPClient) Option {
 func WithDefaultMetro(metro string) Option {
 	return func(client *options.Options) {
 		client.SetDefaultMetro(metro)
+	}
+}
+
+// WithAllowInsecure configures the client to skip checks of the API
+// certificates.
+func WithAllowInsecure(allow bool) Option {
+	return func(client *options.Options) {
+		client.SetAllowInsecure(allow)
 	}
 }

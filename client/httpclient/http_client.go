@@ -8,6 +8,7 @@
 package httpclient
 
 import (
+	"crypto/tls"
 	"net/http"
 	"net/url"
 
@@ -27,6 +28,22 @@ func NewHTTPClient() *http.Client {
 			DisableKeepAlives: true,
 			Proxy: func(req *http.Request) (*url.URL, error) {
 				return httpproxy.FromEnvironment().ProxyFunc()(req.URL)
+			},
+		},
+	}
+}
+
+// NewInsecureHTTPClient creates a default Go HTTP client with insecure checks
+// skipped.
+func NewInsecureHTTPClient() *http.Client {
+	return &http.Client{
+		Transport: &http.Transport{
+			DisableKeepAlives: true,
+			Proxy: func(req *http.Request) (*url.URL, error) {
+				return httpproxy.FromEnvironment().ProxyFunc()(req.URL)
+			},
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true, // Allow insecure connections
 			},
 		},
 	}

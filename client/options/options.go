@@ -12,9 +12,10 @@ import "sdk.kraft.cloud/client/httpclient"
 // Options contain necessary information for connecting to a KraftCloud service
 // endpoint.
 type Options struct {
-	token        string
-	defaultMetro string
-	httpClient   httpclient.HTTPClient
+	token         string
+	defaultMetro  string
+	allowInsecure bool
+	httpClient    httpclient.HTTPClient
 }
 
 func (opts *Options) SetToken(token string) {
@@ -31,6 +32,14 @@ func (opts *Options) SetDefaultMetro(metro string) {
 
 func (opts *Options) DefaultMetro() string {
 	return opts.defaultMetro
+}
+
+func (opts *Options) SetAllowInsecure(allow bool) {
+	opts.allowInsecure = allow
+}
+
+func (opts *Options) AllowInsecure() bool {
+	return opts.allowInsecure
 }
 
 func (opts *Options) SetHTTPClient(httpClient httpclient.HTTPClient) {
