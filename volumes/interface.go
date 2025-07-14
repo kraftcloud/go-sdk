@@ -26,7 +26,7 @@ type VolumesService interface {
 	// Get returns the current state and the configuration of volumes.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#getting-the-status-of-a-volume
-	Get(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
+	Get(ctx context.Context, tags []string, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
 
 	// Attach attaches a volume to an instance so that the volume is mounted
 	// when the instance starts using the volume and instance name.  The volume
@@ -56,7 +56,7 @@ type VolumesService interface {
 	// particular value is assumed if a filter is not part of the request.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/#list-existing-volumes
-	List(ctx context.Context) (*kcclient.ServiceResponse[GetResponseItem], error)
+	List(ctx context.Context, tags []string) (*kcclient.ServiceResponse[GetResponseItem], error)
 
 	// CreateTemplate creates a new volume template with the given configuration.
 	//
@@ -67,7 +67,7 @@ type VolumesService interface {
 	// templates.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/templates#getting-the-status-of-a-template
-	GetTemplate(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[TemplateGetResponseItem], error)
+	GetTemplate(ctx context.Context, tags []string, ids ...string) (*kcclient.ServiceResponse[TemplateGetResponseItem], error)
 
 	// Delete deletes the specified template(s).
 	// After this call the UUID of the templates is no longer valid.
@@ -78,5 +78,5 @@ type VolumesService interface {
 	// Lists all existing templates.
 	//
 	// See: https://docs.kraft.cloud/api/v1/volumes/templates#list-existing-templates
-	ListTemplate(ctx context.Context) (*kcclient.ServiceResponse[TemplateGetResponseItem], error)
+	ListTemplate(ctx context.Context, tags []string) (*kcclient.ServiceResponse[TemplateGetResponseItem], error)
 }

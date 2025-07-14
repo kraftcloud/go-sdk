@@ -12,13 +12,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	kcclient "sdk.kraft.cloud/client"
 	"sdk.kraft.cloud/uuid"
 )
 
 // Get implements InstancesService.
-func (c *client) GetTemplate(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[TemplateGetResponseItem], error) {
+func (c *client) GetTemplate(ctx context.Context, tags []string, ids ...string) (*kcclient.ServiceResponse[TemplateGetResponseItem], error) {
 	if len(ids) == 0 {
 		return nil, errors.New("requires at least one identifier")
 	}
@@ -37,8 +38,13 @@ func (c *client) GetTemplate(ctx context.Context, ids ...string) (*kcclient.Serv
 		return nil, fmt.Errorf("encoding JSON object: %w", err)
 	}
 
+	endpoint := Endpoint + "/templates"
+	if len(tags) > 0 {
+		endpoint = fmt.Sprintf("%s?tags=%s", Endpoint, strings.Join(tags, ","))
+	}
+
 	resp := &kcclient.ServiceResponse[TemplateGetResponseItem]{}
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/templates", bytes.NewReader(body), resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodGet, endpoint, bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 

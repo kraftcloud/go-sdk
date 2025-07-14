@@ -26,7 +26,7 @@ type InstancesService interface {
 	// Get returns the current state and the configuration of one or more instance(s).
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#getting-the-status-of-an-instance
-	Get(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
+	Get(ctx context.Context, tags []string, ids ...string) (*kcclient.ServiceResponse[GetResponseItem], error)
 
 	// Delete deletes the specified instance(s).
 	// After this call the UUIDs of the instances are no longer valid. If the
@@ -38,7 +38,7 @@ type InstancesService interface {
 	// Lists all existing instances.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/#list-existing-instances
-	List(ctx context.Context) (*kcclient.ServiceResponse[GetResponseItem], error)
+	List(ctx context.Context, tags []string) (*kcclient.ServiceResponse[GetResponseItem], error)
 
 	// Start starts previously stopped instance(s).
 	// Does nothing for instances that are already running.
@@ -82,7 +82,7 @@ type InstancesService interface {
 	// templates.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/templates#getting-the-status-of-a-template
-	GetTemplate(ctx context.Context, ids ...string) (*kcclient.ServiceResponse[TemplateGetResponseItem], error)
+	GetTemplate(ctx context.Context, tags []string, ids ...string) (*kcclient.ServiceResponse[TemplateGetResponseItem], error)
 
 	// Delete deletes the specified template(s).
 	// After this call the UUID of the templates is no longer valid.
@@ -93,5 +93,5 @@ type InstancesService interface {
 	// Lists all existing templates.
 	//
 	// See: https://docs.kraft.cloud/api/v1/instances/templates#list-existing-templates
-	ListTemplate(ctx context.Context) (*kcclient.ServiceResponse[TemplateGetResponseItem], error)
+	ListTemplate(ctx context.Context, tags []string) (*kcclient.ServiceResponse[TemplateGetResponseItem], error)
 }
