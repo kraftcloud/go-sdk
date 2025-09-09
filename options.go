@@ -71,7 +71,7 @@ func WithHTTPClient(httpClient httpclient.HTTPClient) Option {
 	}
 }
 
-// WithDefaultMetro sets a KraftCloud metro, e.g. `fra0` which is based in
+// WithDefaultMetro sets a KraftCloud metro, e.g. `fra` which is based in
 // Frankfurt.
 func WithDefaultMetro(metro string) Option {
 	return func(client *options.Options) {

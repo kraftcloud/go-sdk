@@ -13,10 +13,11 @@ import (
 	"time"
 )
 
-// testMetroAlive sends a request to https://api.<metro>.kraft.cloud/ and checks
-// if a response is received is received and the time to dial the tcp connection.
+// testMetroAlive sends a request to https://api.<metro>.unikraft.cloud/ and
+// checks if a response is received is received and the time to dial the tcp
+// connection.
 func testMetroAlive(metro, ip string) time.Duration {
-	url := "https://api." + metro + ".kraft.cloud/"
+	url := "https://api." + metro + ".unikraft.cloud/"
 
 	client := http.Client{
 		Timeout: 3 * time.Second,
@@ -47,7 +48,7 @@ func testMetroAlive(metro, ip string) time.Duration {
 
 // fillMetroIP looks up the IP address of the metro using the DNS name.
 func fillMetroIP(metro string) string {
-	url := metro + ".kraft.host"
+	url := metro + ".unikraft.app"
 
 	ips, err := net.LookupIP(url)
 	if err != nil {
@@ -61,24 +62,29 @@ func fillMetroIP(metro string) string {
 func (c *client) List(ctx context.Context, status bool) ([]ListResponseItem, error) {
 	items := []ListResponseItem{
 		{
-			Code:     "fra0",
+			Code:     "fra",
 			Location: "Frankfurt, DE",
-			Proxy:    "fra0.kraft.host",
+			Proxy:    "fra.unikraft.app",
 		},
 		{
-			Code:     "dal0",
+			Code:     "dal",
 			Location: "Dallas, TX",
-			Proxy:    "dal0.kraft.host",
+			Proxy:    "dal.unikraft.app",
 		},
 		{
-			Code:     "sin0",
+			Code:     "sin",
 			Location: "Singapore",
-			Proxy:    "sin0.kraft.host",
+			Proxy:    "sin.unikraft.app",
 		},
 		{
-			Code:     "was1",
+			Code:     "sfo",
+			Location: "San Francisco, CA",
+			Proxy:    "sfo.unikraft.app",
+		},
+		{
+			Code:     "was",
 			Location: "Washington, DC",
-			Proxy:    "was1.kraft.host",
+			Proxy:    "was.unikraft.app",
 		},
 	}
 
