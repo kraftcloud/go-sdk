@@ -16,7 +16,7 @@ import (
 // List implements ImagesService.
 func (c *client) List(ctx context.Context) (*kcclient.ServiceResponse[GetResponseItem], error) {
 	resp := &kcclient.ServiceResponse[GetResponseItem]{}
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/list", nil, resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, nil, resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
