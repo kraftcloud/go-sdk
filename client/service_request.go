@@ -86,7 +86,13 @@ func (r *ServiceRequest) Metrolink(path string) string {
 	}
 
 	// We discard the error because we are working with well-known path constant.
-	u, _ := url.Parse(fmt.Sprintf(BaseV1FormatURL, m))
+	var format string
+	if m != "" && strings.ContainsAny(m[len(m)-1:], "0123456789") {
+		format = BaseV1FormatURLOld
+	} else {
+		format = BaseV1FormatURL
+	}
+	u, _ := url.Parse(fmt.Sprintf(format, m))
 	return u.JoinPath(path).String()
 }
 

@@ -9,6 +9,7 @@ import (
 	"context"
 	"net"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 )
@@ -17,7 +18,12 @@ import (
 // checks if a response is received is received and the time to dial the tcp
 // connection.
 func testMetroAlive(metro, ip string) time.Duration {
-	url := "https://api." + metro + ".unikraft.cloud/"
+	var url string
+	if metro != "" && strings.ContainsAny(metro[len(metro)-1:], "0123456789") {
+		url = "https://api." + metro + ".unikraft.cloud/"
+	} else {
+		url = "https://api." + metro + ".unikraft.cloud/"
+	}
 
 	client := http.Client{
 		Timeout: 3 * time.Second,
@@ -48,7 +54,12 @@ func testMetroAlive(metro, ip string) time.Duration {
 
 // fillMetroIP looks up the IP address of the metro using the DNS name.
 func fillMetroIP(metro string) string {
-	url := metro + ".unikraft.app"
+	var url string
+	if metro != "" && strings.ContainsAny(metro[len(metro)-1:], "0123456789") {
+		url = metro + ".kraft.host"
+	} else {
+		url = metro + ".unikraft.app"
+	}
 
 	ips, err := net.LookupIP(url)
 	if err != nil {
