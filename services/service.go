@@ -22,8 +22,8 @@ type Handler string
 
 const (
 	// Terminate the TLS connection at the KraftCloud gateway using our wildcard
-	// certificate issued for the kraft.cloud domain. The gateway forwards the
-	// unencrypted traffic to your application.
+	// certificate issued for the unikraft.cloud domain. The gateway forwards
+	// the unencrypted traffic to your application.
 	HandlerTLS Handler = "tls"
 
 	// Enable HTTP mode on the load balancer to load balance on the level of
