@@ -3,8 +3,7 @@
 // Licensed under the BSD-3-Clause License (the "License").
 // You may not use this file except in compliance with the License.
 
-// Package client provides the underlying structures, interfaces and methods for
-// peforming requests against KraftCloud's API.
+// Package options provides option types for the KraftCloud API client.
 //
 // Deprecated: This package is part of the original Unikraft Golang SDK which is no longer maintained. Please switch to: https://github.com/unikraft-cloud/go-sdk
-package client
+package options

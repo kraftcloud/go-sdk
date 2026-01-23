@@ -4,4 +4,6 @@
 // You may not use this file except in compliance with the License.
 
 // Package instances manages instances on KraftCloud.
+//
+// Deprecated: This package is part of the original Unikraft Golang SDK which is no longer maintained. Please switch to: https://github.com/unikraft-cloud/go-sdk
 package instances
