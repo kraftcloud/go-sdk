@@ -7,7 +7,7 @@ require (
 	github.com/goharbor/go-client v0.210.0
 	github.com/google/go-containerregistry v0.21.3
 	github.com/google/uuid v1.6.0
-	golang.org/x/net v0.50.0
+	golang.org/x/net v0.52.0
 )
 
 require (
@@ -43,7 +43,7 @@ require (
 	go.mongodb.org/mongo-driver v1.7.3 // indirect
 	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
-	golang.org/x/text v0.34.0 // indirect
+	golang.org/x/text v0.35.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gotest.tools/v3 v3.5.2 // indirect
 )
