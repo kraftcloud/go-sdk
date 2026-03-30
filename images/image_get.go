@@ -38,7 +38,7 @@ func (c *client) Get(ctx context.Context, ids ...string) (*kcclient.ServiceRespo
 	}
 
 	resp := &kcclient.ServiceResponse[GetResponseItem]{}
-	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint+"/list", bytes.NewReader(body), resp); err != nil {
+	if err := c.request.DoRequest(ctx, http.MethodGet, Endpoint, bytes.NewReader(body), resp); err != nil {
 		return nil, fmt.Errorf("performing the request: %w", err)
 	}
 
